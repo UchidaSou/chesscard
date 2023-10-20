@@ -65,10 +65,12 @@ public class Bishop : Chess
                 case 0:
                     if(k<2){
                         //  一番目
-                        for(int l=1;l<endJ-j+1;l++){
+                        for(int l=0;l<=endJ-j+1;l++){
+                            if(i-l < 0){
+                                break;
+                            }
                             instantiatePosition = ChessUiEngine.ToWorldPoint((i-l)*8+(j+l));
                             canMoveList.Add(instantiatePosition);
-                            Debug.Log(instantiatePosition);
                         }
                     }else{
                         //左上
@@ -81,7 +83,7 @@ public class Bishop : Chess
                 case 1:
                     //右上
                     if(k>2){
-                        for(int l=1;l<endJ-j+1;l++){
+                        for(int l=0;l<endJ-j+1;l++){
                             instantiatePosition = ChessUiEngine.ToWorldPoint((i+l)*8+(j+l));
                             canMoveList.Add(instantiatePosition);
                         }
@@ -92,7 +94,6 @@ public class Bishop : Chess
                             }
                             instantiatePosition = ChessUiEngine.ToWorldPoint((i-(l+1))*8+(j-(l+1)));
                             canMoveList.Add(instantiatePosition);
-                            Debug.Log(instantiatePosition);
                         } 
                     }
                     break;
@@ -105,13 +106,4 @@ public class Bishop : Chess
         this.destoryChess(collider);
     }
         
-
-    // Start is called before the first frame update
-    
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
