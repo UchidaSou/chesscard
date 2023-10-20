@@ -23,7 +23,6 @@ public class King : Chess
                     continue;
                 }
                 instantiatePosition = ChessUiEngine.ToWorldPoint(l*8+k);
-                Debug.Log(instantiatePosition);
                 canMoveList.Add(instantiatePosition);
             }
         }
