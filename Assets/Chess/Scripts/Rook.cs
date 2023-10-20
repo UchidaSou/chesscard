@@ -21,7 +21,9 @@ public class Rook : Chess
         for(int k=0;k<4;k++){
             direction = new Vector3(Mathf.Sin(Mathf.PI*k/2),0,Mathf.Cos(Mathf.PI*k/2));
             ray = new Ray(origin,direction);
-            if(Physics.Raycast(ray,out hit,32)){
+            int layerMask = 1 << 7;
+            layerMask = ~layerMask;
+            if(Physics.Raycast(ray,out hit,32,layerMask)){
                 if(hit.collider.gameObject.tag.Equals("Finish")){
                     switch(hit.collider.gameObject.name){
                         case "I0":

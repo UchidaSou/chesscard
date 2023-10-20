@@ -23,6 +23,7 @@ public class King : Chess
                     continue;
                 }
                 instantiatePosition = ChessUiEngine.ToWorldPoint(l*8+k);
+                Debug.Log(instantiatePosition);
                 canMoveList.Add(instantiatePosition);
             }
         }
@@ -36,7 +37,7 @@ public class King : Chess
     // Start is called before the first frame update
     void Start()
     {
-        
+        this.setMove(1);
     }
 
     // Update is called once per frame

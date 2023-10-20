@@ -38,8 +38,9 @@ public class Pawn : Chess
         RaycastHit hit;
         float length = Mathf.Abs(direction.x - origin.x)/2;
         Vector3 hitPosition;
-        Debug.DrawRay(origin,direction,Color.red,100.0f);
-        if(Physics.Raycast(ray,out hit,length)){
+        int layerMask = 1 << 7;
+        layerMask = ~layerMask;
+        if(Physics.Raycast(ray,out hit,length,layerMask)){
             hitPosition = hit.collider.gameObject.transform.position;
         }else{
             hitPosition = direction;

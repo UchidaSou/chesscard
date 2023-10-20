@@ -98,9 +98,9 @@ CapsuleCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.06
-  m_Height: 0.01
-  m_Direction: 1
-  m_Center: {x: 9.313226e-10, y: -0.0000000055879354, z: -0.0017246082}
+  m_Height: 0.2
+  m_Direction: 2
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &5896243177592203197
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -114,6 +114,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   brightSquare: {fileID: 9120768922875918577, guid: d9aae215274df4f4a86e90ec1cf6cc28, type: 3}
+  canMove: 1
+  count: 0
 --- !u!114 &-7450398230285311585
 MonoBehaviour:
   m_ObjectHideFlags: 0

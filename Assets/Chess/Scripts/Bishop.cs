@@ -20,7 +20,10 @@ public class Bishop : Chess
         for(int k=0;k<4;k++){
             direction = new Vector3(Mathf.Sin(Mathf.PI * k/2 + Mathf.PI/4),0,Mathf.Cos(Mathf.PI*k/2 + Mathf.PI/4));
             ray = new Ray(origin,direction);
-            if(Physics.Raycast(ray,out hit,34)){
+            int layerMask = 1 << 7;
+            layerMask = ~layerMask;
+            Debug.DrawRay(origin,direction*34,Color.red,100.0f);
+            if(Physics.Raycast(ray,out hit,34,layerMask)){
                 if(hit.collider.gameObject.tag.Equals("Finish")){
                     switch(hit.collider.gameObject.name){
                         case "I0":
@@ -61,8 +64,11 @@ public class Bishop : Chess
             switch(k%2){
                 case 0:
                     if(k<2){
-                        //右下
-                        for(int l=1;l<endJ-j+1;l++){
+                        //  一番目
+                        for(int l=0;l<=endJ-j+1;l++){
+                            if(i-l < 0){
+                                break;
+                            }
                             instantiatePosition = ChessUiEngine.ToWorldPoint((i-l)*8+(j+l));
                             canMoveList.Add(instantiatePosition);
                         }
@@ -77,12 +83,11 @@ public class Bishop : Chess
                 case 1:
                     //右上
                     if(k>2){
-                        for(int l=1;l<endJ-j+1;l++){
+                        for(int l=0;l<endJ-j+1;l++){
                             instantiatePosition = ChessUiEngine.ToWorldPoint((i+l)*8+(j+l));
                             canMoveList.Add(instantiatePosition);
                         }
                     }else{
-                        //左下
                        for(int l=0;l<j-hitJ;l++){
                             if(i-(l+1) < 0){
                                 continue;
@@ -101,13 +106,4 @@ public class Bishop : Chess
         this.destoryChess(collider);
     }
         
-
-    // Start is called before the first frame update
-    
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
