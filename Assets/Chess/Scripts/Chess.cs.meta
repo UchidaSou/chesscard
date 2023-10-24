@@ -3,7 +3,9 @@ guid: cca1d5747eb353d43964d812a6baeed3
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - brightSquare: {fileID: 9120768922875918577, guid: d9aae215274df4f4a86e90ec1cf6cc28, type: 3}
+  - board: {fileID: 1595888500303032, guid: bec5b097ce3a840e4b09cd099b17c337, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

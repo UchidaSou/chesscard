@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6144728535815944706}
   - component: {fileID: -6663585285130313114}
   - component: {fileID: 7743178500938256676}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Black Rook
   m_TagString: black
   m_Icon: {fileID: 0}
@@ -116,6 +116,8 @@ MonoBehaviour:
   brightSquare: {fileID: 9120768922875918577, guid: d9aae215274df4f4a86e90ec1cf6cc28, type: 3}
   canMove: 1
   count: 0
+  board: {fileID: 0}
+  boardState: {fileID: 0}
 --- !u!114 &-6663585285130313114
 MonoBehaviour:
   m_ObjectHideFlags: 0

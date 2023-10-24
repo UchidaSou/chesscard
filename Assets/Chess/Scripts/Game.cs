@@ -28,26 +28,28 @@ public class Game : MonoBehaviour
     void Start(){
         secondCamera.SetActive(false);
         uiEngine.SetupPieces();
+        GameObject[] gameObjects;
+        Chess chess;
         //先行プレイヤーの設定
-        //firstPlayer.GetComponent<Player>().mycolor = "white";
         player = firstPlayer.GetComponent<Player>();
         player.setColor("white");
-        /*
-        player = getPlayerCompornent(firstPlayer);
-        player.mycolor = "white";
-        */
+        gameObjects = GameObject.FindGameObjectsWithTag(player.getColor());
+        foreach(GameObject gameObject in gameObjects){
+            chess = gameObject.GetComponent<Chess>();
+            player.setScore(player.getScore() + chess.getMaterial());
+        }
         //後行プレイヤーの設定
         player = secondPlayer.GetComponent<Player>();
         player.setColor("black");
-        //secondPlayer.GetComponent<Player>().mycolor = "black";
-        /*
-        player = getPlayerCompornent(secondPlayer);
-        player.mycolor = "black";
-        */
+        Debug.Log(player);
+        gameObjects = GameObject.FindGameObjectsWithTag(player.getColor());
+        foreach(GameObject gameObject in gameObjects){
+            chess = gameObject.GetComponent<Chess>();
+            player.setScore(player.getScore() + chess.getMaterial());
+        }
         //現在のプレイヤーを設定
         nowPlayer = firstPlayer;
         player = nowPlayer.GetComponent<Player>();
-        //player = nowPlayer.GetComponent<Player>();
         
 
     }
@@ -73,7 +75,7 @@ public class Game : MonoBehaviour
                 if(nowPlayer.GetComponent<PlayerState>().getState() != 0){
                     while(GameObject.FindGameObjectsWithTag("Respawn").Length == 0){
                         chessObject = player.selectedChess();
-                        chess = ChessUiEngine.chessGetComponent(chessObject);
+                        chess = chessObject.GetComponent<Chess>();
                         chess.ShowCanMovePosition();
                         count++;
                         if(count > 50){
@@ -101,12 +103,12 @@ public class Game : MonoBehaviour
                     Debug.Log("LOSE");
                 }*/
                 //プレイヤーを交代する
-                changeTurn();
+                ChangeTurn();
             }
         }   
     }
 
-    public void changeTurn(){
+    public void ChangeTurn(){
         switch(player.getColor()){
             case "white":
                 //firstCamera.SetActive(false);
@@ -133,16 +135,6 @@ public class Game : MonoBehaviour
         }
     }
 
-    public Player getPlayerCompornent(GameObject playerObject){
-        int playerState = playerObject.GetComponent<PlayerState>().state;
-        switch(playerState){
-            case 0:
-                return playerObject.gameObject.GetComponent<RealPlayer>();
-            case 1:
-                return playerObject.gameObject.GetComponent<EasyNPC>();
-        }
-        return null;
-    }
 
     public void Resurrection(){
         Card card = nowPlayer.GetComponent<Card>();
@@ -151,10 +143,10 @@ public class Game : MonoBehaviour
         }
         string color = nowPlayer.GetComponent<Player>().getColor();
         card.Resurrection(color);
-        changeTurn();
+        ChangeTurn();
     }
 
-    public void turnReverse(){
+    public void TurnReverse(){
         Card card = nowPlayer.GetComponent<Card>();
         if(!card.turnreverse){
             return;
@@ -169,7 +161,7 @@ public class Game : MonoBehaviour
         }
         beforeMoveObject.GetComponent<Chess>().canMove = false;
         card.turnReverse(beforeMoveObject);
-        changeTurn();
+        ChangeTurn();
     }
 
     public void setMine(){

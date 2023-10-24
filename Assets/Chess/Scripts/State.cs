@@ -6,17 +6,6 @@ public class State : MonoBehaviour
 {
     private int setup;
     private string color;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public void setSetUp(int setup){
         this.setup = setup;

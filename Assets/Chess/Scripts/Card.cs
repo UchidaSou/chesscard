@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using UnityEngine;
 
 public class Card : MonoBehaviour
@@ -11,20 +12,31 @@ public class Card : MonoBehaviour
     public bool canntmove = true;
 
     public GameObject mine;
+    public GameObject board;
 
     public void Resurrection(string color){
-        GameObject retired = GameObject.Find(color+"Retired");
-        int current = retired.transform.childCount;
-        int r = Random.Range(0,current);
-        Debug.Log(r);
-        Transform currentTransform = retired.transform.GetChild(r);
-        GameObject currentObject = currentTransform.gameObject;
-        Chess chess = currentObject.GetComponent<Chess>();
-        currentObject.transform.position = chess.getFirstVector();
-        currentObject.tag = color;
-        Debug.Log("resurrection " + currentObject.name);
+        List<GameObject> retiredList;
+        BoardState boardState = board.GetComponent<BoardState>();
+        if(color.Equals("white")){
+            retiredList = boardState.whiteRetired;
+        }else{
+            retiredList = boardState.blackRetired;
+        }
+        int size = retiredList.Count;
+        if(size == 0){
+            return;
+        }
+        int r = Random.Range(0,size);
+        GameObject resurrectionObject = retiredList[r];
+        resurrectionObject.tag = color;
+        Chess chess = resurrectionObject.GetComponent<Chess>();
+        resurrectionObject.transform.position = chess.getFirstVector();
+        retiredList.RemoveAt(r);
+        Vector3 vector = chess.getFirstVector() + new Vector3(-16,0,16);
+        int i = (int)-vector.x/4;
+        int j  = (int)vector.z/4;
+        boardState.chessBoardArray[i,j] = resurrectionObject;
         this.resurrection = false;
-        currentObject.transform.parent = null;
     }
 
     public void turnReverse(GameObject beforeMoveObject){

@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6071885316650171626}
   - component: {fileID: -4227120948117702765}
   - component: {fileID: 4755273852838441928}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: White Pawn
   m_TagString: white
   m_Icon: {fileID: 0}
@@ -116,6 +116,8 @@ MonoBehaviour:
   brightSquare: {fileID: 9120768922875918577, guid: d9aae215274df4f4a86e90ec1cf6cc28, type: 3}
   canMove: 1
   count: 0
+  board: {fileID: 1595888500303032, guid: bec5b097ce3a840e4b09cd099b17c337, type: 3}
+  boardState: {fileID: 0}
   first: 1
   Queen: {fileID: 1639620864090624, guid: ff7e7084bc927405da871cf1faa802ab, type: 3}
 --- !u!114 &-4227120948117702765

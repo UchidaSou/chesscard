@@ -8,6 +8,8 @@ public class ChessUiEngine : MonoBehaviour {
 	public BoxCollider bounds;
 	public List<Transform> whitePiecePrefabs;
 	public List<Transform> blackPiecePrefabs;
+	public GameObject board;
+	BoardState boardState;
 
 	public int RaycastCell(Ray ray) {
 		RaycastHit hit;
@@ -21,6 +23,7 @@ public class ChessUiEngine : MonoBehaviour {
 	}
 
 	public void SetupPieces() {
+		boardState = board.gameObject.GetComponent<BoardState>();
 		for (int i = 0; i < 8; i++) {
 			Transform piece = GameObject.Instantiate (whitePiecePrefabs [(int)setup [i]]);
 			Vector3 worldPoint = ToWorldPoint (i);
@@ -31,6 +34,8 @@ public class ChessUiEngine : MonoBehaviour {
 			State state = piece.GetComponent<State>();
 			state.setSetUp((int)setup[i]);
 			state.setColor("white");
+			boardState.chessBoardArray[0,i] = piece.gameObject;
+			chess.boardState = boardState;
 		}
 		for (int i = 0; i < 8; i++) {
 			Transform piece = GameObject.Instantiate (blackPiecePrefabs [(int)setup [i]]);
@@ -42,7 +47,8 @@ public class ChessUiEngine : MonoBehaviour {
 			State state = piece.GetComponent<State>();
 			state.setSetUp((int)setup[i]);
 			state.setColor("black");
-			
+			boardState.chessBoardArray[7,i] = piece.gameObject;
+			chess.boardState = boardState;
 		}
 		for (int i = 0; i < 8; i++) {
 			Transform piece = GameObject.Instantiate (whitePiecePrefabs [(int)Piece.Pawn]);
@@ -54,7 +60,8 @@ public class ChessUiEngine : MonoBehaviour {
 			State state = piece.GetComponent<State>();
 			state.setSetUp((int)Piece.Pawn);
 			state.setColor("white");
-			
+			boardState.chessBoardArray[1,i] = piece.gameObject;
+			chess.boardState = boardState;
 		}
 		
 		for (int i = 0; i < 8; i++) {
@@ -67,7 +74,8 @@ public class ChessUiEngine : MonoBehaviour {
 			State state = piece.GetComponent<State>();
 			state.setSetUp((int)Piece.Pawn);
 			state.setColor("black");
-			
+			boardState.chessBoardArray[6,i] = piece.gameObject;
+			chess.boardState = boardState;
 		}
 	}
 
@@ -83,35 +91,4 @@ public class ChessUiEngine : MonoBehaviour {
 		int i = cellNumber / 8;
 		return new Vector3 (i*-4+14, 1, j*4-14);
 	}
-	public static Chess chessGetComponent(GameObject gameObject){
-		if(gameObject == null){
-			return null;
-		}
-        State state = gameObject.GetComponent<State>();
-        int setup = state.getSetUp();
-        Chess chess;
-        switch(setup){
-            case 0:
-                chess = (Chess)gameObject.GetComponent<King>();
-                return chess;
-            case 1:
-                chess = (Chess)gameObject.GetComponent<Queen>();
-                return chess;
-            case 2:
-                chess = (Chess)gameObject.GetComponent<Rook>();
-                return chess;
-            case 3:
-                chess = (Chess)gameObject.GetComponent<Knight>();
-                return chess;
-            case 4:
-                chess = (Chess)gameObject.GetComponent<Bishop>();
-                return chess;
-            case 5:
-                chess = (Chess)gameObject.GetComponent<Pawn>();
-                return chess;
-        }
-        return null;
-    }
-
-	
 }

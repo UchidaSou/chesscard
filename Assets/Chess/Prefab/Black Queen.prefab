@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 7558400809915601872}
   - component: {fileID: -3305348306140170521}
   - component: {fileID: 4288398739506996425}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Black Queen
   m_TagString: black
   m_Icon: {fileID: 0}
@@ -118,6 +118,8 @@ MonoBehaviour:
   brightSquare: {fileID: 9120768922875918577, guid: d9aae215274df4f4a86e90ec1cf6cc28, type: 3}
   canMove: 1
   count: 0
+  board: {fileID: 1595888500303032, guid: bec5b097ce3a840e4b09cd099b17c337, type: 3}
+  boardState: {fileID: 0}
 --- !u!114 &-4152241213156405795
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -145,6 +147,8 @@ MonoBehaviour:
   brightSquare: {fileID: 0}
   canMove: 1
   count: 0
+  board: {fileID: 1595888500303032, guid: bec5b097ce3a840e4b09cd099b17c337, type: 3}
+  boardState: {fileID: 0}
 --- !u!114 &-3305348306140170521
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -160,6 +164,8 @@ MonoBehaviour:
   brightSquare: {fileID: 0}
   canMove: 1
   count: 0
+  board: {fileID: 0}
+  boardState: {fileID: 0}
 --- !u!54 &4288398739506996425
 Rigidbody:
   m_ObjectHideFlags: 0

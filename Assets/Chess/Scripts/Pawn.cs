@@ -15,12 +15,12 @@ public class Pawn : Chess
         List<Vector3> canMoveList = new List<Vector3>();
         int j = (int) cellNumber % 8;
         int i = (int) cellNumber / 8;
-        int hitJ;
+        /*int hitJ;
         int hitI;
         Vector3 origin;
         Vector3 direction;
         Vector3 instantiatePosition;
-        Ray ray;
+        Ray ray;*/
         int pm;
         if(this.gameObject.tag.Equals("white")){
             pm = 1;
@@ -28,46 +28,19 @@ public class Pawn : Chess
             pm = -1;
         }
         int move = this.getMove();
-        origin = ChessUiEngine.ToWorldPoint(cellNumber);
         if(first){
-           direction = (ChessUiEngine.ToWorldPoint((i+pm*2)*8+j) - origin) * move;
-        }else{
-            direction = (ChessUiEngine.ToWorldPoint((i+pm*1)*8+j) - origin) * move;
+            move = move * 2;
         }
-        ray = new Ray(origin,direction);
-        RaycastHit hit;
-        float length = Mathf.Abs(direction.x - origin.x)/2;
-        Vector3 hitPosition;
-        int layerMask = 1 << 7;
-        layerMask = ~layerMask;
-        if(Physics.Raycast(ray,out hit,length,layerMask)){
-            hitPosition = hit.collider.gameObject.transform.position;
-        }else{
-            hitPosition = direction;
-        }
-        hitJ = (int)hitPosition.z % 4;
-        hitI = (int)-hitPosition.x / 4 + i;
-        int toJ = Mathf.Abs(hitJ - j);
-        int toI;
-        if(this.gameObject.tag.Equals("white")){
-            toI = Mathf.Abs(hitI - i);
-        }else{
-            toI = Mathf.Abs(i - hitI);
-        }
-        int c=0;
-        for(int k=1;k<=toI;k++){
-            c++;
-            if(c==20){
+        GameObject gameObject;
+        for(int k=1;k<=move&&(i+k<8 || i-k>=0);k++){
+            gameObject = boardState.chessBoardArray[i+pm*k,j];
+            if(gameObject != null){
                 break;
+            }else{
+                canMoveList.Add(ChessUiEngine.ToWorldPoint((i+pm*k)*8 + j));
             }
-            instantiatePosition = ChessUiEngine.ToWorldPoint((i+pm*k)*8+j);
-            canMoveList.Add(instantiatePosition);
         }
         return canMoveList;
-    }
-
-    public void OnTriggerEnter(Collider collider){
-        this.destoryChess(collider);
     }
 
     // Start is called before the first frame update
@@ -88,4 +61,5 @@ public class Pawn : Chess
             Destroy(this.gameObject);
         }
     }
+
 }

@@ -10,100 +10,68 @@ public class Bishop : Chess
         List<Vector3> canMoveList = new List<Vector3>();
         int j = (int) cellNumber % 8;
         int i = (int) cellNumber / 8;
-        int hitJ=0;
-        int hitI=0;
-        Vector3 origin = this.gameObject.transform.position;
-        Vector3 direction,hitPosition;
-        Vector3 instantiatePosition;
-        Ray ray;
-        RaycastHit hit;
-        for(int k=0;k<4;k++){
-            direction = new Vector3(Mathf.Sin(Mathf.PI * k/2 + Mathf.PI/4),0,Mathf.Cos(Mathf.PI*k/2 + Mathf.PI/4));
-            ray = new Ray(origin,direction);
-            int layerMask = 1 << 7;
-            layerMask = ~layerMask;
-            Debug.DrawRay(origin,direction*34,Color.red,100.0f);
-            if(Physics.Raycast(ray,out hit,34,layerMask)){
-                if(hit.collider.gameObject.tag.Equals("Finish")){
-                    switch(hit.collider.gameObject.name){
-                        case "I0":
-                            hitI = 0;
-                            hitJ = i;
-                            break;
-                        case "I7":
-                            hitI = 7;
-                            hitJ = j;
-                            break;
-                        case "J0":
-                            hitJ = 0;
-                            hitI = i;
-                            break;
-                        case "J7":
-                            hitJ = 7;
-                            hitI = i;
-                            break;
+        GameObject gameObject;
+        bool upFlg=false,downFlg=false;
+        for(int k=1;k<8-j;k++){
+            if(!upFlg && i+k<8){
+                gameObject = boardState.chessBoardArray[i+k,j+k];
+                if(gameObject != null){
+                    upFlg = true;
+                    if(!gameObject.tag.Equals(this.tag)){
+                        canMoveList.Add(ChessUiEngine.ToWorldPoint((i+k)*8 + (j+k)));
                     }
                 }else{
-                    hitPosition = hit.collider.gameObject.transform.position + new Vector3(-16,0,16);
-                    hitI = (int)-hitPosition.x / 4;
-                    hitJ = (int)hitPosition.z / 4;
+                    canMoveList.Add(ChessUiEngine.ToWorldPoint((i+k)*8+(j+k)));
                 }
-            }else{
-                hitPosition = direction;
-                hitI = (int)-hitPosition.x / 4;
-                hitJ = (int)hitPosition.z / 4;
             }
-            int startJ,endJ;
-            if(hitJ < j){
-                startJ = hitJ;
-                endJ = j;
-            }else{
-                startJ = j;
-                endJ = hitJ;
+            if(!downFlg && i-k>=0){
+                gameObject = boardState.chessBoardArray[i-k,j+k];
+                if(gameObject != null){
+                    downFlg = true;
+                    if(!gameObject.tag.Equals(this.tag)){
+                        canMoveList.Add(ChessUiEngine.ToWorldPoint((i-k)*8 + (j+k)));
+                    }
+                }else{
+                    canMoveList.Add(ChessUiEngine.ToWorldPoint((i-k)*8+(j+k)));
+                }
             }
-            switch(k%2){
-                case 0:
-                    if(k<2){
-                        //  一番目
-                        for(int l=0;l<=endJ-j+1;l++){
-                            if(i-l < 0){
-                                break;
-                            }
-                            instantiatePosition = ChessUiEngine.ToWorldPoint((i-l)*8+(j+l));
-                            canMoveList.Add(instantiatePosition);
-                        }
-                    }else{
-                        //左上
-                        for(int l=0;l<j-hitJ;l++){
-                            instantiatePosition = ChessUiEngine.ToWorldPoint((i+(l+1))*8+(j-(l+1)));
-                            canMoveList.Add(instantiatePosition);
-                        } 
+            if(upFlg && downFlg){
+                break;
+            }
+        }
+        upFlg = false;
+        downFlg = false;
+        for(int k=1;k<j+1;k++){
+            if(!upFlg && i+k<8){
+                gameObject = boardState.chessBoardArray[i+k,j-k];
+                if(gameObject != null){
+                    upFlg = true;
+                    if(!gameObject.tag.Equals(this.tag)){
+                        canMoveList.Add(ChessUiEngine.ToWorldPoint((i+k)*8 + (j-k)));
                     }
-                    break;
-                case 1:
-                    //右上
-                    if(k>2){
-                        for(int l=0;l<endJ-j+1;l++){
-                            instantiatePosition = ChessUiEngine.ToWorldPoint((i+l)*8+(j+l));
-                            canMoveList.Add(instantiatePosition);
-                        }
-                    }else{
-                       for(int l=0;l<j-hitJ;l++){
-                            if(i-(l+1) < 0){
-                                continue;
-                            }
-                            instantiatePosition = ChessUiEngine.ToWorldPoint((i-(l+1))*8+(j-(l+1)));
-                            canMoveList.Add(instantiatePosition);
-                        } 
+                }else{
+                    canMoveList.Add(ChessUiEngine.ToWorldPoint((i+k)*8+(j-k)));
+                }
+            }
+            if(!downFlg && i-k>=0){
+                gameObject = boardState.chessBoardArray[i-k,j-k];
+                if(gameObject != null){
+                    downFlg = true;
+                    if(!gameObject.tag.Equals(this.tag)){
+                        canMoveList.Add(ChessUiEngine.ToWorldPoint((i-k)*8 + (j-k)));
                     }
-                    break;
+                }else{
+                    canMoveList.Add(ChessUiEngine.ToWorldPoint((i-k)*8+(j-k)));
+                }
+            }
+            if(upFlg && downFlg){
+                break;
             }
         }
         return canMoveList;
-    }
+    }  
 
-    public void OnTriggerEnter(Collider collider){
-        this.destoryChess(collider);
+    void Start(){
+        this.setMaterial(4);
     }
-        
 }

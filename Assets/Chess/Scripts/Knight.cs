@@ -9,51 +9,47 @@ public class Knight : Chess
         List<Vector3> canMoveList = new List<Vector3>();
         int j = (int) cellNumber % 8;
         int i = (int) cellNumber / 8;
-        Vector3 instantiatePosition;
+        GameObject gameObject;
         for(int k=1;k<3;k++){
             if(i+k>=8 || j-(3-k)<0){
                 continue;
             }
-            instantiatePosition = ChessUiEngine.ToWorldPoint((i+k)*8+(j-(3-k)));
-            canMoveList.Add(instantiatePosition);
+            gameObject = boardState.chessBoardArray[i+k,j-(3-k)];
+            if(gameObject == null || !gameObject.tag.Equals(this.tag)){
+                canMoveList.Add(ChessUiEngine.ToWorldPoint((i+k)*8+(j-(3-k))));
+            }
         }
         for(int k=1;k<3;k++){
             if(i-k<0 || j-(3-k)<0){
                 continue;
             }
-            instantiatePosition = ChessUiEngine.ToWorldPoint((i-k)*8+(j-(3-k)));
-            canMoveList.Add(instantiatePosition);
+            gameObject = boardState.chessBoardArray[i-k,j-(3-k)];
+            if(gameObject == null || !gameObject.tag.Equals(this.tag)){
+                canMoveList.Add(ChessUiEngine.ToWorldPoint((i-k)*8+(j-(3-k))));
+            }
         }
         for(int k=1;k<3;k++){
             if(j+(3-k)>=8 || i+k>=8){
                 continue;
             }
-            instantiatePosition = ChessUiEngine.ToWorldPoint((i+k)*8+(j+(3-k)));
-            canMoveList.Add(instantiatePosition);
+            gameObject = boardState.chessBoardArray[i+k,j+(3-k)];
+            if(gameObject == null || !gameObject.tag.Equals(this.tag)){
+                canMoveList.Add(ChessUiEngine.ToWorldPoint((i+k)*8+(j+(3-k))));
+            }
         }
         for(int k=1;k<3;k++){
             if(j+(3-k)>=8 || i-k<0){
                 continue;
             }
-            instantiatePosition = ChessUiEngine.ToWorldPoint((i-k)*8+(j+(3-k)));
-            canMoveList.Add(instantiatePosition);
+            gameObject = boardState.chessBoardArray[i-k,j+(3-k)];
+            if(gameObject == null || !gameObject.tag.Equals(this.tag)){
+                canMoveList.Add(ChessUiEngine.ToWorldPoint((i-k)*8+(j+(3-k))));
+            }
         }
         return canMoveList;
     }
 
-
-    public void OnTriggerEnter(Collider collider){
-        this.destoryChess(collider);
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+    void Start(){
+        this.setMaterial(3);
     }
 }

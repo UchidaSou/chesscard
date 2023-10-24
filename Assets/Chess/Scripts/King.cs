@@ -9,8 +9,8 @@ public class King : Chess
         List<Vector3> canMoveList = new List<Vector3>();
         int j = (int) cellNumber % 8;
         int i = (int) cellNumber / 8;
-        Vector3 instantiatePosition;
         int move = this.getMove();
+        GameObject gameObject;
         for(int k=j-move;k<=j+move;k++){
             for(int l=i-move;l<=i+move;l++){
                 if(k>8||k<0){
@@ -22,26 +22,22 @@ public class King : Chess
                 if(k==j&&l==i){
                     continue;
                 }
-                instantiatePosition = ChessUiEngine.ToWorldPoint(l*8+k);
-                canMoveList.Add(instantiatePosition);
+                gameObject = boardState.chessBoardArray[l,k];
+                if(gameObject == null){
+                    canMoveList.Add(ChessUiEngine.ToWorldPoint(l*8+k));
+                }else{
+                    if(gameObject.tag.Equals(this.tag)){
+                        continue;
+                    }
+                    canMoveList.Add(ChessUiEngine.ToWorldPoint(l*8+k));
+                }
             }
         }
         return canMoveList;
     }
 
-    public void OnTriggerEnter(Collider collider){
-        this.destoryChess(collider);
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
+    void Start(){
         this.setMove(1);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        this.setMaterial(0);
     }
 }

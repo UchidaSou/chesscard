@@ -29,12 +29,5 @@ public class EasyNPC : Player
     void Start()
     {
         this.setPlayerState(this.GetComponent<PlayerState>(),1);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-    
+    }    
 }

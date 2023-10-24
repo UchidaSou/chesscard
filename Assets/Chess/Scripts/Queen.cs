@@ -25,15 +25,14 @@ public class Queen : Chess
         this.AddComponent<Bishop>();
         setRook(this.gameObject.GetComponent<Rook>());
         rook.brightSquare = this.brightSquare;
+        rook.board = this.board;
+        rook.boardState = this.boardState;
         setBishop(this.gameObject.GetComponent<Bishop>());
         bishop.brightSquare = this.brightSquare;
+        bishop.boardState = this.boardState;
+        this.setMaterial(9);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public override List<Vector3> canMovePosition(int cellNumber)
     {
@@ -47,7 +46,4 @@ public class Queen : Chess
         return canMoveList;
     }
 
-    public void OnTriggerEnter(Collider collider){
-        this.destoryChess(collider);
-    }
 }

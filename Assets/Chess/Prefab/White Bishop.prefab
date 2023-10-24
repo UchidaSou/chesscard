@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 4273619889832285896}
   - component: {fileID: -1751763814252233994}
   - component: {fileID: -1416954393518361429}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: White Bishop
   m_TagString: white
   m_Icon: {fileID: 0}
@@ -116,6 +116,8 @@ MonoBehaviour:
   brightSquare: {fileID: 9120768922875918577, guid: d9aae215274df4f4a86e90ec1cf6cc28, type: 3}
   canMove: 1
   count: 0
+  board: {fileID: 1595888500303032, guid: bec5b097ce3a840e4b09cd099b17c337, type: 3}
+  boardState: {fileID: 0}
 --- !u!114 &-1751763814252233994
 MonoBehaviour:
   m_ObjectHideFlags: 0

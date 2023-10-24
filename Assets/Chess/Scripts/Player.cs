@@ -8,35 +8,15 @@ public abstract class Player:MonoBehaviour
 {
     private String mycolor;
     private PlayerState playerState;
+    private int score;
 
     public void setPlayerState(PlayerState playerState,int state){
         this.playerState = playerState;
         this.playerState.setState(state);
         
     }
-/*
-    public void selectedChess(GameObject gameObject){
-        Vector3 pos = gameObject.transform.position;
-        pos.y += 0.5f;
-        gameObject.transform.position = pos;
-    }
-  */ 
 
     public abstract GameObject selectedChess();
-
-/*
-    public void selectedMovePosition(int cellNumber,GameObject chess){
-        Vector3 pos = ChessUiEngine.ToWorldPoint(cellNumber);
-        chess.GetComponent<Chess>().setBeforeVector(chess.transform.position);
-        pos.y = chess.transform.position.y;
-        chess.transform.position = pos;
-        GameObject[] gameObject = GameObject.FindGameObjectsWithTag("Respawn");
-        for(int i=0;i<gameObject.Length;i++){
-            Destroy(gameObject[i]);
-        }
-    }
-    
-*/
     public abstract Vector3 selectedMovePosition();
 
     public void setColor(String color){
@@ -51,6 +31,16 @@ public abstract class Player:MonoBehaviour
         return this.playerState;
     }
 
+    public void setScore(int score){
+        this.score = score;
+    }
 
+    public int getScore(){
+        return this.score;
+    }
+
+    void Start(){
+        this.setScore(0);
+    }
 }
 

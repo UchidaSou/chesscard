@@ -21,7 +21,7 @@ public class Checker : MonoBehaviour
         int kingCellNumber = kingI*8 + kingJ;
         List<Vector3> kingCanMove = king.GetComponent<King>().canMovePosition(kingCellNumber);
         foreach(GameObject gameObject in objects){
-            Chess chess = ChessUiEngine.chessGetComponent(gameObject);
+            Chess chess = gameObject.GetComponent<Chess>();
             
             Vector3 position = gameObject.transform.position + new Vector3(-16,0,16);
             int i = (int)-position.x/4;

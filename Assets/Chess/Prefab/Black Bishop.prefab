@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2150294972224128634}
   - component: {fileID: 2043769370698932008}
   - component: {fileID: -960248099160259118}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Black Bishop
   m_TagString: black
   m_Icon: {fileID: 0}
@@ -30,7 +30,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1479989141987308}
   m_LocalRotation: {x: 0.7071069, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -0.0081311, y: 2.86, z: -2.25}
+  m_LocalPosition: {x: 0, y: 2.86, z: 0}
   m_LocalScale: {x: 27.904564, y: 27.904564, z: 206.0775}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -116,6 +116,8 @@ MonoBehaviour:
   brightSquare: {fileID: 9120768922875918577, guid: d9aae215274df4f4a86e90ec1cf6cc28, type: 3}
   canMove: 1
   count: 0
+  board: {fileID: 1595888500303032, guid: bec5b097ce3a840e4b09cd099b17c337, type: 3}
+  boardState: {fileID: 0}
 --- !u!114 &2043769370698932008
 MonoBehaviour:
   m_ObjectHideFlags: 0

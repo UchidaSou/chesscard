@@ -14,6 +14,9 @@ public abstract class Chess:MonoBehaviour
     private int move;
     public bool canMove = true;
     public int count = 0;
+    public GameObject board;
+    public BoardState boardState;
+    private int material;
 
     public void ShowCanMovePosition(){
         if(!this.canMove){
@@ -25,26 +28,46 @@ public abstract class Chess:MonoBehaviour
         int cellNumber = i*8+j;
         List<Vector3> canMoveList = canMovePosition(cellNumber);
         GameObject square;
-        SquareState squareState;
         State state = this.gameObject.GetComponent<State>();
         foreach(Vector3 vec in canMoveList){
             square = GameObject.Instantiate(this.brightSquare,vec,Quaternion.Euler(0,0,0));
-            squareState = square.GetComponent<SquareState>();
-            squareState.setColor(state.getColor());
         }
     }
 
     public void movePosition(Vector3 position){
         Vector3 vector = this.gameObject.transform.position;
+        int i = (int)-(vector.x-16)/4;
+        int j = (int)(vector.z+16)/4;
+        boardState.chessBoardArray[i,j] = null;
         setBeforeVector(vector);
         vector.x = position.x;
+        i = (int)-(vector.x - 16) / 4;
         vector.z = position.z;
+        j = (int)(vector.z + 16) / 4;
+        GameObject gameObject = boardState.chessBoardArray[i,j];
+        Game game = GameObject.Find("Game").GetComponent<Game>();
+        Player player = game.nowPlayer.GetComponent<Player>();
+        if(gameObject != null){
+            if(gameObject.tag.Equals("white")){
+                boardState.whiteRetired.Add(gameObject);
+            }else{
+                boardState.blackRetired.Add(gameObject);
+            }
+            string retiredObjectname = gameObject.tag + "Retired";
+            GameObject retiredObject = GameObject.Find(retiredObjectname);
+            gameObject.transform.position = retiredObject.transform.position;
+            gameObject.tag = "Retired";
+            Chess chess = gameObject.GetComponent<Chess>();
+            player.setScore(player.getScore() - chess.getMaterial());
+            }
+        boardState.chessBoardArray[i,j] = this.gameObject;
         this.gameObject.transform.position = vector;
         State state = this.gameObject.GetComponent<State>();
         if(state.getSetUp() == 5){
             this.gameObject.GetComponent<Pawn>().first = false;
         }
         this.setMove(1);
+
     }
 
     public abstract List<Vector3> canMovePosition(int cellNumber);
@@ -83,31 +106,16 @@ public abstract class Chess:MonoBehaviour
         return this.move;
     }
 
-    public void destoryChess(Collider collider){
-        State state = this.gameObject.GetComponent<State>();
-        GameObject gameObject = GameObject.Find("Game");
-        GameObject now = gameObject.GetComponent<Game>().nowPlayer;
-        Player player = now.GetComponent<Player>();
-        string color = player.getColor();
-        GameObject retiredObject;
-        if(color.Equals("black")){
-            color = "white";
-        }else{
-            color = "black";
-        }
-        string retiredColor = collider.tag;
-        retiredObject = GameObject.Find(retiredColor+"Retired");
-        if(!collider.tag.Equals("Respawn") && !collider.name.Equals("Bounds")){
-            if(collider.tag.Equals(this.GetComponent<State>().getColor())){
-                return;
-            }
-            if(!collider.tag.Equals(color)){
-                collider.transform.parent = retiredObject.transform;
-                collider.transform.position = retiredObject.transform.position;
-                collider.tag = "Retired";
-                //Destroy(collider.gameObject);
-            }
-            
-        }
+    public void setMaterial(int material){
+        this.material = material;
+    }
+
+    public int getMaterial(){
+        return this.material;
+    }
+
+    void Start(){
+        //string retiredObjectname = this.tag + "Retired";
+        //this.retiredObject = GameObject.Find(retiredObjectname);
     }
 }

@@ -32,11 +32,5 @@ public class RealPlayer : Player
     {
         base.setPlayerState(this.gameObject.GetComponent<PlayerState>(),0);
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     
 }
