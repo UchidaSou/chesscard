@@ -2424,8 +2424,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1819022716}
   - component: {fileID: 1819022721}
+  - component: {fileID: 1819022724}
+  - component: {fileID: 1819022725}
   - component: {fileID: 1819022722}
-  - component: {fileID: 1819022723}
   m_Layer: 0
   m_Name: SecondPlayer
   m_TagString: Untagged
@@ -2480,7 +2481,7 @@ MonoBehaviour:
   canntmove: 1
   mine: {fileID: 7188897934587076981, guid: 397e922cdd8852d4bb00f73b451f6c2d, type: 3}
   board: {fileID: 1484360090}
---- !u!114 &1819022723
+--- !u!114 &1819022724
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2489,9 +2490,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 1819022714}
   m_Enabled: 1
   m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03379e54d75bfd84182c880986df9ab7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1819022725
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1819022714}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 72ca1a58fff61344194f9311fdc7646b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  board: {fileID: 1484360090}
 --- !u!1 &2002324193
 GameObject:
   m_ObjectHideFlags: 0

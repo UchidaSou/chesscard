@@ -41,7 +41,6 @@ public class Game : MonoBehaviour
         //後行プレイヤーの設定
         player = secondPlayer.GetComponent<Player>();
         player.setColor("black");
-        Debug.Log(player);
         gameObjects = GameObject.FindGameObjectsWithTag(player.getColor());
         foreach(GameObject gameObject in gameObjects){
             chess = gameObject.GetComponent<Chess>();
@@ -50,8 +49,6 @@ public class Game : MonoBehaviour
         //現在のプレイヤーを設定
         nowPlayer = firstPlayer;
         player = nowPlayer.GetComponent<Player>();
-        
-
     }
     // Update is called once per frame
     void FixedUpdate()
@@ -99,9 +96,13 @@ public class Game : MonoBehaviour
                 }
                 chess.movePosition(selectedPosition);
                 chessObject = null;
-                /*if(checker.isCheck(player.getColor())){
-                    Debug.Log("LOSE");
-                }*/
+                bool check = checker.isCheck(player.getColor());
+                bool checkmate = checker.isCheckMate(player.getColor());
+                if(checker.isCheckMate(player.getColor()) || checker.isCheck(player.getColor())){
+                    Debug.Log("check " + check);
+                    Debug.Log("CheckMate " + checkmate);
+                    Debug.Log(player.getColor()+"Lose");
+                }
                 //プレイヤーを交代する
                 ChangeTurn();
             }

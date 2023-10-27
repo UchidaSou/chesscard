@@ -14,15 +14,16 @@ public class Checker : MonoBehaviour
             king = GameObject.Find("Black King(Clone)");
             objects = GameObject.FindGameObjectsWithTag("white");
         }
-        int count = 0;
         Vector3 kingPosition = king.transform.position + new Vector3(-16,0,16);
         int kingI = (int)-kingPosition.x/4;
         int kingJ = (int)kingPosition.z/4;
         int kingCellNumber = kingI*8 + kingJ;
         List<Vector3> kingCanMove = king.GetComponent<King>().canMovePosition(kingCellNumber);
+        BoardState boardState = GameObject.Find("Board").GetComponent<BoardState>();
+        int count = kingCanMove.Count;
+        List<Vector3> removeList = new List<Vector3>();
         foreach(GameObject gameObject in objects){
             Chess chess = gameObject.GetComponent<Chess>();
-            
             Vector3 position = gameObject.transform.position + new Vector3(-16,0,16);
             int i = (int)-position.x/4;
             int j = (int)position.z/4;
@@ -39,12 +40,18 @@ public class Checker : MonoBehaviour
                     int J = (int)canMovePosition.z/4;
                     int Cell = I*8+J;
                     if(Cell == kingCanMoveCellNumber){
-                        count++;
+                        if(removeList.Exists(x => x.Equals(vector))){
+                            removeList.Add(vector);
+                        }
                     }
                 }
             }
         }
-        if(count >= kingCanMove.ToArray().Length){
+        foreach (Vector3 vector in removeList)
+        {
+            kingCanMove.Remove(vector);            
+        }
+        if(kingCanMove.Count == 0){
             return true;
         }else{
             return false;

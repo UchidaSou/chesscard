@@ -114,8 +114,7 @@ public abstract class Chess:MonoBehaviour
         return this.material;
     }
 
-    void Start(){
-        //string retiredObjectname = this.tag + "Retired";
-        //this.retiredObject = GameObject.Find(retiredObjectname);
+    public int getScore(int i,int j){
+        return (int)this.boardState.imbalance[i,j] * this.getMaterial();
     }
 }
