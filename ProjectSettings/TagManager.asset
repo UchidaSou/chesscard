@@ -7,6 +7,7 @@ TagManager:
   - white
   - black
   - Retired
+  - mine
   layers:
   - Default
   - TransparentFX

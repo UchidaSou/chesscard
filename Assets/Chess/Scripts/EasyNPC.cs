@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EasyNPC : Player
@@ -10,14 +11,28 @@ public class EasyNPC : Player
     
     public override GameObject selectedChess()
     {
+        GameObject gameObject = GameObject.Find("Game");
+        Checker checker = gameObject.GetComponent<Game>().checker;
         int cardUse = Random.Range(0,7);
         GameObject[] chesses = GameObject.FindGameObjectsWithTag(this.getColor());
+        if(checker.checkCount >= 1){
+            if(this.getColor().Equals("white")){
+                return GameObject.Find("White King(Clone)");
+            }else{
+                return GameObject.Find("Black King(Clone)");
+            }
+        }
         int r = Random.Range(0,chesses.Length);
         return chesses[r];
     }
 
     public override Vector3 selectedMovePosition()
     {
+        GameObject gameObject = GameObject.Find("Game");
+        Checker checker = gameObject.GetComponent<Game>().checker;
+        if(checker.checkCount == 1){
+            return checker.checkObject.transform.position;
+        }
         GameObject[] chesses = GameObject.FindGameObjectsWithTag(this.getColor());
         GameObject[] square = GameObject.FindGameObjectsWithTag("Respawn");
         int r = Random.Range(0,square.Length);

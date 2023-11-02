@@ -10,6 +10,7 @@ public class King : Chess
         int j = (int) cellNumber % 8;
         int i = (int) cellNumber / 8;
         int move = this.getMove();
+        GameObject gameObject;
         for(int k=j-move;k<=j+move;k++){
             for(int l=i-move;l<=i+move;l++){
                 if(k>8||k<0){
@@ -19,6 +20,10 @@ public class King : Chess
                     continue;
                 }
                 if(k==j&&l==i){
+                    continue;
+                }
+                gameObject = boardState.chessBoardArray[l,k];
+                if(gameObject != null && gameObject.tag.Equals(this.tag)){
                     continue;
                 }
                 canMoveList.Add(ChessUiEngine.ToWorldPoint(l*8+k));

@@ -41,18 +41,25 @@ public class Card : MonoBehaviour
 
     public void turnReverse(GameObject beforeMoveObject){
         Debug.Log("Reverse");
+        int i = (int) -(beforeMoveObject.transform.position.x - 16) / 4;
+        int j = (int) (beforeMoveObject.transform.position.z + 16) /4;
+        BoardState boardState = board.GetComponent<BoardState>();
+        boardState.chessBoardArray[i,j] = null;
         Chess chess = beforeMoveObject.GetComponent<Chess>();
         Vector3 vector = chess.getBeforeVector();
         beforeMoveObject.transform.position = vector;
+        i = (int) -(vector.x - 16) / 4;
+        j = (int) (vector.z + 16) / 4;
+        boardState.chessBoardArray[i,j] = beforeMoveObject;
         this.turnreverse = false;
     }
 
     public void setMine(string color){
-        int cellNumber = Random.Range(14,41);
+        int cellNumber = Random.Range(2*8,5*8+7);
         Vector3 vector = ChessUiEngine.ToWorldPoint(cellNumber);
         Debug.Log("setMine " + cellNumber);
-        Instantiate(mine,vector,Quaternion.Euler(0,0,0));
-        mine.tag = color;
+        GameObject setmine = GameObject.Instantiate(mine,vector,Quaternion.Euler(0,0,0));
+        setmine.GetComponent<Mine>().color = color;
         this.setmine = false;
     }
 
@@ -87,5 +94,9 @@ public class Card : MonoBehaviour
 
     public void nullBtn(){
 
+    }
+
+    void Start(){
+        this.board = GameObject.Find("Board");
     }
 }

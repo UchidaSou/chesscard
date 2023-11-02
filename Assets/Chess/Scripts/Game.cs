@@ -26,13 +26,38 @@ public class Game : MonoBehaviour
     GameObject beforeMoveObject = null;
 
     void Start(){
-        secondCamera.SetActive(false);
+        int x = PlayerPrefs.GetInt("Level",1);
+        int y = PlayerPrefs.GetInt("First", 1);
+        if(y == 1){
+            firstPlayer.AddComponent<RealPlayer>();
+            secondCamera.SetActive(false);
+            player = firstPlayer.GetComponent<Player>();
+            player.setColor("white");
+            if(x == 1){
+                secondPlayer.AddComponent<EasyNPC>();
+            }else{
+                secondPlayer.AddComponent<normalNPC>();
+            }
+            player = secondPlayer.GetComponent<Player>();
+            player.setColor("black");
+        }else{
+            secondPlayer.AddComponent<RealPlayer>();
+            firstCamera.SetActive(false);
+            player = secondPlayer.GetComponent<Player>();
+            player.setColor("black");
+            if(x == 1){
+                firstPlayer.AddComponent<EasyNPC>();
+            }else{
+                firstPlayer.AddComponent<normalNPC>();
+            }
+            player = firstPlayer.GetComponent<Player>();
+            player.setColor("white");
+        }
         uiEngine.SetupPieces();
         GameObject[] gameObjects;
         Chess chess;
         //先行プレイヤーの設定
         player = firstPlayer.GetComponent<Player>();
-        player.setColor("white");
         gameObjects = GameObject.FindGameObjectsWithTag(player.getColor());
         foreach(GameObject gameObject in gameObjects){
             chess = gameObject.GetComponent<Chess>();
@@ -40,7 +65,6 @@ public class Game : MonoBehaviour
         }
         //後行プレイヤーの設定
         player = secondPlayer.GetComponent<Player>();
-        player.setColor("black");
         gameObjects = GameObject.FindGameObjectsWithTag(player.getColor());
         foreach(GameObject gameObject in gameObjects){
             chess = gameObject.GetComponent<Chess>();
@@ -98,9 +122,12 @@ public class Game : MonoBehaviour
                 chessObject = null;
                 bool check = checker.isCheck(player.getColor());
                 bool checkmate = checker.isCheckMate(player.getColor());
-                if(checker.isCheckMate(player.getColor()) || checker.isCheck(player.getColor())){
-                    Debug.Log("check " + check);
+                if(checker.isCheckMate(player.getColor())){
                     Debug.Log("CheckMate " + checkmate);
+                    Debug.Log(player.getColor()+"Lose");
+                }
+                if(checker.isCheck(player.getColor())){
+                    Debug.Log("check " + check);
                     Debug.Log(player.getColor()+"Lose");
                 }
                 //プレイヤーを交代する
