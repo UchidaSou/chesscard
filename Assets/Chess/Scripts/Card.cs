@@ -12,6 +12,7 @@ public class Card : MonoBehaviour
     public bool canntmove = true;
 
     public GameObject mine;
+    public GameObject cantMoveEffect;
     public GameObject board;
 
     public void Resurrection(string color){
@@ -89,6 +90,7 @@ public class Card : MonoBehaviour
         int r = Random.Range(0,objects.Length);
         objects[r].GetComponent<Chess>().canMove = false;
         Debug.Log("cantMove " + objects[r].name);
+        cantMoveEffect = Instantiate(cantMoveEffect,objects[r].transform.position,Quaternion.Euler(0,0,0));
         return objects[r];
     }
 

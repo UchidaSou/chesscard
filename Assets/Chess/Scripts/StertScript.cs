@@ -21,7 +21,6 @@ public class StertScript : MonoBehaviour
     {
         Toggle easy = GameObject.Find("easy").GetComponent<Toggle>();
         bool easyflag = easy.isOn;
-        Debug.Log(easyflag);
         if (easyflag)
         {
             PlayerPrefs.SetInt("Level",1);
@@ -31,7 +30,6 @@ public class StertScript : MonoBehaviour
         }
         Toggle first = GameObject.Find("white").GetComponent<Toggle>();
         bool firstflag = first.isOn;
-        Debug.Log(firstflag);
         if (firstflag)
         {
             PlayerPrefs.SetInt("First", 1);

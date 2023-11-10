@@ -158,6 +158,7 @@ public class Game : MonoBehaviour
                 if(chess.GetComponent<Chess>().count%2 == 0){
                     chess.GetComponent<Chess>().canMove = true;
                     canntMoveObject[i] = null;
+                    Destroy(player.GetComponent<Card>().cantMoveEffect);
                 }
             }
         }

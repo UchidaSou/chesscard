@@ -251,6 +251,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88db41a6538c97c4f873e6094dd5efc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  checkCount: 0
+  checkObject: {fileID: 0}
 --- !u!4 &122425946
 Transform:
   m_ObjectHideFlags: 0
@@ -827,6 +829,7 @@ MonoBehaviour:
   twicemove: 1
   canntmove: 1
   mine: {fileID: 0}
+  cantMoveEffect: {fileID: 0}
   board: {fileID: 0}
 --- !u!1 &776279366
 GameObject:
@@ -1767,6 +1770,7 @@ MonoBehaviour:
   twicemove: 1
   canntmove: 1
   mine: {fileID: 7188897934587076981, guid: 397e922cdd8852d4bb00f73b451f6c2d, type: 3}
+  cantMoveEffect: {fileID: 6716933543107358056, guid: 8a334e7c388e77347a1dddd727ef3446, type: 3}
   board: {fileID: 1484360090}
 --- !u!1 &1602129005
 GameObject:
@@ -2465,6 +2469,7 @@ MonoBehaviour:
   twicemove: 1
   canntmove: 1
   mine: {fileID: 7188897934587076981, guid: 397e922cdd8852d4bb00f73b451f6c2d, type: 3}
+  cantMoveEffect: {fileID: 6716933543107358056, guid: 8a334e7c388e77347a1dddd727ef3446, type: 3}
   board: {fileID: 1484360090}
 --- !u!1 &2002324193
 GameObject:

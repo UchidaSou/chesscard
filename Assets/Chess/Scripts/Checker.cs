@@ -82,7 +82,6 @@ public class Checker : MonoBehaviour
         int kingCellNumber = kingI*8 + kingJ;
         Vector3 now = ChessUiEngine.ToWorldPoint(kingCellNumber);
         List<Vector3> kingMovePosition = king.GetComponent<Chess>().canMovePosition(kingCellNumber);
-        Debug.Log("kingMovePosition " + kingMovePosition.Count);
         if(kingMovePosition.Count == 0){
             return false;
         }
@@ -110,17 +109,14 @@ public class Checker : MonoBehaviour
                             if(moveCell == Cell){
                                 checkObject = gameObject;
                                 inFlg = true;
-                                Debug.Log(checkObject + " is in");
                                 break;
                             }
                         }
-                        Debug.Log(gameObject.name+" color:"+color);
                         checkCount++;
                     }
                 }
             }
         }
-        Debug.Log("checkCount " + checkCount);
         if(checkCount >= 1 || inFlg){
             return true;
         }else{

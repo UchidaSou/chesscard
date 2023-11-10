@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
 public class Mine : MonoBehaviour
 {
+    public GameObject effect;
     public GameObject board;
     public string color;
     void OnTriggerEnter(Collider collider){
@@ -22,6 +24,7 @@ public class Mine : MonoBehaviour
             int j = (int) (collider.gameObject.transform.position.z + 16) / 4;
             boardState.chessBoardArray[i,j] = null;
             GameObject retiredObject = GameObject.Find(tag + "Retired");
+            Instantiate(effect,this.transform.position,this.transform.rotation);
             collider.transform.position = retiredObject.transform.position;
             collider.tag = "Retired";
             Destroy(this.gameObject);

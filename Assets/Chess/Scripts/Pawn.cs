@@ -1,9 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using Unity.VisualScripting.Dependencies.Sqlite;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class Pawn : Chess
 {
@@ -15,12 +11,6 @@ public class Pawn : Chess
         List<Vector3> canMoveList = new List<Vector3>();
         int j = (int) cellNumber % 8;
         int i = (int) cellNumber / 8;
-        /*int hitJ;
-        int hitI;
-        Vector3 origin;
-        Vector3 direction;
-        Vector3 instantiatePosition;
-        Ray ray;*/
         int pm;
         if(this.gameObject.tag.Equals("white")){
             pm = 1;
