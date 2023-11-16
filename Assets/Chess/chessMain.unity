@@ -829,6 +829,9 @@ MonoBehaviour:
   twicemove: 1
   canntmove: 1
   mine: {fileID: 0}
+  ressuEfect: {fileID: 0}
+  reverceEffect: {fileID: 0}
+  twiceEffect: {fileID: 0}
   cantMoveEffect: {fileID: 0}
   board: {fileID: 0}
 --- !u!1 &776279366
@@ -1770,6 +1773,9 @@ MonoBehaviour:
   twicemove: 1
   canntmove: 1
   mine: {fileID: 7188897934587076981, guid: 397e922cdd8852d4bb00f73b451f6c2d, type: 3}
+  ressuEfect: {fileID: 56852242586695119, guid: 4d7e19c9fcb52be4bb9a8ba855ffe12d, type: 3}
+  reverceEffect: {fileID: 6716933543107358056, guid: 8a334e7c388e77347a1dddd727ef3446, type: 3}
+  twiceEffect: {fileID: 4545730075028336661, guid: eafb5fe28c005164a92ca42f3f7532a7, type: 3}
   cantMoveEffect: {fileID: 6716933543107358056, guid: 8a334e7c388e77347a1dddd727ef3446, type: 3}
   board: {fileID: 1484360090}
 --- !u!1 &1602129005
@@ -2469,6 +2475,9 @@ MonoBehaviour:
   twicemove: 1
   canntmove: 1
   mine: {fileID: 7188897934587076981, guid: 397e922cdd8852d4bb00f73b451f6c2d, type: 3}
+  ressuEfect: {fileID: 56852242586695119, guid: 4d7e19c9fcb52be4bb9a8ba855ffe12d, type: 3}
+  reverceEffect: {fileID: 6716933543107358056, guid: 8a334e7c388e77347a1dddd727ef3446, type: 3}
+  twiceEffect: {fileID: 4545730075028336661, guid: eafb5fe28c005164a92ca42f3f7532a7, type: 3}
   cantMoveEffect: {fileID: 6716933543107358056, guid: 8a334e7c388e77347a1dddd727ef3446, type: 3}
   board: {fileID: 1484360090}
 --- !u!1 &2002324193

@@ -5,6 +5,8 @@ MonoImporter:
   serializedVersion: 2
   defaultReferences:
   - mine: {fileID: 7188897934587076981, guid: 397e922cdd8852d4bb00f73b451f6c2d, type: 3}
+  - ressuEfect: {fileID: 56852242586695119, guid: 4d7e19c9fcb52be4bb9a8ba855ffe12d, type: 3}
+  - cantMoveEffect: {fileID: 417761080263594737, guid: 7800b8f6b712bfe49bd663eeb3ebe1e4, type: 3}
   - board: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}

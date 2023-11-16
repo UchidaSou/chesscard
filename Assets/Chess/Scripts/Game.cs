@@ -158,7 +158,7 @@ public class Game : MonoBehaviour
                 if(chess.GetComponent<Chess>().count%2 == 0){
                     chess.GetComponent<Chess>().canMove = true;
                     canntMoveObject[i] = null;
-                    Destroy(player.GetComponent<Card>().cantMoveEffect);
+                    Destroy(player.GetComponent<Card>().insCantMove);
                 }
             }
         }
@@ -181,6 +181,8 @@ public class Game : MonoBehaviour
             return;
         }
         string color = beforeMoveObject.tag;
+        card.turnReverse(beforeMoveObject);
+        beforeMoveObject.GetComponent<Chess>().canMove = false;
         if(color.Equals("white")){
             canntMoveObject[0] = beforeMoveObject;
             count = 1;
@@ -188,8 +190,6 @@ public class Game : MonoBehaviour
             canntMoveObject[1] = beforeMoveObject;
             count = 2;
         }
-        beforeMoveObject.GetComponent<Chess>().canMove = false;
-        card.turnReverse(beforeMoveObject);
         ChangeTurn();
     }
 

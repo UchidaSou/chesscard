@@ -12,7 +12,7 @@ public class Card : MonoBehaviour
     public bool canntmove = true;
 
     public GameObject mine;
-    public GameObject cantMoveEffect;
+    public GameObject ressuEfect,reverceEffect,twiceEffect,cantMoveEffect,insCantMove;
     public GameObject board;
 
     public void Resurrection(string color){
@@ -32,6 +32,7 @@ public class Card : MonoBehaviour
         resurrectionObject.tag = color;
         Chess chess = resurrectionObject.GetComponent<Chess>();
         resurrectionObject.transform.position = chess.getFirstVector();
+        Instantiate(ressuEfect,resurrectionObject.transform.position,resurrectionObject.transform.rotation);
         retiredList.RemoveAt(r);
         Vector3 vector = chess.getFirstVector() + new Vector3(-16,0,16);
         int i = (int)-vector.x/4;
@@ -74,6 +75,7 @@ public class Card : MonoBehaviour
         }
         int r = Random.Range(0,objects.Count);
         objects[r].GetComponent<Chess>().setMove(2);
+        Instantiate(twiceEffect,objects[r].transform.position,objects[r].transform.rotation);
         Debug.Log("Twice " + objects[r].name);
         this.twicemove = false;
         }
@@ -90,7 +92,8 @@ public class Card : MonoBehaviour
         int r = Random.Range(0,objects.Length);
         objects[r].GetComponent<Chess>().canMove = false;
         Debug.Log("cantMove " + objects[r].name);
-        cantMoveEffect = Instantiate(cantMoveEffect,objects[r].transform.position,Quaternion.Euler(0,0,0));
+        insCantMove = Instantiate(cantMoveEffect,objects[r].transform.position,Quaternion.Euler(0,0,0));
+        this.canntmove = false;
         return objects[r];
     }
 
