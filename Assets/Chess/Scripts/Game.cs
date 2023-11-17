@@ -149,6 +149,9 @@ public class Game : MonoBehaviour
     }
 
     public void ChangeTurn(){
+        if(!player.card.usecard){
+            player.card.usecard = true;
+        }
         switch(player.getColor()){
             case "white":
                 nowPlayer = secondPlayer;
@@ -158,6 +161,7 @@ public class Game : MonoBehaviour
                 break;
         }
         player = nowPlayer.GetComponent<Player>();
+        player.card.point += 1;
         playerState = nowPlayer.GetComponent<PlayerState>();
         for(int i=0;i<count;i++){
             if(canntMoveObject[i] != null){
@@ -175,7 +179,7 @@ public class Game : MonoBehaviour
 
     public void Resurrection(){
         Card card = nowPlayer.GetComponent<Card>();
-        if(!card.resurrection){
+        if(!card.resurrection || card.point < 15){
             return;
         }
         string color = nowPlayer.GetComponent<Player>().getColor();
@@ -185,7 +189,7 @@ public class Game : MonoBehaviour
 
     public void TurnReverse(){
         Card card = nowPlayer.GetComponent<Card>();
-        if(!card.turnreverse){
+        if(!card.turnreverse || card.point < 10){
             return;
         }
         string color = beforeMoveObject.tag;
@@ -203,7 +207,7 @@ public class Game : MonoBehaviour
 
     public void setMine(){
         Card card = nowPlayer.GetComponent<Card>();
-        if(!card.setmine){
+        if(!card.setmine || card.point < 5){
             return;
         }
         string color = nowPlayer.GetComponent<Player>().getColor();
@@ -212,7 +216,7 @@ public class Game : MonoBehaviour
 
     public void twiceMove(){
         Card card = nowPlayer.GetComponent<Card>();
-        if(!card.twicemove){
+        if(!card.twicemove || card.point == 6){
             return;
         }
         string color = nowPlayer.GetComponent<Player>().getColor();
@@ -221,7 +225,7 @@ public class Game : MonoBehaviour
 
     public void canntMove(){
         Card card = nowPlayer.GetComponent<Card>();
-        if(!card.canntmove){
+        if(!card.canntmove || card.point < 10){
             return;
         }
         string color = nowPlayer.GetComponent<Player>().getColor();
@@ -236,7 +240,15 @@ public class Game : MonoBehaviour
         
     }
 
-    public void nullBtn(){
-
+    public void notUseCard(){
+        Card card = nowPlayer.GetComponent<Card>();
+        if(!card.notusecard || card.point < 12){
+            return;
+        }
+        if(nowPlayer.Equals(firstPlayer)){
+            card.notUseCard(secondPlayer.GetComponent<Player>().card);
+        }else{
+            card.notUseCard(firstPlayer.GetComponent<Player>().card);
+        }
     }
 }

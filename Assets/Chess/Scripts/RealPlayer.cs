@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RealPlayer : Player
 {
-    
+    public Text text;
     public override GameObject selectedChess()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -31,6 +32,11 @@ public class RealPlayer : Player
     public void Start()
     {
         base.setPlayerState(this.gameObject.GetComponent<PlayerState>(),0);
+        this.card = this.gameObject.GetComponent<Card>();
+        this.text = card.text;
     }
     
+    public void Update(){
+        this.text.text = this.card.point.ToString();
+    }
 }

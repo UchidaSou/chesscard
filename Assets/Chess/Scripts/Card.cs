@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Security.Cryptography;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Card : MonoBehaviour
 {
@@ -10,6 +12,10 @@ public class Card : MonoBehaviour
     public bool setmine = true;
     public bool twicemove = true;
     public bool canntmove = true;
+    public bool notusecard = true;
+    public bool usecard = true;
+    public int point = 10;
+    public Text text;
 
     public GameObject mine;
     public GameObject ressuEfect,reverceEffect,twiceEffect,cantMoveEffect,insCantMove;
@@ -39,6 +45,7 @@ public class Card : MonoBehaviour
         int j  = (int)vector.z/4;
         boardState.chessBoardArray[i,j] = resurrectionObject;
         this.resurrection = false;
+        this.point -= 15;
     }
 
     public void turnReverse(GameObject beforeMoveObject){
@@ -54,6 +61,7 @@ public class Card : MonoBehaviour
         j = (int) (vector.z + 16) / 4;
         boardState.chessBoardArray[i,j] = beforeMoveObject;
         this.turnreverse = false;
+        this.point -= 10;
     }
 
     public void setMine(string color){
@@ -76,6 +84,7 @@ public class Card : MonoBehaviour
         GameObject setmine = GameObject.Instantiate(mine,vector,Quaternion.Euler(0,0,0));
         setmine.GetComponent<Mine>().color = color;
         this.setmine = false;
+        this.point -= 5;
     }
 
     public void twiceMove(string color){
@@ -91,6 +100,7 @@ public class Card : MonoBehaviour
         Instantiate(twiceEffect,objects[r].transform.position,objects[r].transform.rotation);
         Debug.Log("Twice " + objects[r].name);
         this.twicemove = false;
+        this.point -= 6;
         }
 
 
@@ -107,11 +117,14 @@ public class Card : MonoBehaviour
         Debug.Log("cantMove " + objects[r].name);
         insCantMove = Instantiate(cantMoveEffect,objects[r].transform.position,Quaternion.Euler(0,0,0));
         this.canntmove = false;
+        this.point -= 10;
         return objects[r];
     }
 
-    public void nullBtn(){
-
+    public void notUseCard(Card card){
+        card.usecard = false;
+        this.point -= 12;
+        this.notusecard = false;
     }
 
     void Start(){

@@ -9,6 +9,7 @@ public abstract class Player:MonoBehaviour
     private String mycolor;
     private PlayerState playerState;
     private int score;
+    public Card card;
 
     public void setPlayerState(PlayerState playerState,int state){
         this.playerState = playerState;

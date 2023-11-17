@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class normalNPC : Player
@@ -13,6 +14,7 @@ public class normalNPC : Player
     private GameObject firstSelect;
     public override GameObject selectedChess()
     {
+        //int x = UnityEngine.Random.Range(0,100);
         List<GameObject> myChesses = GameObject.FindGameObjectsWithTag(this.getColor()).ToList();
         List<GameObject> enemeyChesses = new List<GameObject>();
         if(this.getColor().Equals("white")){
@@ -97,5 +99,6 @@ public class normalNPC : Player
         this.setPlayerState(this.GetComponent<PlayerState>(),2);
         board = GameObject.Find("Board");
         this.boardState = board.GetComponent<BoardState>();
+        this.card = this.gameObject.GetComponent<Card>();
     }  
 }
