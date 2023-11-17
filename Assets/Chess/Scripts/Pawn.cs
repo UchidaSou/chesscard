@@ -32,6 +32,12 @@ public class Pawn : Chess
                 canMoveList.Add(ChessUiEngine.ToWorldPoint((i+pm*k)*8 + j));
             }
         }
+        if(j+1<maxJ && boardState.chessBoardArray[i+pm,j+1] != null && !!boardState.chessBoardArray[i+pm,j+1].tag.Equals(this.tag)){
+            canMoveList.Add(ChessUiEngine.ToWorldPoint((i+pm)*8 + j+1));
+        }
+        if(j-1>=0 && boardState.chessBoardArray[i+pm,j-1] != null && !boardState.chessBoardArray[i+pm,j-1].tag.Equals(this.tag)){
+            canMoveList.Add(ChessUiEngine.ToWorldPoint((i+pm)*8 + j-1));
+        }
         return canMoveList;
     }
 

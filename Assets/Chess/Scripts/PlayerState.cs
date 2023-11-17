@@ -10,9 +10,7 @@ public class PlayerState : MonoBehaviour
     public void setState(int state){
         this.state = state;
     }
-
     public int getState(){
         return this.state;
     }
-
 }

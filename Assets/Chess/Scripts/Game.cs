@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Net.NetworkInformation;
 using Unity.VisualScripting;
 using UnityEditor;
@@ -28,6 +29,18 @@ public class Game : MonoBehaviour
     void Start(){
         int x = PlayerPrefs.GetInt("Level",1);
         int y = PlayerPrefs.GetInt("First", 1);
+        int mode = PlayerPrefs.GetInt("Mode",0);
+        if(mode == 0){
+            uiEngine.SetupPieces();
+        }else{
+            uiEngine.SetUpDemo();
+            Vector3 pos = firstCamera.transform.position;
+            pos.z = -5.0f;
+            firstCamera.transform.position = pos;
+            pos = secondCamera.transform.position;
+            pos.z = -5.0f;
+            secondCamera.transform.position = pos;
+        }
         if(y == 1){
             firstPlayer.AddComponent<RealPlayer>();
             secondCamera.SetActive(false);
@@ -53,8 +66,6 @@ public class Game : MonoBehaviour
             player = firstPlayer.GetComponent<Player>();
             player.setColor("white");
         }
-        //uiEngine.SetupPieces();
-        uiEngine.SetUpDemo();
         GameObject[] gameObjects;
         Chess chess;
         //先行プレイヤーの設定
