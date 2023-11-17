@@ -32,5 +32,4 @@ public class BoardState : MonoBehaviour
         blackRetired = new List<GameObject>();
         whiteRetired = new List<GameObject>();
     }
-
 }
