@@ -11,7 +11,8 @@ public class BoardState : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        chessBoardArray = new GameObject[8,8];
+        chessBoardArray = new GameObject[6,5];
+        //chessBoardArray = new GameObject[8,8];
         blackRetired = new List<GameObject>();
         whiteRetired = new List<GameObject>();
         imbalance = new float[8,8];

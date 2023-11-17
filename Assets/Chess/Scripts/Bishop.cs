@@ -7,13 +7,15 @@ public class Bishop : Chess
 {
     public override List<Vector3> canMovePosition(int cellNumber)
     {
+        int maxI = this.getMaxI();
+        int maxJ = this.getMaxJ();
         List<Vector3> canMoveList = new List<Vector3>();
         int j = (int) cellNumber % 8;
         int i = (int) cellNumber / 8;
         GameObject gameObject;
         bool upFlg=false,downFlg=false;
-        for(int k=1;k<8-j;k++){
-            if(!upFlg && i+k<8){
+        for(int k=1;k<maxJ-j;k++){
+            if(!upFlg && i+k<maxI){
                 gameObject = boardState.chessBoardArray[i+k,j+k];
                 if(gameObject != null){
                     upFlg = true;
@@ -42,7 +44,7 @@ public class Bishop : Chess
         upFlg = false;
         downFlg = false;
         for(int k=1;k<j+1;k++){
-            if(!upFlg && i+k<8){
+            if(!upFlg && i+k<maxI){
                 gameObject = boardState.chessBoardArray[i+k,j-k];
                 if(gameObject != null){
                     upFlg = true;

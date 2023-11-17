@@ -57,7 +57,16 @@ public class Card : MonoBehaviour
     }
 
     public void setMine(string color){
-        int cellNumber = Random.Range(2*8,5*8+7);
+        //int cellNumber = Random.Range(2*8,5*8+7);
+        int cellNumber = Random.Range(2*8,3*8+4);
+        if(cellNumber < 3*8 && cellNumber > 2*8+4){
+            if(color.Equals("white")){
+                cellNumber = Random.Range(3*8,3*8+4);
+            }else{
+                cellNumber = Random.Range(2*8,2*8+4);
+            }
+            
+        }
         Vector3 vector = ChessUiEngine.ToWorldPoint(cellNumber);
         Debug.Log("setMine " + cellNumber);
         GameObject setmine = GameObject.Instantiate(mine,vector,Quaternion.Euler(0,0,0));

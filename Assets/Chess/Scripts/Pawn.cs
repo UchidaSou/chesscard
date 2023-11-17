@@ -8,6 +8,8 @@ public class Pawn : Chess
 
     public override List<Vector3> canMovePosition(int cellNumber)
     {
+        int maxI = this.getMaxI();
+        int maxJ = this.getMaxJ();
         List<Vector3> canMoveList = new List<Vector3>();
         int j = (int) cellNumber % 8;
         int i = (int) cellNumber / 8;
@@ -22,7 +24,7 @@ public class Pawn : Chess
             move = move * 2;
         }
         GameObject gameObject;
-        for(int k=1;k<=move&&(i+k<8 || i-k>=0);k++){
+        for(int k=1;k<=move&&(i+k<maxI || i-k>=0);k++){
             gameObject = boardState.chessBoardArray[i+pm*k,j];
             if(gameObject != null){
                 break;
@@ -42,9 +44,12 @@ public class Pawn : Chess
     // Update is called once per frame
     void Update()
     {
+        if(this.tag == "Retired"){
+            return;
+        }
         Vector3 vector = this.gameObject.transform.position+ new Vector3(-16,0,16);
         int i = (int)-vector.x/4;
-        if(i == 7){
+        if(i == this.getMaxI()){
             Vector3 instantiatePosition = this.transform.position;
             instantiatePosition.y = 3.1f;
             Instantiate(Queen,instantiatePosition,Quaternion.Euler(90,0,0));

@@ -53,7 +53,8 @@ public class Game : MonoBehaviour
             player = firstPlayer.GetComponent<Player>();
             player.setColor("white");
         }
-        uiEngine.SetupPieces();
+        //uiEngine.SetupPieces();
+        uiEngine.SetUpDemo();
         GameObject[] gameObjects;
         Chess chess;
         //先行プレイヤーの設定
@@ -139,13 +140,9 @@ public class Game : MonoBehaviour
     public void ChangeTurn(){
         switch(player.getColor()){
             case "white":
-                //firstCamera.SetActive(false);
-                //secondCamera.SetActive(true);
                 nowPlayer = secondPlayer;
                 break;
             case "black":
-                //firstCamera.SetActive(true);
-                //secondCamera.SetActive(false);
                 nowPlayer = firstPlayer;
                 break;
         }

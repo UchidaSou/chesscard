@@ -17,6 +17,7 @@ public abstract class Chess:MonoBehaviour
     public GameObject board;
     public BoardState boardState;
     private int material;
+    private int maxI,maxJ;
 
     public void ShowCanMovePosition(){
         if(!this.canMove){
@@ -116,5 +117,20 @@ public abstract class Chess:MonoBehaviour
 
     public int getScore(int i,int j){
         return (int)this.boardState.imbalance[i,j] * this.getMaterial();
+    }
+
+    public void setMaxI(int maxI){
+        this.maxI = maxI;
+    }
+
+    public void setMaxJ(int maxJ){
+        this.maxJ = maxJ;
+    }
+
+    public int getMaxI(){
+        return this.maxI;
+    }
+    public int getMaxJ(){
+        return this.maxJ;
     }
 }

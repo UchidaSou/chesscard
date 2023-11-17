@@ -5,6 +5,7 @@ using UnityEngine;
 public class ChessUiEngine : MonoBehaviour {
 	enum Piece {King=0, Queen=1, Rook=2, Knight=3, Bishop=4, Pawn=5};
 	private Piece[] setup = new Piece[] {Piece.Rook, Piece.Knight, Piece.Bishop, Piece.Queen, Piece.King, Piece.Bishop, Piece.Knight, Piece.Rook};
+	private Piece[] demo = new Piece[]{Piece.Rook,Piece.Bishop,Piece.King,Piece.Bishop,Piece.Rook};
 	public BoxCollider bounds;
 	public List<Transform> whitePiecePrefabs;
 	public List<Transform> blackPiecePrefabs;
@@ -36,6 +37,8 @@ public class ChessUiEngine : MonoBehaviour {
 			state.setColor("white");
 			boardState.chessBoardArray[0,i] = piece.gameObject;
 			chess.boardState = boardState;
+			chess.setMaxI(8);
+			chess.setMaxJ(8);
 		}
 		for (int i = 0; i < 8; i++) {
 			Transform piece = GameObject.Instantiate (blackPiecePrefabs [(int)setup [i]]);
@@ -49,6 +52,8 @@ public class ChessUiEngine : MonoBehaviour {
 			state.setColor("black");
 			boardState.chessBoardArray[7,i] = piece.gameObject;
 			chess.boardState = boardState;
+			chess.setMaxI(8);
+			chess.setMaxJ(8);
 		}
 		for (int i = 0; i < 8; i++) {
 			Transform piece = GameObject.Instantiate (whitePiecePrefabs [(int)Piece.Pawn]);
@@ -62,6 +67,8 @@ public class ChessUiEngine : MonoBehaviour {
 			state.setColor("white");
 			boardState.chessBoardArray[1,i] = piece.gameObject;
 			chess.boardState = boardState;
+			chess.setMaxI(8);
+			chess.setMaxJ(8);
 		}
 		
 		for (int i = 0; i < 8; i++) {
@@ -76,6 +83,73 @@ public class ChessUiEngine : MonoBehaviour {
 			state.setColor("black");
 			boardState.chessBoardArray[6,i] = piece.gameObject;
 			chess.boardState = boardState;
+			chess.setMaxI(8);
+			chess.setMaxJ(8);
+		}
+	}
+
+	public void SetUpDemo(){
+		boardState = board.gameObject.GetComponent<BoardState>();
+		for (int i = 0; i < 5; i++) {
+			Transform piece = GameObject.Instantiate (whitePiecePrefabs [(int)demo [i]]);
+			Vector3 worldPoint = ToWorldPoint (i);
+			piece.position = new Vector3(worldPoint.x, piece.position.y, worldPoint.z);	
+			Chess chess = piece.GetComponent<Chess>();
+			chess.setFirstVector(piece.position);
+			chess.setBeforeVector(piece.position);
+			State state = piece.GetComponent<State>();
+			state.setSetUp((int)demo[i]);
+			state.setColor("white");
+			boardState.chessBoardArray[0,i] = piece.gameObject;
+			chess.boardState = boardState;
+			chess.setMaxI(6);
+			chess.setMaxJ(5);
+		}
+		for (int i = 0; i < 5; i++) {
+			Transform piece = GameObject.Instantiate (blackPiecePrefabs [(int)demo [i]]);
+			Vector3 worldPoint = ToWorldPoint (i+8*5);
+			piece.position = new Vector3(worldPoint.x, piece.position.y, worldPoint.z);	
+			Chess chess = piece.GetComponent<Chess>();
+			chess.setFirstVector(piece.position);
+			chess.setBeforeVector(piece.position);
+			State state = piece.GetComponent<State>();
+			state.setSetUp((int)demo[i]);
+			state.setColor("black");
+			boardState.chessBoardArray[5,i] = piece.gameObject;
+			chess.boardState = boardState;
+			chess.setMaxI(6);
+			chess.setMaxJ(5);
+		}
+		for (int i = 0; i < 5; i++) {
+			Transform piece = GameObject.Instantiate (whitePiecePrefabs [(int)Piece.Pawn]);
+			Vector3 worldPoint = ToWorldPoint (i+8);
+			piece.position = new Vector3(worldPoint.x, piece.position.y, worldPoint.z);
+			Chess chess = piece.GetComponent<Pawn>();
+			chess.setFirstVector(piece.position);
+			chess.setBeforeVector(piece.position);
+			State state = piece.GetComponent<State>();
+			state.setSetUp((int)Piece.Pawn);
+			state.setColor("white");
+			boardState.chessBoardArray[1,i] = piece.gameObject;
+			chess.boardState = boardState;
+			chess.setMaxI(6);
+			chess.setMaxJ(5);
+		}
+		
+		for (int i = 0; i < 5; i++) {
+			Transform piece = GameObject.Instantiate (blackPiecePrefabs [(int)Piece.Pawn]);
+			Vector3 worldPoint = ToWorldPoint (i+8*4);
+			piece.position = new Vector3(worldPoint.x, piece.position.y, worldPoint.z);	
+			Chess chess = piece.GetComponent<Pawn>();
+			chess.setFirstVector(piece.position);
+			chess.setBeforeVector(piece.position);
+			State state = piece.GetComponent<State>();
+			state.setSetUp((int)Piece.Pawn);
+			state.setColor("black");
+			boardState.chessBoardArray[4,i] = piece.gameObject;
+			chess.boardState = boardState;
+			chess.setMaxI(6);
+			chess.setMaxJ(5);
 		}
 	}
 
