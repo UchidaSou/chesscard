@@ -32,9 +32,9 @@ public class RealPlayer : Player
     public void Start()
     {
         base.setPlayerState(this.gameObject.GetComponent<PlayerState>(),0);
-        this.card = this.gameObject.GetComponent<Card>();
+        base.card = this.gameObject.GetComponent<Card>();
         this.text = card.text;
-        this.text.text = this.card.point.ToString();
+        this.text.text = base.card.point.ToString();
     }
     
 }
