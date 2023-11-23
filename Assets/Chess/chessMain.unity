@@ -1115,6 +1115,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Leather_Chair
       objectReference: {fileID: 0}
+    - target: {fileID: 7913095298352757725, guid: 5e6a18de649e1db47b6f2ed538fc63f3, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 1eefee0e0609f3842b0258788a3290fe, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5e6a18de649e1db47b6f2ed538fc63f3, type: 3}
 --- !u!1 &776279366
@@ -1500,7 +1504,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 2147483647
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -1885,6 +1889,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Leather_Chair (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 7913095298352757725, guid: 5e6a18de649e1db47b6f2ed538fc63f3, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 1eefee0e0609f3842b0258788a3290fe, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5e6a18de649e1db47b6f2ed538fc63f3, type: 3}
 --- !u!1 &1072467556
@@ -2121,6 +2129,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
       objectReference: {fileID: 0}
+    - target: {fileID: 23737230515901090, guid: 00284cf2de272b74d864cac5ee59c480, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 476546af43edc7248ad74be0405e64f1, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 00284cf2de272b74d864cac5ee59c480, type: 3}
 --- !u!1 &1270083347
@@ -2488,8 +2500,8 @@ MonoBehaviour:
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
-  m_horizontalMapping: 0
-  m_verticalMapping: 0
+  m_horizontalMapping: 3
+  m_verticalMapping: 3
   m_uvLineOffset: 0
   m_geometrySortingOrder: 0
   m_IsTextObjectScaleStatic: 0

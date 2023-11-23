@@ -46,6 +46,7 @@ public class Card : MonoBehaviour
         boardState.chessBoardArray[i,j] = resurrectionObject;
         this.resurrection = false;
         this.point -= 15;
+        this.text.text = this.point.ToString();
     }
 
     public void turnReverse(GameObject beforeMoveObject){
@@ -62,6 +63,7 @@ public class Card : MonoBehaviour
         boardState.chessBoardArray[i,j] = beforeMoveObject;
         this.turnreverse = false;
         this.point -= 10;
+        this.text.text = this.point.ToString();
     }
 
     public void setMine(string color){
@@ -85,6 +87,7 @@ public class Card : MonoBehaviour
         setmine.GetComponent<Mine>().color = color;
         this.setmine = false;
         this.point -= 5;
+        this.text.text = this.point.ToString();
     }
 
     public void twiceMove(string color){
@@ -101,6 +104,7 @@ public class Card : MonoBehaviour
         Debug.Log("Twice " + objects[r].name);
         this.twicemove = false;
         this.point -= 6;
+        this.text.text = this.point.ToString();
         }
 
 
@@ -118,12 +122,14 @@ public class Card : MonoBehaviour
         insCantMove = Instantiate(cantMoveEffect,objects[r].transform.position,Quaternion.Euler(0,0,0));
         this.canntmove = false;
         this.point -= 10;
+        this.text.text = this.point.ToString();
         return objects[r];
     }
 
     public void notUseCard(Card card){
         card.usecard = false;
         this.point -= 12;
+        this.text.text = this.point.ToString();
         this.notusecard = false;
     }
 

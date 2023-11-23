@@ -34,9 +34,7 @@ public class RealPlayer : Player
         base.setPlayerState(this.gameObject.GetComponent<PlayerState>(),0);
         this.card = this.gameObject.GetComponent<Card>();
         this.text = card.text;
-    }
-    
-    public void Update(){
         this.text.text = this.card.point.ToString();
     }
+    
 }
