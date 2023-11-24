@@ -14,6 +14,15 @@ public class normalNPC : Player
     private GameObject firstSelect;
     public override GameObject selectedChess()
     {
+        int mode = PlayerPrefs.GetInt("Mode",0);
+        int maxI,maxJ;
+        if(mode == 0){
+            maxI = 8;
+            maxJ = 8;
+        }else{
+            maxI = 6;
+            maxJ = 5;
+        }
         //int x = UnityEngine.Random.Range(0,100);
         List<GameObject> myChesses = GameObject.FindGameObjectsWithTag(this.getColor()).ToList();
         List<GameObject> enemeyChesses = new List<GameObject>();
@@ -31,7 +40,7 @@ public class normalNPC : Player
         }
         int max = -1;
         this.selectedObject = null;
-        GameObject[,] boardArray = new GameObject[8,8];
+        GameObject[,] boardArray = new GameObject[maxI,maxJ];
         Array.Copy(boardState.chessBoardArray,boardArray,boardArray.Length); 
         this.ReturnMethod(myChesses,enemeyChesses,2,boardArray,max);
         return this.selectedObject;

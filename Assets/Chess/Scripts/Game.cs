@@ -216,7 +216,7 @@ public class Game : MonoBehaviour
 
     public void twiceMove(){
         Card card = nowPlayer.GetComponent<Card>();
-        if(!card.twicemove || card.point == 6){
+        if(!card.twicemove || card.point < 6){
             return;
         }
         string color = nowPlayer.GetComponent<Player>().getColor();
