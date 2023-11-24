@@ -40,5 +40,9 @@ public class RealPlayer : Player
     public void Update(){
         this.text.text = base.card.point.ToString();
     }
-    
+
+    public override void UseCard()
+    {
+        return;
+    }
 }

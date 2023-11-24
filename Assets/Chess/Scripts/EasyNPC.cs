@@ -46,4 +46,31 @@ public class EasyNPC : Player
         this.setPlayerState(this.GetComponent<PlayerState>(),1);
         this.card = this.gameObject.GetComponent<Card>();
     }    
+
+    public override void UseCard()
+    {
+        int x = UnityEngine.Random.Range(0,20);
+        switch(x){
+            case 0:
+             GameObject.Find("Game").GetComponent<Game>().Resurrection();
+             break;
+            case 1:
+             GameObject.Find("Game").GetComponent<Game>().TurnReverse();
+             break;
+            case 2:
+             GameObject.Find("Game").GetComponent<Game>().setMine();
+             break;
+             case 3:
+             GameObject.Find("Game").GetComponent<Game>().twiceMove();
+             break;
+            case 4:
+             GameObject.Find("Game").GetComponent<Game>().canntMove();
+             break;
+            case 5:
+             GameObject.Find("Game").GetComponent<Game>().notUseCard();
+             break;
+            default:
+             break;
+        }
+    }
 }

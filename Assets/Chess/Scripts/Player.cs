@@ -19,6 +19,7 @@ public abstract class Player:MonoBehaviour
 
     public abstract GameObject selectedChess();
     public abstract Vector3 selectedMovePosition();
+    public abstract void UseCard();
 
     public void setColor(String color){
         this.mycolor = color;

@@ -91,6 +91,9 @@ public class Game : MonoBehaviour
     {
         bool npcFlg = false;
         if(Input.GetMouseButtonDown(0) || nowPlayer.GetComponent<PlayerState>().getState() != 0){
+            if(nowPlayer.GetComponent<PlayerState>().getState() != 0){
+                player.UseCard();
+            }
             GameObject[] reapwn = GameObject.FindGameObjectsWithTag("Respawn");
             if(reapwn.Length > 0){
                 foreach(GameObject gameObject in reapwn){

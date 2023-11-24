@@ -23,7 +23,6 @@ public class normalNPC : Player
             maxI = 6;
             maxJ = 5;
         }
-        //int x = UnityEngine.Random.Range(0,100);
         List<GameObject> myChesses = GameObject.FindGameObjectsWithTag(this.getColor()).ToList();
         List<GameObject> enemeyChesses = new List<GameObject>();
         if(this.getColor().Equals("white")){
@@ -110,4 +109,31 @@ public class normalNPC : Player
         this.boardState = board.GetComponent<BoardState>();
         this.card = this.gameObject.GetComponent<Card>();
     }  
+
+    public override void UseCard()
+    {
+        int x = UnityEngine.Random.Range(0,20);
+        switch(x){
+            case 0:
+             GameObject.Find("Game").GetComponent<Game>().Resurrection();
+             break;
+            case 1:
+             GameObject.Find("Game").GetComponent<Game>().TurnReverse();
+             break;
+            case 2:
+             GameObject.Find("Game").GetComponent<Game>().setMine();
+             break;
+             case 3:
+             GameObject.Find("Game").GetComponent<Game>().twiceMove();
+             break;
+            case 4:
+             GameObject.Find("Game").GetComponent<Game>().canntMove();
+             break;
+            case 5:
+             GameObject.Find("Game").GetComponent<Game>().notUseCard();
+             break;
+            default:
+             break;
+        }
+    }
 }
