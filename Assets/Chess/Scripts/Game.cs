@@ -189,7 +189,7 @@ public class Game : MonoBehaviour
 
     public void TurnReverse(){
         Card card = nowPlayer.GetComponent<Card>();
-        if(!card.turnreverse || card.point < 10){
+        if(!card.turnreverse || card.point < 10 || beforeMoveObject == null){
             return;
         }
         string color = beforeMoveObject.tag;
