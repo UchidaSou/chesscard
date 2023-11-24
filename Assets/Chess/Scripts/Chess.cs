@@ -62,6 +62,9 @@ public abstract class Chess:MonoBehaviour
             player.setScore(player.getScore() - chess.getMaterial());
             }
         boardState.chessBoardArray[i,j] = this.gameObject;
+        if(this.gameObject.transform.childCount != 0){
+            Destroy(this.gameObject.transform.GetChild(0).gameObject);
+        }
         this.gameObject.transform.position = vector;
         State state = this.gameObject.GetComponent<State>();
         if(state.getSetUp() == 5){
