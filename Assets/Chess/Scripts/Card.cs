@@ -100,7 +100,7 @@ public class Card : MonoBehaviour
         }
         int r = Random.Range(0,objects.Count);
         objects[r].GetComponent<Chess>().setMove(2);
-        Instantiate(twiceEffect,objects[r].transform.position,objects[r].transform.rotation);
+        Instantiate(twiceEffect,objects[r].transform.position,Quaternion.Euler(0,0,90),objects[r].transform);
         Debug.Log("Twice " + objects[r].name);
         this.twicemove = false;
         this.point -= 6;

@@ -36,5 +36,13 @@ public class RealPlayer : Player
         this.text = card.text;
         this.text.text = base.card.point.ToString();
     }
-    
+
+    public void Update(){
+        this.text.text = base.card.point.ToString();
+    }
+
+    public override void UseCard()
+    {
+        return;
+    }
 }

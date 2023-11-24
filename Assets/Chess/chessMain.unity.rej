@@ -1,0 +1,10 @@
+diff a/Assets/Chess/chessMain.unity b/Assets/Chess/chessMain.unity	(rejected hunks)
+@@ -2037,7 +2037,7 @@
+   m_HandleRect: {fileID: 1218637073}
+   m_Direction: 2
+   m_Value: 1
+-  m_Size: 0.3415385
++  m_Size: 0.34153846
+   m_NumberOfSteps: 0
+   m_OnValueChanged:
+     m_PersistentCalls:

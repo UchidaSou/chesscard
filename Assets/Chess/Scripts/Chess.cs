@@ -49,6 +49,9 @@ public abstract class Chess:MonoBehaviour
         Game game = GameObject.Find("Game").GetComponent<Game>();
         Player player = game.nowPlayer.GetComponent<Player>();
         if(gameObject != null){
+            if(gameObject.transform.childCount != 0){
+                Destroy(gameObject.transform.GetChild(0).gameObject);
+            }
             if(gameObject.tag.Equals("white")){
                 boardState.whiteRetired.Add(gameObject);
             }else{
@@ -60,8 +63,11 @@ public abstract class Chess:MonoBehaviour
             gameObject.tag = "Retired";
             Chess chess = gameObject.GetComponent<Chess>();
             player.setScore(player.getScore() - chess.getMaterial());
-            }
+        }
         boardState.chessBoardArray[i,j] = this.gameObject;
+        if(this.gameObject.transform.childCount != 0){
+            Destroy(this.gameObject.transform.GetChild(0).gameObject);
+        }
         this.gameObject.transform.position = vector;
         State state = this.gameObject.GetComponent<State>();
         if(state.getSetUp() == 5){

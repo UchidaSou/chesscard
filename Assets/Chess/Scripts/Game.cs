@@ -91,6 +91,9 @@ public class Game : MonoBehaviour
     {
         bool npcFlg = false;
         if(Input.GetMouseButtonDown(0) || nowPlayer.GetComponent<PlayerState>().getState() != 0){
+            if(nowPlayer.GetComponent<PlayerState>().getState() != 0){
+                player.UseCard();
+            }
             GameObject[] reapwn = GameObject.FindGameObjectsWithTag("Respawn");
             if(reapwn.Length > 0){
                 foreach(GameObject gameObject in reapwn){
@@ -189,7 +192,7 @@ public class Game : MonoBehaviour
 
     public void TurnReverse(){
         Card card = nowPlayer.GetComponent<Card>();
-        if(!card.turnreverse || card.point < 10){
+        if(!card.turnreverse || card.point < 10 || beforeMoveObject == null){
             return;
         }
         string color = beforeMoveObject.tag;
@@ -216,7 +219,7 @@ public class Game : MonoBehaviour
 
     public void twiceMove(){
         Card card = nowPlayer.GetComponent<Card>();
-        if(!card.twicemove || card.point == 6){
+        if(!card.twicemove || card.point < 6){
             return;
         }
         string color = nowPlayer.GetComponent<Player>().getColor();
