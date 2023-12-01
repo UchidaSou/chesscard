@@ -6,7 +6,8 @@ using UnityEngine;
 public class Checker : MonoBehaviour
 {
     public int checkCount = 0;
-    public GameObject checkObject;
+    public GameObject checkObject = null;
+    public bool inFlg = false;
     public bool isCheckMate(string color){
         GameObject king;
         GameObject[] objects;
@@ -16,6 +17,9 @@ public class Checker : MonoBehaviour
         }else{
             king = GameObject.Find("Black King(Clone)");
             objects = GameObject.FindGameObjectsWithTag("white");
+        }
+        if(king.gameObject.tag.Equals("Retired")){
+            return true;
         }
         Vector3 kingPosition = king.transform.position + new Vector3(-16,0,16);
         int kingI = (int)-kingPosition.x/4;
@@ -65,7 +69,7 @@ public class Checker : MonoBehaviour
     }
 
     public bool isCheck(string color){
-        bool inFlg = false;
+        inFlg = false;
         checkCount = 0;
         GameObject king;
         GameObject[] objects;
@@ -80,7 +84,6 @@ public class Checker : MonoBehaviour
         int kingI = (int)-kingPosition.x/4;
         int kingJ = (int)kingPosition.z/4;
         int kingCellNumber = kingI*8 + kingJ;
-        Vector3 now = ChessUiEngine.ToWorldPoint(kingCellNumber);
         List<Vector3> kingMovePosition = king.GetComponent<Chess>().canMovePosition(kingCellNumber);
         if(kingMovePosition.Count == 0){
             return false;
@@ -106,7 +109,8 @@ public class Checker : MonoBehaviour
                             int moveI = (int) - (move.x - 16) / 4;
                             int moveJ = (int) (move.z + 16) /4;
                             int moveCell = moveI*8 + moveJ;
-                            if(moveCell == Cell){
+                            if(moveCell == cellNumber){
+                                Debug.Log(gameObject);
                                 checkObject = gameObject;
                                 inFlg = true;
                                 break;

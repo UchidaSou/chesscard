@@ -30,7 +30,9 @@ public class EasyNPC : Player
     {
         GameObject gameObject = GameObject.Find("Game");
         Checker checker = gameObject.GetComponent<Game>().checker;
-        if(checker.checkCount >= 1){
+        bool check = checker.isCheck(this.gameObject.GetComponent<Player>().getColor());
+        Debug.Log("NPC:"+check);
+        if(check && checker.checkCount >= 1 && checker.inFlg){
             return checker.checkObject.transform.position;
         }
         GameObject[] chesses = GameObject.FindGameObjectsWithTag(this.getColor());

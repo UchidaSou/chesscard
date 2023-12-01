@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
@@ -7,6 +8,8 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Game : MonoBehaviour
 {
@@ -23,10 +26,15 @@ public class Game : MonoBehaviour
     Chess chess;
     Vector3 selectedPosition;
     GameObject[] canntMoveObject = new GameObject[2];
+    public Text result;
     int count = 0;
     GameObject beforeMoveObject = null;
+    public GameObject resultCanvas;
+    public GameObject mainCanvas;
+    public bool playStop = false;
 
     void Start(){
+        resultCanvas.SetActive(false);
         int x = PlayerPrefs.GetInt("Level",1);
         int y = PlayerPrefs.GetInt("First", 1);
         int mode = PlayerPrefs.GetInt("Mode",0);
@@ -89,6 +97,19 @@ public class Game : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        if(playStop){
+            return;
+        }
+        if(checker.isCheckMate(player.getColor())){
+            mainCanvas.SetActive(false);
+            resultCanvas.SetActive(true);
+            result.text = player.getColor() + " LOSE";
+            playStop = true;
+            return;
+        }
+        if(checker.isCheck(player.getColor())){
+            Debug.Log("check " + player.getColor());
+        }
         bool npcFlg = false;
         if(Input.GetMouseButtonDown(0) || nowPlayer.GetComponent<PlayerState>().getState() != 0){
             if(nowPlayer.GetComponent<PlayerState>().getState() != 0){
@@ -135,16 +156,6 @@ public class Game : MonoBehaviour
                 }
                 chess.movePosition(selectedPosition);
                 chessObject = null;
-                bool check = checker.isCheck(player.getColor());
-                bool checkmate = checker.isCheckMate(player.getColor());
-                if(checker.isCheckMate(player.getColor())){
-                    Debug.Log("CheckMate " + checkmate);
-                    Debug.Log(player.getColor()+"Lose");
-                }
-                if(checker.isCheck(player.getColor())){
-                    Debug.Log("check " + check);
-                    Debug.Log(player.getColor()+"Lose");
-                }
                 //プレイヤーを交代する
                 ChangeTurn();
             }
@@ -253,5 +264,9 @@ public class Game : MonoBehaviour
         }else{
             card.notUseCard(firstPlayer.GetComponent<Player>().card);
         }
+    }
+
+    public void GoStartBtn(){
+        SceneManager.LoadScene("select");
     }
 }
