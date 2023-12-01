@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Net.NetworkInformation;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -26,7 +27,7 @@ public class Game : MonoBehaviour
     Chess chess;
     Vector3 selectedPosition;
     GameObject[] canntMoveObject = new GameObject[2];
-    public Text result;
+    public TMP_Text result;
     int count = 0;
     GameObject beforeMoveObject = null;
     public GameObject resultCanvas;
