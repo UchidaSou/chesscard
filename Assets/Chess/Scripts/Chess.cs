@@ -1,9 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Android;
-using UnityEngine.UIElements;
 public abstract class Chess:MonoBehaviour
 {
     public GameObject brightSquare;

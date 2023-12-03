@@ -1,9 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Threading;
-using System.Threading.Tasks;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class EasyNPC : Player
@@ -31,7 +25,6 @@ public class EasyNPC : Player
         GameObject gameObject = GameObject.Find("Game");
         Checker checker = gameObject.GetComponent<Game>().checker;
         bool check = checker.isCheck(this.gameObject.GetComponent<Player>().getColor());
-        Debug.Log("NPC:"+check);
         if(check && checker.checkCount >= 1 && checker.inFlg){
             return checker.checkObject.transform.position;
         }

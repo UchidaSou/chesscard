@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class normalNPC : Player
@@ -47,43 +45,55 @@ public class normalNPC : Player
 
     public override Vector3 selectedMovePosition()
     {
+        GameObject gameObject = GameObject.Find("Game");
+        Checker checker = gameObject.GetComponent<Game>().checker;
+        bool check = checker.isCheck(this.gameObject.GetComponent<Player>().getColor());
+        Debug.Log("NPC:"+check);
+        if(check && checker.checkCount >= 1 && checker.inFlg){
+            return checker.checkObject.transform.position;
+        }
         return this.selectedPosition;
     }
 
     private bool ReturnMethod(List<GameObject> mylist,List<GameObject> enemeyList,int count,GameObject[,] board,int max){
-        int score;
+        int score,myScore=0,enemeyScore=0;
+        int objectI=0,objectJ=0,vi=0,vj=0,index=0,I=0,J=0;
+        List<Vector3> vectors;
+        GameObject enemey;
+        bool flg = false;
         GameObject[] objects = new GameObject[5];
         for(int i=0;i<5;i++){
             objects[i] = mylist[UnityEngine.Random.Range(0,mylist.Count)];
         }
         for(int i=0;i<5;i++){
-            int objectI = (int)-(objects[i].transform.position.x - 16) / 4;
-            int objectJ = (int)(objects[i].transform.position.z + 16) / 4;
-            List<Vector3> vectors = objects[i].GetComponent<Chess>().canMovePosition(objectI*8+objectJ);
+            objectI = (int)-(objects[i].transform.position.x - 16) / 4;
+            objectJ = (int)(objects[i].transform.position.z + 16) / 4;
+            vectors = objects[i].GetComponent<Chess>().canMovePosition(objectI*8+objectJ);
             foreach(Vector3 vector in vectors){
                 if(count == 2){
                     firstSelect = objects[i];
                     selectedPosition = vector;
                 }
-                int vi = (int)-(vector.x - 16) / 4;
-                int vj = (int)(vector.z + 16) / 4;
-                GameObject enemey = board[vi,vj];
+                vi = (int)-(vector.x - 16) / 4;
+                vj = (int)(vector.z + 16) / 4;
+                enemey = board[vi,vj];
                 if(enemey != null && !enemey.tag.Equals(objects[i].tag)){
-                    int index = enemeyList.IndexOf(enemey);
+                    index = enemeyList.IndexOf(enemey);
                     enemeyList.RemoveAt(index);
                     board[vi,vj] = objects[i];
                 }
-                bool flg = false;
+                flg = false;
                 if(count == 0){
-                    int myScore = 0,enemeyScore = 0;
+                    myScore = 0;
+                    enemeyScore = 0;
                     foreach(GameObject myObject in mylist){
-                        int I = (int)-(myObject.transform.position.x - 16) / 4;
-                        int J = (int)(myObject.transform.position.z + 16) / 4;
+                        I = (int)-(myObject.transform.position.x - 16) / 4;
+                        J = (int)(myObject.transform.position.z + 16) / 4;
                         myScore += myObject.GetComponent<Chess>().getScore(I,J);
                     }
                     foreach(GameObject enemeyObject in enemeyList){
-                        int I = (int)-(enemeyObject.transform.position.x - 16) / 4;
-                        int J = (int)(enemeyObject.transform.position.z + 16) / 4;
+                        I = (int)-(enemeyObject.transform.position.x - 16) / 4;
+                        J = (int)(enemeyObject.transform.position.z + 16) / 4;
                         enemeyScore += enemeyObject.GetComponent<Chess>().getScore(I,J);
                     }
                     score = myScore - enemeyScore;

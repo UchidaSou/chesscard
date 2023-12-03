@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Checker : MonoBehaviour
@@ -73,6 +71,8 @@ public class Checker : MonoBehaviour
         checkCount = 0;
         GameObject king;
         GameObject[] objects;
+        GameObject board = GameObject.Find("Board");
+        BoardState boardState = board.GetComponent<BoardState>();
         if(color.Equals("white")){
             king = GameObject.Find("White King(Clone)");
             objects = GameObject.FindGameObjectsWithTag("black");
@@ -103,6 +103,7 @@ public class Checker : MonoBehaviour
                     Vector3 canMovePosition = vector + new Vector3(-16,0,16);
                     int I = (int)-canMovePosition.x / 4;
                     int J = (int)canMovePosition.z/4;
+                    boardState.checkBoardArray[I,J] = true;
                     int Cell = I*8+J;
                     if(Cell == kingCellNumber){
                         foreach(Vector3 move in kingMovePosition){

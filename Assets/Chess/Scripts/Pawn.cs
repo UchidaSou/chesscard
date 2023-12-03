@@ -25,6 +25,9 @@ public class Pawn : Chess
         }
         GameObject gameObject;
         for(int k=1;k<=move&&(i+k<maxI || i-k>=0);k++){
+            if(i+k >= maxI){
+                break;
+            }
             gameObject = boardState.chessBoardArray[i+pm*k,j];
             if(gameObject != null){
                 break;
@@ -32,10 +35,10 @@ public class Pawn : Chess
                 canMoveList.Add(ChessUiEngine.ToWorldPoint((i+pm*k)*8 + j));
             }
         }
-        if(j+1<maxJ && boardState.chessBoardArray[i+pm,j+1] != null && !boardState.chessBoardArray[i+pm,j+1].tag.Equals(this.tag)){
+        if(j+1<maxJ && i+pm < maxI && boardState.chessBoardArray[i+pm,j+1] != null && !boardState.chessBoardArray[i+pm,j+1].tag.Equals(this.tag)){
             canMoveList.Add(ChessUiEngine.ToWorldPoint((i+pm)*8 + j+1));
         }
-        if(j-1>=0 && boardState.chessBoardArray[i+pm,j-1] != null && !boardState.chessBoardArray[i+pm,j-1].tag.Equals(this.tag)){
+        if(j-1>=0 && i+pm < maxI &&boardState.chessBoardArray[i+pm,j-1] != null && !boardState.chessBoardArray[i+pm,j-1].tag.Equals(this.tag)){
             canMoveList.Add(ChessUiEngine.ToWorldPoint((i+pm)*8 + j-1));
         }
         return canMoveList;
@@ -55,10 +58,24 @@ public class Pawn : Chess
         }
         Vector3 vector = this.gameObject.transform.position+ new Vector3(-16,0,16);
         int i = (int)-vector.x/4;
-        if(i == this.getMaxI()){
+        int j = (int)vector.z / 4;
+        if(i == this.getMaxI()-1){
             Vector3 instantiatePosition = this.transform.position;
             instantiatePosition.y = 3.1f;
-            Instantiate(Queen,instantiatePosition,Quaternion.Euler(90,0,0));
+            GameObject queen = Instantiate(Queen,instantiatePosition,Quaternion.Euler(90,0,0));
+            Chess chess = queen.GetComponent<Chess>();
+            this.boardState.chessBoardArray[i,j] = queen;
+            chess.board = this.board;
+            chess.boardState = this.board.gameObject.GetComponent<BoardState>();
+            chess.boardState.chessBoardArray = this.boardState.chessBoardArray;
+            chess.setMaxI(this.getMaxI());
+            chess.setMaxJ(this.getMaxJ());
+            Vector3 first = this.getFirstVector();
+            first.y = 3.2f;
+            chess.setFirstVector(first);
+            Vector3 before = this.getBeforeVector();
+            before.y = 3.2f;
+            chess.setBeforeVector(before);
             Destroy(this.gameObject);
         }
     }

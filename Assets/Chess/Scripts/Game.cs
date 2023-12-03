@@ -1,16 +1,6 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data;
-using System.Net.NetworkInformation;
 using TMPro;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class Game : MonoBehaviour
 {
@@ -101,16 +91,6 @@ public class Game : MonoBehaviour
         if(playStop){
             return;
         }
-        if(checker.isCheckMate(player.getColor())){
-            mainCanvas.SetActive(false);
-            resultCanvas.SetActive(true);
-            result.text = player.getColor() + " LOSE";
-            playStop = true;
-            return;
-        }
-        if(checker.isCheck(player.getColor())){
-            Debug.Log("check " + player.getColor());
-        }
         bool npcFlg = false;
         if(Input.GetMouseButtonDown(0) || nowPlayer.GetComponent<PlayerState>().getState() != 0){
             if(nowPlayer.GetComponent<PlayerState>().getState() != 0){
@@ -176,6 +156,16 @@ public class Game : MonoBehaviour
                 break;
         }
         player = nowPlayer.GetComponent<Player>();
+        if(checker.isCheckMate(player.getColor())){
+            mainCanvas.SetActive(false);
+            resultCanvas.SetActive(true);
+            result.text = player.getColor() + " LOSE";
+            playStop = true;
+            return;
+        }
+        if(checker.isCheck(player.getColor())){
+            Debug.Log("check " + player.getColor());
+        }
         player.card.point += 1;
         playerState = nowPlayer.GetComponent<PlayerState>();
         for(int i=0;i<count;i++){

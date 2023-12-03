@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,7 +14,7 @@ public class King : Chess
         GameObject gameObject;
         for(int k=j-move;k<=j+move;k++){
             for(int l=i-move;l<=i+move;l++){
-                if(k>maxJ||k<0){
+                if(k>=maxJ||k<0){
                     continue;
                 }
                 if(l>=maxI||l<0){
@@ -25,7 +24,7 @@ public class King : Chess
                     continue;
                 }
                 gameObject = boardState.chessBoardArray[l,k];
-                if(gameObject != null && gameObject.tag.Equals(this.tag)){
+                if((gameObject != null && gameObject.tag.Equals(this.tag)) || boardState.checkBoardArray[l,k]){
                     continue;
                 }
                 canMoveList.Add(ChessUiEngine.ToWorldPoint(l*8+k));

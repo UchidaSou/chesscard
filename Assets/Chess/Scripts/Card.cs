@@ -1,7 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Data;
-using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -43,6 +40,22 @@ public class Card : MonoBehaviour
         Vector3 vector = chess.getFirstVector() + new Vector3(-16,0,16);
         int i = (int)-vector.x/4;
         int j  = (int)vector.z/4;
+        if(boardState.chessBoardArray[i,j] != null){
+            GameObject gameObject = boardState.chessBoardArray[i,j];
+            if(gameObject.tag.Equals("white")){
+                boardState.whiteRetired.Add(gameObject);
+            }else{
+                boardState.blackRetired.Add(gameObject);
+            }
+            string retiredObjectname = gameObject.tag + "Retired";
+            GameObject retiredObject = GameObject.Find(retiredObjectname);
+            gameObject.transform.position = retiredObject.transform.position;
+            gameObject.tag = "Retired";
+            chess = gameObject.GetComponent<Chess>();
+            Game game = GameObject.Find("Game").GetComponent<Game>();
+            Player player = game.nowPlayer.GetComponent<Player>();
+            player.setScore(player.getScore() - chess.getMaterial());
+        }
         boardState.chessBoardArray[i,j] = resurrectionObject;
         this.resurrection = false;
         this.point -= 15;
