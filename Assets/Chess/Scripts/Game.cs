@@ -156,15 +156,15 @@ public class Game : MonoBehaviour
                 break;
         }
         player = nowPlayer.GetComponent<Player>();
+        if(checker.isCheck(player.getColor())){
+            Debug.Log("check " + player.getColor());
+        }
         if(checker.isCheckMate(player.getColor())){
             mainCanvas.SetActive(false);
             resultCanvas.SetActive(true);
             result.text = player.getColor() + " LOSE";
             playStop = true;
             return;
-        }
-        if(checker.isCheck(player.getColor())){
-            Debug.Log("check " + player.getColor());
         }
         player.card.point += 1;
         playerState = nowPlayer.GetComponent<PlayerState>();

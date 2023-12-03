@@ -80,6 +80,11 @@ public class Checker : MonoBehaviour
             king = GameObject.Find("Black King(Clone)");
             objects = GameObject.FindGameObjectsWithTag("white");
         }
+        for(int x=0;x<king.GetComponent<Chess>().getMaxI();x++){
+            for(int y=0;y<king.GetComponent<Chess>().getMaxJ();y++){
+                boardState.checkBoardArray[x,y] = false;
+            }
+        }
         Vector3 kingPosition = king.transform.position + new Vector3(-16,0,16);
         int kingI = (int)-kingPosition.x/4;
         int kingJ = (int)kingPosition.z/4;
