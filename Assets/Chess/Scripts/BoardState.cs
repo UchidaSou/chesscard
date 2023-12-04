@@ -23,6 +23,7 @@ public class BoardState : MonoBehaviour
                 }
             }
         }else{
+            checkBoardArray = new bool[6,5];
             chessBoardArray = new GameObject[6,5];
             imbalance = new float[6,5];
             for(int i=0;i<6;i++){

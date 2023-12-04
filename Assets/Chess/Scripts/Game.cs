@@ -17,7 +17,7 @@ public class Game : MonoBehaviour
     Chess chess;
     Vector3 selectedPosition;
     GameObject[] canntMoveObject = new GameObject[2];
-    public TMP_Text result;
+    public TMP_Text loser,winner;
     int count = 0;
     GameObject beforeMoveObject = null;
     public GameObject resultCanvas;
@@ -162,7 +162,13 @@ public class Game : MonoBehaviour
         if(checker.isCheckMate(player.getColor())){
             mainCanvas.SetActive(false);
             resultCanvas.SetActive(true);
-            result.text = player.getColor() + " LOSE";
+            loser.text = "Loser " + player.getColor();
+            winner.text = "Winner ";
+            if(player.getColor().Equals("white")){
+                winner.text = winner.text + "black";
+            }else{
+                winner.text = winner.text + "white";
+            }
             playStop = true;
             return;
         }

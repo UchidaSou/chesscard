@@ -25,7 +25,9 @@ public class Pawn : Chess
         }
         GameObject gameObject;
         for(int k=1;k<=move&&(i+k<maxI || i-k>=0);k++){
-            if(i+k >= maxI){
+            if(this.tag.Equals("white") && i+k>=maxI){
+                break;
+            }else if(this.tag.Equals("black") && i-k<0){
                 break;
             }
             gameObject = boardState.chessBoardArray[i+pm*k,j];
@@ -35,10 +37,10 @@ public class Pawn : Chess
                 canMoveList.Add(ChessUiEngine.ToWorldPoint((i+pm*k)*8 + j));
             }
         }
-        if(j+1<maxJ && i+pm < maxI && boardState.chessBoardArray[i+pm,j+1] != null && !boardState.chessBoardArray[i+pm,j+1].tag.Equals(this.tag)){
+        if(j+1<maxJ && (i < this.getMaxI()-1 && i > 0) && boardState.chessBoardArray[i+pm,j+1] != null && !boardState.chessBoardArray[i+pm,j+1].tag.Equals(this.tag)){
             canMoveList.Add(ChessUiEngine.ToWorldPoint((i+pm)*8 + j+1));
         }
-        if(j-1>=0 && i+pm < maxI &&boardState.chessBoardArray[i+pm,j-1] != null && !boardState.chessBoardArray[i+pm,j-1].tag.Equals(this.tag)){
+        if(j-1>=0 && (i<this.getMaxI()-1 && i>0) &&boardState.chessBoardArray[i+pm,j-1] != null && !boardState.chessBoardArray[i+pm,j-1].tag.Equals(this.tag)){
             canMoveList.Add(ChessUiEngine.ToWorldPoint((i+pm)*8 + j-1));
         }
         return canMoveList;
@@ -53,13 +55,13 @@ public class Pawn : Chess
     // Update is called once per frame
     void Update()
     {
-        if(this.tag == "Retired"){
+        if(this.tag == "Retired" || PlayerPrefs.GetInt("Mode",0) == 1){
             return;
         }
         Vector3 vector = this.gameObject.transform.position+ new Vector3(-16,0,16);
         int i = (int)-vector.x/4;
         int j = (int)vector.z / 4;
-        if(i == this.getMaxI()-1){
+        if(i == this.getMaxI()-1 || i == 0){
             Vector3 instantiatePosition = this.transform.position;
             instantiatePosition.y = 3.1f;
             GameObject queen = Instantiate(Queen,instantiatePosition,Quaternion.Euler(90,0,0));
