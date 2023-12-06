@@ -25,7 +25,7 @@ public class King : Chess
                 }
                 gameObject = boardState.chessBoardArray[l,k];
                 if((gameObject != null && gameObject.tag.Equals(this.tag)) || boardState.checkBoardArray[l,k]){
-                    continue;
+                 continue;
                 }
                 canMoveList.Add(ChessUiEngine.ToWorldPoint(l*8+k));
             }

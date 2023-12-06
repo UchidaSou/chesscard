@@ -9,7 +9,7 @@ public class EasyNPC : Player
         Checker checker = gameObject.GetComponent<Game>().checker;
         int cardUse = Random.Range(0,7);
         GameObject[] chesses = GameObject.FindGameObjectsWithTag(this.getColor());
-        if(checker.checkCount >= 1){
+        if(checker.isCheck(this.getColor())){
             if(this.getColor().Equals("white")){
                 return GameObject.Find("White King(Clone)");
             }else{
@@ -25,7 +25,8 @@ public class EasyNPC : Player
         GameObject gameObject = GameObject.Find("Game");
         Checker checker = gameObject.GetComponent<Game>().checker;
         bool check = checker.isCheck(this.gameObject.GetComponent<Player>().getColor());
-        if(check && checker.checkCount >= 1 && checker.inFlg){
+        if(check && checker.inFlg){
+            Debug.Log(checker.checkObject.name);
             return checker.checkObject.transform.position;
         }
         GameObject[] chesses = GameObject.FindGameObjectsWithTag(this.getColor());

@@ -1,5 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Threading;
+using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 
 public class Checker : MonoBehaviour
@@ -26,11 +29,6 @@ public class Checker : MonoBehaviour
         int kingCellNumber = kingI*8 + kingJ;
         King king1 = king.GetComponent<King>();
         List<Vector3> kingCanMove = king1.canMovePosition(kingCellNumber);
-        /*
-        if(kingCanMove.Count == 0){
-            Debug.Log("count");
-            return false;
-        }*/
         int move = king1.getMove();
         int maxI = king1.getMaxI();
         int maxJ = king1.getMaxJ();
@@ -59,43 +57,6 @@ public class Checker : MonoBehaviour
         }else{
             return false;
         }
-        /*
-        int count = kingCanMove.Count;
-        List<Vector3> removeList = new List<Vector3>();
-        foreach(GameObject gameObject in objects){
-            Chess chess = gameObject.GetComponent<Chess>();
-            Vector3 position = gameObject.transform.position + new Vector3(-16,0,16);
-            int i = (int)-position.x/4;
-            int j = (int)position.z/4;
-            int cellNumber = i*8+j;
-            List<Vector3> list = chess.canMovePosition(cellNumber);
-            foreach(Vector3 kingVec in kingCanMove){
-                Vector3 kingCanMovePosition = kingVec + new Vector3(-16,0,16);
-                int KI = (int)-kingCanMovePosition.x/4;
-                int KJ = (int)kingCanMovePosition.z/4;
-                int kingCanMoveCellNumber = KI*8+KJ;
-                foreach(Vector3 vector in list){
-                    Vector3 canMovePosition = vector + new Vector3(-16,0,16);
-                    int I = (int)-canMovePosition.x / 4;
-                    int J = (int)canMovePosition.z/4;
-                    int Cell = I*8+J;
-                    if(Cell == kingCanMoveCellNumber){
-                        if(removeList.Exists(x => x.Equals(vector))){
-                            removeList.Add(vector);
-                        }
-                    }
-                }
-            }
-        }
-        foreach (Vector3 vector in removeList)
-        {
-            kingCanMove.Remove(vector);            
-        }
-        if(kingCanMove.Count == 0){
-            return true;
-        }else{
-            return false;
-        }*/
     }
 
     public bool isCheck(string color){
@@ -112,6 +73,36 @@ public class Checker : MonoBehaviour
             king = GameObject.Find("Black King(Clone)");
             objects = GameObject.FindGameObjectsWithTag("white");
         }
+        if(king.tag.Equals("Retired")){
+            return true;
+        }
+        Vector3 kingPosition = king.transform.position + new Vector3(-16,0,16);
+        int kingI = (int)-kingPosition.x/4;
+        int kingJ = (int)kingPosition.z/4;
+        if(boardState.checkBoardArray[kingI,kingJ]){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    
+    public void setCheck(string color){
+        this.checkCount = 0;
+        this.inFlg = false;
+        this.checkObject = null;
+        GameObject king;
+        GameObject[] objects;
+        BoardState boardState = GameObject.Find("Board").GetComponent<BoardState>();
+        if(color.Equals("white")){
+            king = GameObject.Find("White King(Clone)");
+            objects = GameObject.FindGameObjectsWithTag("black");
+        }else{
+            king = GameObject.Find("Black King(Clone)");
+            objects = GameObject.FindGameObjectsWithTag("white");
+        }
+        if(king == null){
+            return;
+        }
         for(int x=0;x<king.GetComponent<Chess>().getMaxI();x++){
             for(int y=0;y<king.GetComponent<Chess>().getMaxJ();y++){
                 boardState.checkBoardArray[x,y] = false;
@@ -120,50 +111,26 @@ public class Checker : MonoBehaviour
         Vector3 kingPosition = king.transform.position + new Vector3(-16,0,16);
         int kingI = (int)-kingPosition.x/4;
         int kingJ = (int)kingPosition.z/4;
-        int kingCellNumber = kingI*8 + kingJ;
-        List<Vector3> kingMovePosition = king.GetComponent<Chess>().canMovePosition(kingCellNumber);
-        if(kingMovePosition.Count == 0){
-            return false;
-        }
+        Chess chess;
+        int i=0,j=0,cellNumber=0;
+        int vi=0,vj=0;
         foreach(GameObject gameObject in objects){
-            if(gameObject.name.Equals(king.name)){
-                continue;
-            }
-            Chess chess = gameObject.GetComponent<Chess>();
-            Vector3 position = gameObject.transform.position + new Vector3(-16,0,16);
-            int i = (int)-position.x/4;
-            int j = (int)position.z/4;
-            int cellNumber = i*8+j;
-            List<Vector3> list = chess.canMovePosition(cellNumber);
-            if(list.Count > 0){
-                foreach(Vector3 vector in list){
-                    Vector3 canMovePosition = vector + new Vector3(-16,0,16);
-                    int I = (int)-canMovePosition.x / 4;
-                    int J = (int)canMovePosition.z/4;
-                    boardState.checkBoardArray[I,J] = true;
-                    int Cell = I*8+J;
-                    if(Cell == kingCellNumber){
-                        foreach(Vector3 move in kingMovePosition){
-                            int moveI = (int) - (move.x - 16) / 4;
-                            int moveJ = (int) (move.z + 16) /4;
-                            int moveCell = moveI*8 + moveJ;
-                            if(moveCell == cellNumber){
-                                Debug.Log(gameObject);
-                                checkObject = gameObject;
-                                inFlg = true;
-                                break;
-                            }
-                        }
-                        checkCount++;
+            chess = gameObject.GetComponent<Chess>();
+            i = (int)- (gameObject.transform.position.x -16) / 4;
+            j = (int)(gameObject.transform.position.z + 16) / 4;
+            cellNumber = i*8+j;
+            foreach(Vector3 vector in chess.canMovePosition(cellNumber)){
+                vi = (int)-(vector.x - 16) / 4;
+                vj = (int)(vector.z + 16) / 4;
+                boardState.checkBoardArray[vi,vj] = true;
+                if(boardState.chessBoardArray[vi,vj] == king){
+                    checkObject = boardState.chessBoardArray[i,j];
+                    if(Math.Abs(kingI - vi) <= 1  && Math.Abs(kingJ - vj) <= 1){
+                        checkObject = gameObject;
+                        inFlg = true;
                     }
                 }
             }
         }
-        if(checkCount >= 1 || inFlg){
-            return true;
-        }else{
-            return false;
-        }
     }
-    
 }

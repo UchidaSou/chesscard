@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class normalNPC : Player
@@ -49,7 +50,7 @@ public class normalNPC : Player
         Checker checker = gameObject.GetComponent<Game>().checker;
         bool check = checker.isCheck(this.gameObject.GetComponent<Player>().getColor());
         Debug.Log("NPC:"+check);
-        if(check && checker.checkCount >= 1 && checker.inFlg){
+        if(check && checker.inFlg){
             return checker.checkObject.transform.position;
         }
         return this.selectedPosition;
@@ -62,14 +63,17 @@ public class normalNPC : Player
         GameObject enemey;
         bool flg = false;
         GameObject[] objects = new GameObject[5];
-        for(int i=0;i<5;i++){
+        for(int i=0;i<objects.Length;i++){
             objects[i] = mylist[UnityEngine.Random.Range(0,mylist.Count)];
         }
-        for(int i=0;i<5;i++){
+        List<GameObject> mylist2,enemeyList2;
+        for(int i=0;i<objects.Length;i++){
             objectI = (int)-(objects[i].transform.position.x - 16) / 4;
             objectJ = (int)(objects[i].transform.position.z + 16) / 4;
             vectors = objects[i].GetComponent<Chess>().canMovePosition(objectI*8+objectJ);
             foreach(Vector3 vector in vectors){
+                mylist2 = mylist;
+                enemeyList2 = enemeyList;
                 if(count == 2){
                     firstSelect = objects[i];
                     selectedPosition = vector;
@@ -78,23 +82,23 @@ public class normalNPC : Player
                 vj = (int)(vector.z + 16) / 4;
                 enemey = board[vi,vj];
                 if(enemey != null && !enemey.tag.Equals(objects[i].tag)){
-                    index = enemeyList.IndexOf(enemey);
-                    enemeyList.RemoveAt(index);
+                    index = enemeyList2.IndexOf(enemey);
+                    enemeyList2.RemoveAt(index);
                     board[vi,vj] = objects[i];
                 }
                 flg = false;
                 if(count == 0){
                     myScore = 0;
                     enemeyScore = 0;
-                    foreach(GameObject myObject in mylist){
+                    foreach(GameObject myObject in mylist2){
                         I = (int)-(myObject.transform.position.x - 16) / 4;
                         J = (int)(myObject.transform.position.z + 16) / 4;
                         myScore += myObject.GetComponent<Chess>().getScore(I,J);
                     }
-                    foreach(GameObject enemeyObject in enemeyList){
+                    foreach(GameObject enemeyObject in enemeyList2){
                         I = (int)-(enemeyObject.transform.position.x - 16) / 4;
                         J = (int)(enemeyObject.transform.position.z + 16) / 4;
-                        enemeyScore += enemeyObject.GetComponent<Chess>().getScore(I,J);
+                        enemeyScore += enemeyObject.GetComponent<Chess>().getScore(I,J);                        
                     }
                     score = myScore - enemeyScore;
                     if(max<score){
@@ -102,7 +106,7 @@ public class normalNPC : Player
                         flg = true;
                     }
                 }else{
-                    flg = ReturnMethod(enemeyList,mylist,count-1,board,max);
+                    flg = ReturnMethod(enemeyList2,mylist2,count-1,board,max);
                 }
                 if(flg){
                     selectedObject = firstSelect;

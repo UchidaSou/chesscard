@@ -11,7 +11,6 @@ public class Game : MonoBehaviour
     public Checker checker;
     public ChessUiEngine uiEngine;
     Player player;
-    //PlayerState playerState;
     GameObject chessObject;
     public GameObject firstCamera,secondCamera;
     Chess chess;
@@ -156,6 +155,7 @@ public class Game : MonoBehaviour
                 break;
         }
         player = nowPlayer.GetComponent<Player>();
+        checker.setCheck(player.getColor());
         if(checker.isCheck(player.getColor())){
             Debug.Log("check " + player.getColor());
         }
