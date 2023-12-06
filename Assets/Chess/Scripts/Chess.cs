@@ -14,7 +14,24 @@ public abstract class Chess:MonoBehaviour
     public BoardState boardState;
     private int material;
     private int maxI,maxJ;
+    private int setup;
 
+    public void setSetUp(int setup){
+        this.setup = setup;
+    }
+
+    public int getSetUp(){
+        return this.setup;
+    }
+/*
+    public void setColor(string color){
+        this.color = color;
+    }
+
+    public string getColor(){
+        return this.color;
+    }
+*/
     public void ShowCanMovePosition(){
         if(!this.canMove){
             return;
@@ -25,7 +42,6 @@ public abstract class Chess:MonoBehaviour
         int cellNumber = i*8+j;
         List<Vector3> canMoveList = canMovePosition(cellNumber);
         GameObject square;
-        State state = this.gameObject.GetComponent<State>();
         foreach(Vector3 vec in canMoveList){
             square = GameObject.Instantiate(this.brightSquare,vec,Quaternion.Euler(0,0,0));
         }
@@ -65,8 +81,8 @@ public abstract class Chess:MonoBehaviour
             Destroy(this.gameObject.transform.GetChild(0).gameObject);
         }
         this.gameObject.transform.position = vector;
-        State state = this.gameObject.GetComponent<State>();
-        if(state.getSetUp() == 5){
+        //State state = this.gameObject.GetComponent<State>();
+        if(/*state*/this.getSetUp() == 5){
             this.gameObject.GetComponent<Pawn>().first = false;
         }
         this.setMove(1);

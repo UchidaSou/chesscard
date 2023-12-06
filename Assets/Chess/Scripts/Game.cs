@@ -11,7 +11,7 @@ public class Game : MonoBehaviour
     public Checker checker;
     public ChessUiEngine uiEngine;
     Player player;
-    PlayerState playerState;
+    //PlayerState playerState;
     GameObject chessObject;
     public GameObject firstCamera,secondCamera;
     Chess chess;
@@ -92,8 +92,8 @@ public class Game : MonoBehaviour
             return;
         }
         bool npcFlg = false;
-        if(Input.GetMouseButtonDown(0) || nowPlayer.GetComponent<PlayerState>().getState() != 0){
-            if(nowPlayer.GetComponent<PlayerState>().getState() != 0){
+        if(Input.GetMouseButtonDown(0) ||player.getState() != 0){
+            if(player.getState() != 0){
                 player.UseCard();
             }
             GameObject[] reapwn = GameObject.FindGameObjectsWithTag("Respawn");
@@ -110,7 +110,7 @@ public class Game : MonoBehaviour
                 chess = chessObject.GetComponent<Chess>();
                 chess.ShowCanMovePosition();
                 int count=0;
-                if(nowPlayer.GetComponent<PlayerState>().getState() != 0){
+                if(player.getState() != 0){
                     while(GameObject.FindGameObjectsWithTag("Respawn").Length == 0){
                         chessObject = player.selectedChess();
                         chess = chessObject.GetComponent<Chess>();
@@ -126,7 +126,7 @@ public class Game : MonoBehaviour
                 beforeMoveObject = chessObject;
             }
             if(chessObject.gameObject.tag == "Respawn" || npcFlg == true){
-                if(nowPlayer.GetComponent<PlayerState>().getState() == 0){
+                if(player.getState() == 0){
                     selectedPosition = chessObject.gameObject.transform.position;
                 }
                 reapwn = GameObject.FindGameObjectsWithTag("Respawn");
@@ -173,7 +173,6 @@ public class Game : MonoBehaviour
             return;
         }
         player.card.point += 1;
-        playerState = nowPlayer.GetComponent<PlayerState>();
         for(int i=0;i<count;i++){
             if(canntMoveObject[i] != null){
                 Chess chess = canntMoveObject[i].GetComponent<Chess>();

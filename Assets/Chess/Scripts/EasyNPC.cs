@@ -38,7 +38,7 @@ public class EasyNPC : Player
     // Start is called before the first frame update
     void Start()
     {
-        this.setPlayerState(this.GetComponent<PlayerState>(),1);
+        this.setState(1);
         this.card = this.gameObject.GetComponent<Card>();
     }    
 

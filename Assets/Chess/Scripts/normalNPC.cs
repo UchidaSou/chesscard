@@ -114,7 +114,7 @@ public class normalNPC : Player
 
     void Start()
     {
-        this.setPlayerState(this.GetComponent<PlayerState>(),2);
+        this.setState(2);
         board = GameObject.Find("Board");
         this.boardState = board.GetComponent<BoardState>();
         this.card = this.gameObject.GetComponent<Card>();

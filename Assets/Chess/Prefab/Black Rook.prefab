@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 23157407585696186}
   - component: {fileID: 3712855544836750882}
   - component: {fileID: 6144728535815944706}
-  - component: {fileID: -6663585285130313114}
   - component: {fileID: 7743178500938256676}
   m_Layer: 6
   m_Name: Black Rook
@@ -118,18 +117,6 @@ MonoBehaviour:
   count: 0
   board: {fileID: 0}
   boardState: {fileID: 0}
---- !u!114 &-6663585285130313114
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1709358859266834}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8851ec00c9c41534ba83a0a8c8486d00, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!54 &7743178500938256676
 Rigidbody:
   m_ObjectHideFlags: 0

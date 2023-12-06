@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 23667668981231296}
   - component: {fileID: 2027692727825146070}
   - component: {fileID: 628130367400261256}
-  - component: {fileID: -8936961906952362100}
   - component: {fileID: -6928351685456155727}
   m_Layer: 6
   m_Name: Black Pawn
@@ -120,18 +119,6 @@ MonoBehaviour:
   boardState: {fileID: 0}
   first: 1
   Queen: {fileID: 1275902455577708, guid: e9b85e3c5806d4152b0b5cb3158d2120, type: 3}
---- !u!114 &-8936961906952362100
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1031636751254628}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8851ec00c9c41534ba83a0a8c8486d00, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!54 &-6928351685456155727
 Rigidbody:
   m_ObjectHideFlags: 0

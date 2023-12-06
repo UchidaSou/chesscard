@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 public class Checker : MonoBehaviour
@@ -23,11 +24,42 @@ public class Checker : MonoBehaviour
         int kingI = (int)-kingPosition.x/4;
         int kingJ = (int)kingPosition.z/4;
         int kingCellNumber = kingI*8 + kingJ;
-        List<Vector3> kingCanMove = king.GetComponent<King>().canMovePosition(kingCellNumber);
+        King king1 = king.GetComponent<King>();
+        List<Vector3> kingCanMove = king1.canMovePosition(kingCellNumber);
+        /*
         if(kingCanMove.Count == 0){
+            Debug.Log("count");
+            return false;
+        }*/
+        int move = king1.getMove();
+        int maxI = king1.getMaxI();
+        int maxJ = king1.getMaxJ();
+        BoardState boardState = GameObject.Find("Board").GetComponent<BoardState>();
+        int count = 0;
+        int checkCount=0;
+        for(int k=kingJ-move;k<=kingJ+move;k++){
+            for(int l=kingI-move;l<=kingI+move;l++){
+                if(k>=maxJ||k<0){
+                    continue;
+                }
+                if(l>=maxI||l<0){
+                    continue;
+                }
+                if(k==kingJ&&l==kingI){
+                    continue;
+                }
+                count++;
+                if(boardState.checkBoardArray[l,k]){
+                    checkCount++;
+                }
+            }
+        }
+        if(count == checkCount){
+            return true;
+        }else{
             return false;
         }
-        BoardState boardState = GameObject.Find("Board").GetComponent<BoardState>();
+        /*
         int count = kingCanMove.Count;
         List<Vector3> removeList = new List<Vector3>();
         foreach(GameObject gameObject in objects){
@@ -63,7 +95,7 @@ public class Checker : MonoBehaviour
             return true;
         }else{
             return false;
-        }
+        }*/
     }
 
     public bool isCheck(string color){

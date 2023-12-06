@@ -29,7 +29,7 @@ public class RealPlayer : Player
     // Start is called before the first frame update
     public void Start()
     {
-        base.setPlayerState(this.gameObject.GetComponent<PlayerState>(),0);
+        this.setState(0);
         base.card = this.gameObject.GetComponent<Card>();
         this.text = card.text;
         this.text.text = base.card.point.ToString();

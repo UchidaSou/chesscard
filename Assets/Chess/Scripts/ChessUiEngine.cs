@@ -31,9 +31,11 @@ public class ChessUiEngine : MonoBehaviour {
 			Chess chess = piece.GetComponent<Chess>();
 			chess.setFirstVector(piece.position);
 			chess.setBeforeVector(piece.position);
-			State state = piece.GetComponent<State>();
-			state.setSetUp((int)setup[i]);
-			state.setColor("white");
+			//State state = piece.GetComponent<State>();
+			//state.setSetUp((int)setup[i]);
+			//state.setColor("white");
+			chess.setSetUp((int)setup[i]);
+			//chess.setColor("white");
 			boardState.chessBoardArray[0,i] = piece.gameObject;
 			chess.boardState = boardState;
 			chess.setMaxI(8);
@@ -46,9 +48,12 @@ public class ChessUiEngine : MonoBehaviour {
 			Chess chess = piece.GetComponent<Chess>();
 			chess.setFirstVector(piece.position);
 			chess.setBeforeVector(piece.position);
-			State state = piece.GetComponent<State>();
+			/*State state = piece.GetComponent<State>();
 			state.setSetUp((int)setup[i]);
 			state.setColor("black");
+			*/
+			chess.setSetUp((int)setup[i]);
+			//chess.setColor("black");
 			boardState.chessBoardArray[7,i] = piece.gameObject;
 			chess.boardState = boardState;
 			chess.setMaxI(8);
@@ -61,9 +66,12 @@ public class ChessUiEngine : MonoBehaviour {
 			Chess chess = piece.GetComponent<Pawn>();
 			chess.setFirstVector(piece.position);
 			chess.setBeforeVector(piece.position);
-			State state = piece.GetComponent<State>();
+			/*State state = piece.GetComponent<State>();
 			state.setSetUp((int)Piece.Pawn);
 			state.setColor("white");
+			*/
+			chess.setSetUp((int)Piece.Pawn);
+			//chess.setColor("white");
 			boardState.chessBoardArray[1,i] = piece.gameObject;
 			chess.boardState = boardState;
 			chess.setMaxI(8);
@@ -77,9 +85,12 @@ public class ChessUiEngine : MonoBehaviour {
 			Chess chess = piece.GetComponent<Pawn>();
 			chess.setFirstVector(piece.position);
 			chess.setBeforeVector(piece.position);
-			State state = piece.GetComponent<State>();
+			/*State state = piece.GetComponent<State>();
 			state.setSetUp((int)Piece.Pawn);
 			state.setColor("black");
+			*/
+			chess.setSetUp((int)Piece.Pawn);
+			//chess.setColor("black");
 			boardState.chessBoardArray[6,i] = piece.gameObject;
 			chess.boardState = boardState;
 			chess.setMaxI(8);
@@ -96,9 +107,12 @@ public class ChessUiEngine : MonoBehaviour {
 			Chess chess = piece.GetComponent<Chess>();
 			chess.setFirstVector(piece.position);
 			chess.setBeforeVector(piece.position);
-			State state = piece.GetComponent<State>();
+			/*State state = piece.GetComponent<State>();
 			state.setSetUp((int)demo[i]);
 			state.setColor("white");
+			*/
+			chess.setSetUp((int)demo[i]);
+			//chess.setColor("white");
 			boardState.chessBoardArray[0,i] = piece.gameObject;
 			chess.boardState = boardState;
 			chess.setMaxI(6);
@@ -111,9 +125,12 @@ public class ChessUiEngine : MonoBehaviour {
 			Chess chess = piece.GetComponent<Chess>();
 			chess.setFirstVector(piece.position);
 			chess.setBeforeVector(piece.position);
-			State state = piece.GetComponent<State>();
+			/*State state = piece.GetComponent<State>();
 			state.setSetUp((int)demo[i]);
 			state.setColor("black");
+			*/
+			chess.setSetUp((int)demo[i]);
+			//chess.setColor("black");
 			boardState.chessBoardArray[5,i] = piece.gameObject;
 			chess.boardState = boardState;
 			chess.setMaxI(6);
@@ -126,9 +143,12 @@ public class ChessUiEngine : MonoBehaviour {
 			Chess chess = piece.GetComponent<Pawn>();
 			chess.setFirstVector(piece.position);
 			chess.setBeforeVector(piece.position);
-			State state = piece.GetComponent<State>();
+			/*State state = piece.GetComponent<State>();
 			state.setSetUp((int)Piece.Pawn);
 			state.setColor("white");
+			*/
+			chess.setSetUp((int)Piece.Pawn);
+			//chess.setColor("white");
 			boardState.chessBoardArray[1,i] = piece.gameObject;
 			chess.boardState = boardState;
 			chess.setMaxI(6);
@@ -142,9 +162,12 @@ public class ChessUiEngine : MonoBehaviour {
 			Chess chess = piece.GetComponent<Pawn>();
 			chess.setFirstVector(piece.position);
 			chess.setBeforeVector(piece.position);
-			State state = piece.GetComponent<State>();
+			/*State state = piece.GetComponent<State>();
 			state.setSetUp((int)Piece.Pawn);
 			state.setColor("black");
+			*/
+			chess.setSetUp((int)Piece.Pawn);
+			//chess.setColor("black");
 			boardState.chessBoardArray[4,i] = piece.gameObject;
 			chess.boardState = boardState;
 			chess.setMaxI(6);
