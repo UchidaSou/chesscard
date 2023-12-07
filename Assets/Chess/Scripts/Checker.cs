@@ -60,7 +60,6 @@ public class Checker : MonoBehaviour
     }
 
     public bool isCheck(string color){
-        inFlg = false;
         checkCount = 0;
         GameObject king;
         GameObject[] objects;
@@ -124,10 +123,11 @@ public class Checker : MonoBehaviour
                 vj = (int)(vector.z + 16) / 4;
                 boardState.checkBoardArray[vi,vj] = true;
                 if(boardState.chessBoardArray[vi,vj] == king){
-                    checkObject = boardState.chessBoardArray[i,j];
-                    if(Math.Abs(kingI - vi) <= 1  && Math.Abs(kingJ - vj) <= 1){
-                        checkObject = gameObject;
-                        inFlg = true;
+                    this.checkObject = gameObject;
+                    if(Math.Abs(kingI - i) <= 1  && Math.Abs(kingJ - j) <= 1){
+                        Debug.Log(checkObject);
+                        this.inFlg = true;
+                        this.checkCount++;
                     }
                 }
             }

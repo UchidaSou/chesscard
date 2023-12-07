@@ -103,6 +103,7 @@ public class Game : MonoBehaviour
             }
             chessObject = player.selectedChess();
             if(chessObject == null){
+                Debug.Log("here");
                 return;
             }
             if(chessObject.gameObject.tag.Equals(player.getColor())){
@@ -110,10 +111,13 @@ public class Game : MonoBehaviour
                 chess.ShowCanMovePosition();
                 int count=0;
                 if(player.getState() != 0){
-                    while(GameObject.FindGameObjectsWithTag("Respawn").Length == 0){
+                    while(GameObject.FindGameObjectsWithTag("Respawn").Length == 0 && chessObject == null){
                         chessObject = player.selectedChess();
                         chess = chessObject.GetComponent<Chess>();
                         chess.ShowCanMovePosition();
+                        if(GameObject.FindGameObjectsWithTag("Respawn").Length == 0){
+                            continue;
+                        }
                         count++;
                         if(count > 50){
                             return;
