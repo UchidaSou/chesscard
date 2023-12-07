@@ -31,11 +31,7 @@ public class ChessUiEngine : MonoBehaviour {
 			Chess chess = piece.GetComponent<Chess>();
 			chess.setFirstVector(piece.position);
 			chess.setBeforeVector(piece.position);
-			//State state = piece.GetComponent<State>();
-			//state.setSetUp((int)setup[i]);
-			//state.setColor("white");
 			chess.setSetUp((int)setup[i]);
-			//chess.setColor("white");
 			boardState.chessBoardArray[0,i] = piece.gameObject;
 			chess.boardState = boardState;
 			chess.setMaxI(8);

@@ -52,6 +52,9 @@ public class EasyNPC : Player
 
     public override void UseCard()
     {
+        if(PlayerPrefs.GetInt("Mode",0) == 1){
+            return;
+        }
         int x = UnityEngine.Random.Range(0,20);
         switch(x){
             case 0:

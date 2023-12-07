@@ -137,16 +137,11 @@ public class normalNPC : Player
                 int j = (int)vector.z / 4;
                 List<Vector3> vectors = chess.canMovePosition(i*8+j);
                 int r = Random.Range(0,vectors.Count);
-                Debug.Log("r:"+r + " count"+vectors.Count);
                 if(vectors.Count != 0){
                     this.selectedPosition = vectors[r];
                 }
             }
         }
-        /*
-        if(check && checker.inFlg){
-            return checker.checkObject.transform.position;
-        }*/
         return this.selectedPosition;
     }
 

@@ -70,6 +70,8 @@ public class Pawn : Chess
             chess.board = this.board;
             chess.boardState = this.board.gameObject.GetComponent<BoardState>();
             chess.boardState.chessBoardArray = this.boardState.chessBoardArray;
+            chess.boardState.checkBoardArray = this.boardState.checkBoardArray;
+            chess.boardState.imbalance = this.boardState.imbalance;
             chess.setMaxI(this.getMaxI());
             chess.setMaxJ(this.getMaxJ());
             Vector3 first = this.getFirstVector();
@@ -78,6 +80,9 @@ public class Pawn : Chess
             Vector3 before = this.getBeforeVector();
             before.y = 3.2f;
             chess.setBeforeVector(before);
+            chess.setMaterial(9);
+            chess.setBrightSquare(this.getBrightSquare());
+            chess.setSetUp(1);
             Destroy(this.gameObject);
         }
     }

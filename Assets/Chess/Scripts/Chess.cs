@@ -81,8 +81,7 @@ public abstract class Chess:MonoBehaviour
             Destroy(this.gameObject.transform.GetChild(0).gameObject);
         }
         this.gameObject.transform.position = vector;
-        //State state = this.gameObject.GetComponent<State>();
-        if(/*state*/this.getSetUp() == 5){
+        if(this.getSetUp() == 5){
             this.gameObject.GetComponent<Pawn>().first = false;
         }
         this.setMove(1);
