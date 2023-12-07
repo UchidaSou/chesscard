@@ -22,9 +22,13 @@ public class Game : MonoBehaviour
     public GameObject resultCanvas;
     public GameObject mainCanvas;
     public bool playStop = false;
+    private AudioSource audioSource;
+    [SerializeField]
+    private AudioClip[] effectAudioClip = new AudioClip[3];
 
     void Start(){
         resultCanvas.SetActive(false);
+        audioSource = this.gameObject.GetComponent<AudioSource>();
         int x = PlayerPrefs.GetInt("Level",1);
         int y = PlayerPrefs.GetInt("First", 1);
         int mode = PlayerPrefs.GetInt("Mode",0);
@@ -90,6 +94,9 @@ public class Game : MonoBehaviour
         if(playStop){
             return;
         }
+        if(audioSource.isPlaying){
+            return;
+        }
         bool npcFlg = false;
         if(Input.GetMouseButtonDown(0) ||player.getState() != 0){
             if(player.getState() != 0){
@@ -103,7 +110,6 @@ public class Game : MonoBehaviour
             }
             chessObject = player.selectedChess();
             if(chessObject == null){
-                Debug.Log("here");
                 return;
             }
             if(chessObject.gameObject.tag.Equals(player.getColor())){
@@ -138,6 +144,7 @@ public class Game : MonoBehaviour
                         Destroy(gameObject);
                     }
                 }
+                audioSource.PlayOneShot(audioSource.clip);
                 chess.movePosition(selectedPosition);
                 chessObject = null;
                 //プレイヤーを交代する
@@ -198,6 +205,7 @@ public class Game : MonoBehaviour
         }
         string color = nowPlayer.GetComponent<Player>().getColor();
         card.Resurrection(color);
+        audioSource.PlayOneShot(effectAudioClip[0]);
         ChangeTurn();
     }
 
@@ -235,6 +243,7 @@ public class Game : MonoBehaviour
         }
         string color = nowPlayer.GetComponent<Player>().getColor();
         card.twiceMove(color);
+        audioSource.PlayOneShot(this.effectAudioClip[0]);
     }
 
     public void canntMove(){
@@ -244,14 +253,14 @@ public class Game : MonoBehaviour
         }
         string color = nowPlayer.GetComponent<Player>().getColor();
         GameObject effectObject = card.canntMove(color);
+        audioSource.PlayOneShot(this.effectAudioClip[2]);
         if(color.Equals("white")){
             canntMoveObject[0] = effectObject;
             count = 1;
         }else{
             canntMoveObject[1] = effectObject;
             count = 2;
-        }
-        
+        }        
     }
 
     public void notUseCard(){
