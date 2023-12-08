@@ -1,12 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Data;
-using System.Net.NetworkInformation;
-using Unity.VisualScripting;
-using UnityEditor;
+using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 
 public class Game : MonoBehaviour
 {
@@ -17,16 +11,24 @@ public class Game : MonoBehaviour
     public Checker checker;
     public ChessUiEngine uiEngine;
     Player player;
-    PlayerState playerState;
     GameObject chessObject;
     public GameObject firstCamera,secondCamera;
     Chess chess;
     Vector3 selectedPosition;
     GameObject[] canntMoveObject = new GameObject[2];
+    public TMP_Text loser,winner;
     int count = 0;
     GameObject beforeMoveObject = null;
+    public GameObject resultCanvas;
+    public GameObject mainCanvas;
+    public bool playStop = false;
+    private AudioSource audioSource;
+    [SerializeField]
+    private AudioClip[] effectAudioClip = new AudioClip[3];
 
     void Start(){
+        resultCanvas.SetActive(false);
+        audioSource = this.gameObject.GetComponent<AudioSource>();
         int x = PlayerPrefs.GetInt("Level",1);
         int y = PlayerPrefs.GetInt("First", 1);
         int mode = PlayerPrefs.GetInt("Mode",0);
@@ -89,9 +91,15 @@ public class Game : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        if(playStop){
+            return;
+        }
+        if(audioSource.isPlaying){
+            return;
+        }
         bool npcFlg = false;
-        if(Input.GetMouseButtonDown(0) || nowPlayer.GetComponent<PlayerState>().getState() != 0){
-            if(nowPlayer.GetComponent<PlayerState>().getState() != 0){
+        if(Input.GetMouseButtonDown(0) ||player.getState() != 0){
+            if(player.getState() != 0){
                 player.UseCard();
             }
             GameObject[] reapwn = GameObject.FindGameObjectsWithTag("Respawn");
@@ -108,11 +116,14 @@ public class Game : MonoBehaviour
                 chess = chessObject.GetComponent<Chess>();
                 chess.ShowCanMovePosition();
                 int count=0;
-                if(nowPlayer.GetComponent<PlayerState>().getState() != 0){
-                    while(GameObject.FindGameObjectsWithTag("Respawn").Length == 0){
+                if(player.getState() != 0){
+                    while(GameObject.FindGameObjectsWithTag("Respawn").Length == 0 && chessObject == null){
                         chessObject = player.selectedChess();
                         chess = chessObject.GetComponent<Chess>();
                         chess.ShowCanMovePosition();
+                        if(GameObject.FindGameObjectsWithTag("Respawn").Length == 0){
+                            continue;
+                        }
                         count++;
                         if(count > 50){
                             return;
@@ -124,7 +135,7 @@ public class Game : MonoBehaviour
                 beforeMoveObject = chessObject;
             }
             if(chessObject.gameObject.tag == "Respawn" || npcFlg == true){
-                if(nowPlayer.GetComponent<PlayerState>().getState() == 0){
+                if(player.getState() == 0){
                     selectedPosition = chessObject.gameObject.transform.position;
                 }
                 reapwn = GameObject.FindGameObjectsWithTag("Respawn");
@@ -133,18 +144,10 @@ public class Game : MonoBehaviour
                         Destroy(gameObject);
                     }
                 }
+                audioSource.PlayOneShot(audioSource.clip);
+                audioSource.PlayDelayed(0.001f);
                 chess.movePosition(selectedPosition);
                 chessObject = null;
-                bool check = checker.isCheck(player.getColor());
-                bool checkmate = checker.isCheckMate(player.getColor());
-                if(checker.isCheckMate(player.getColor())){
-                    Debug.Log("CheckMate " + checkmate);
-                    Debug.Log(player.getColor()+"Lose");
-                }
-                if(checker.isCheck(player.getColor())){
-                    Debug.Log("check " + check);
-                    Debug.Log(player.getColor()+"Lose");
-                }
                 //プレイヤーを交代する
                 ChangeTurn();
             }
@@ -164,8 +167,24 @@ public class Game : MonoBehaviour
                 break;
         }
         player = nowPlayer.GetComponent<Player>();
+        checker.setCheck(player.getColor());
+        if(checker.isCheck(player.getColor())){
+            Debug.Log("check " + player.getColor());
+        }
+        if(checker.isCheckMate(player.getColor())){
+            mainCanvas.SetActive(false);
+            resultCanvas.SetActive(true);
+            loser.text = "Loser " + player.getColor();
+            winner.text = "Winner ";
+            if(player.getColor().Equals("white")){
+                winner.text = winner.text + "black";
+            }else{
+                winner.text = winner.text + "white";
+            }
+            playStop = true;
+            return;
+        }
         player.card.point += 1;
-        playerState = nowPlayer.GetComponent<PlayerState>();
         for(int i=0;i<count;i++){
             if(canntMoveObject[i] != null){
                 Chess chess = canntMoveObject[i].GetComponent<Chess>();
@@ -187,6 +206,8 @@ public class Game : MonoBehaviour
         }
         string color = nowPlayer.GetComponent<Player>().getColor();
         card.Resurrection(color);
+        audioSource.PlayOneShot(effectAudioClip[0]);
+        audioSource.PlayDelayed(0.001f);
         ChangeTurn();
     }
 
@@ -224,6 +245,8 @@ public class Game : MonoBehaviour
         }
         string color = nowPlayer.GetComponent<Player>().getColor();
         card.twiceMove(color);
+        audioSource.PlayOneShot(this.effectAudioClip[0]);
+        audioSource.PlayDelayed(0.001f);
     }
 
     public void canntMove(){
@@ -233,14 +256,15 @@ public class Game : MonoBehaviour
         }
         string color = nowPlayer.GetComponent<Player>().getColor();
         GameObject effectObject = card.canntMove(color);
+        audioSource.PlayOneShot(this.effectAudioClip[2]);
+        audioSource.PlayDelayed(0.001f);
         if(color.Equals("white")){
             canntMoveObject[0] = effectObject;
             count = 1;
         }else{
             canntMoveObject[1] = effectObject;
             count = 2;
-        }
-        
+        }        
     }
 
     public void notUseCard(){
@@ -253,5 +277,9 @@ public class Game : MonoBehaviour
         }else{
             card.notUseCard(firstPlayer.GetComponent<Player>().card);
         }
+    }
+
+    public void GoStartBtn(){
+        SceneManager.LoadScene("select");
     }
 }

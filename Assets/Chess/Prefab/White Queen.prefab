@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 23130532683746060}
   - component: {fileID: -7575401057947344508}
   - component: {fileID: 8017475972077260178}
-  - component: {fileID: -7395030491072647429}
   - component: {fileID: -8604019589843862943}
   m_Layer: 6
   m_Name: White Queen
@@ -118,18 +117,6 @@ MonoBehaviour:
   count: 0
   board: {fileID: 1595888500303032, guid: bec5b097ce3a840e4b09cd099b17c337, type: 3}
   boardState: {fileID: 0}
---- !u!114 &-7395030491072647429
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1639620864090624}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8851ec00c9c41534ba83a0a8c8486d00, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!54 &-8604019589843862943
 Rigidbody:
   m_ObjectHideFlags: 0

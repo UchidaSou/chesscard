@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 23733394573932104}
   - component: {fileID: -1096891722936781574}
   - component: {fileID: 6188108575054028954}
-  - component: {fileID: -6781852864739080994}
   - component: {fileID: -6176110483032106594}
   m_Layer: 6
   m_Name: Black Knight
@@ -118,18 +117,6 @@ MonoBehaviour:
   count: 0
   board: {fileID: 1595888500303032, guid: bec5b097ce3a840e4b09cd099b17c337, type: 3}
   boardState: {fileID: 0}
---- !u!114 &-6781852864739080994
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1291360291826688}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8851ec00c9c41534ba83a0a8c8486d00, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!54 &-6176110483032106594
 Rigidbody:
   m_ObjectHideFlags: 0

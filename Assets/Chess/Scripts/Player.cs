@@ -1,22 +1,20 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 public abstract class Player:MonoBehaviour
 {
     private String mycolor;
-    private PlayerState playerState;
     private int score;
     public Card card;
+    public int state;
 
-    public void setPlayerState(PlayerState playerState,int state){
-        this.playerState = playerState;
-        this.playerState.setState(state);
-        
+  public void setState(int state){
+        this.state = state;
     }
 
+    public int getState(){
+        return this.state;
+    }
     public abstract GameObject selectedChess();
     public abstract Vector3 selectedMovePosition();
     public abstract void UseCard();
@@ -27,10 +25,6 @@ public abstract class Player:MonoBehaviour
 
     public String getColor(){
         return this.mycolor;
-    }
-
-    public PlayerState getPlayerState(){
-        return this.playerState;
     }
 
     public void setScore(int score){

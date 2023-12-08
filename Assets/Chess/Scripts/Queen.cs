@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -27,11 +26,14 @@ public class Queen : Chess
         rook.brightSquare = this.brightSquare;
         rook.board = this.board;
         rook.boardState = this.boardState;
+        rook.boardState.chessBoardArray = this.boardState.chessBoardArray;
         rook.setMaxI(this.getMaxI());
         rook.setMaxJ(this.getMaxJ());
         setBishop(this.gameObject.GetComponent<Bishop>());
         bishop.brightSquare = this.brightSquare;
+        bishop.board = this.board;
         bishop.boardState = this.boardState;
+        bishop.boardState.chessBoardArray = this.boardState.chessBoardArray;
         bishop.setMaxI(this.getMaxI());
         bishop.setMaxJ(this.getMaxJ());
         this.setMaterial(9);

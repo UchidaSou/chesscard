@@ -1,7 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Data;
-using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,6 +17,8 @@ public class Card : MonoBehaviour
     public GameObject mine;
     public GameObject ressuEfect,reverceEffect,twiceEffect,cantMoveEffect,insCantMove;
     public GameObject board;
+    [SerializeField]
+    GameObject mineSquare;
 
     public void Resurrection(string color){
         List<GameObject> retiredList;
@@ -43,6 +42,22 @@ public class Card : MonoBehaviour
         Vector3 vector = chess.getFirstVector() + new Vector3(-16,0,16);
         int i = (int)-vector.x/4;
         int j  = (int)vector.z/4;
+        if(boardState.chessBoardArray[i,j] != null){
+            GameObject gameObject = boardState.chessBoardArray[i,j];
+            if(gameObject.tag.Equals("white")){
+                boardState.whiteRetired.Add(gameObject);
+            }else{
+                boardState.blackRetired.Add(gameObject);
+            }
+            string retiredObjectname = gameObject.tag + "Retired";
+            GameObject retiredObject = GameObject.Find(retiredObjectname);
+            gameObject.transform.position = retiredObject.transform.position;
+            gameObject.tag = "Retired";
+            chess = gameObject.GetComponent<Chess>();
+            Game game = GameObject.Find("Game").GetComponent<Game>();
+            Player player = game.nowPlayer.GetComponent<Player>();
+            player.setScore(player.getScore() - chess.getMaterial());
+        }
         boardState.chessBoardArray[i,j] = resurrectionObject;
         this.resurrection = false;
         this.point -= 15;
@@ -85,6 +100,16 @@ public class Card : MonoBehaviour
         Debug.Log("setMine " + cellNumber);
         GameObject setmine = GameObject.Instantiate(mine,vector,Quaternion.Euler(0,0,0));
         setmine.GetComponent<Mine>().color = color;
+        GameObject ms = GameObject.Instantiate(mineSquare,setmine.transform.position,Quaternion.Euler(0,0,0),setmine.transform);
+        ms.tag = "mine";
+        switch(color){
+            case "white":
+                ms.layer = 8;
+                break;
+            case "black":
+                ms.layer = 9;
+                break;
+        }
         this.setmine = false;
         this.point -= 5;
         this.text.text = this.point.ToString();
