@@ -17,6 +17,8 @@ public class Card : MonoBehaviour
     public GameObject mine;
     public GameObject ressuEfect,reverceEffect,twiceEffect,cantMoveEffect,insCantMove;
     public GameObject board;
+    [SerializeField]
+    GameObject mineSquare;
 
     public void Resurrection(string color){
         List<GameObject> retiredList;
@@ -98,6 +100,16 @@ public class Card : MonoBehaviour
         Debug.Log("setMine " + cellNumber);
         GameObject setmine = GameObject.Instantiate(mine,vector,Quaternion.Euler(0,0,0));
         setmine.GetComponent<Mine>().color = color;
+        GameObject ms = GameObject.Instantiate(mineSquare,setmine.transform.position,Quaternion.Euler(0,0,0),setmine.transform);
+        ms.tag = "mine";
+        switch(color){
+            case "white":
+                ms.layer = 8;
+                break;
+            case "black":
+                ms.layer = 9;
+                break;
+        }
         this.setmine = false;
         this.point -= 5;
         this.text.text = this.point.ToString();

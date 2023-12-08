@@ -8,7 +8,7 @@ public class Mine : MonoBehaviour
     public string color;
     void OnTriggerEnter(Collider collider){
         string tag = collider.tag;
-        if(!this.color.Equals(tag)){
+        if(!this.color.Equals(tag) && !tag.Equals("mine")){
             BoardState boardState = board.GetComponent<BoardState>();
             Debug.Log(collider.name);
             if(tag.Equals("white")){
