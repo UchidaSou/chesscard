@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -48,6 +49,7 @@ public class Game : MonoBehaviour
             secondCamera.SetActive(false);
             player = firstPlayer.GetComponent<Player>();
             player.setColor("white");
+            this.removeAura(player.getColor());
             if(x == 1){
                 secondPlayer.AddComponent<EasyNPC>();
             }else{
@@ -55,6 +57,7 @@ public class Game : MonoBehaviour
             }
             player = secondPlayer.GetComponent<Player>();
             player.setColor("black");
+            this.removeAura(player.getColor());
         }else{
             secondPlayer.AddComponent<RealPlayer>();
             firstCamera.SetActive(false);
@@ -87,6 +90,7 @@ public class Game : MonoBehaviour
         //現在のプレイヤーを設定
         nowPlayer = firstPlayer;
         player = nowPlayer.GetComponent<Player>();
+        Invoke("setAura(player.getColor())",2.0f);
     }
     // Update is called once per frame
     void FixedUpdate()
@@ -158,6 +162,7 @@ public class Game : MonoBehaviour
         if(!player.card.usecard){
             player.card.usecard = true;
         }
+        this.removeAura(player.getColor());
         switch(player.getColor()){
             case "white":
                 nowPlayer = secondPlayer;
@@ -184,6 +189,7 @@ public class Game : MonoBehaviour
             playStop = true;
             return;
         }
+        setAura(player.getColor());
         player.card.point += 1;
         for(int i=0;i<count;i++){
             if(canntMoveObject[i] != null){
@@ -197,6 +203,31 @@ public class Game : MonoBehaviour
             }
         }
     }
+
+    public void setAura(string color){
+        GameObject[] objects = GameObject.FindGameObjectsWithTag(color);
+        Chess chess;
+        int i=0,j=0;
+        foreach(GameObject gameObject in objects){
+            chess = gameObject.GetComponent<Chess>();
+            i = (int)-(gameObject.transform.position.x - 16) / 4;
+            j = (int)(gameObject.transform.position.z + 16) / 4;
+            if(chess.canMovePosition(i*8+j).Count != 0){
+                gameObject.GetComponent<Outline>().OutlineWidth = 2;
+                gameObject.GetComponent<Outline>().OutlineColor = Color.green;
+            }else{
+                gameObject.GetComponent<Outline>().OutlineWidth = 0;
+            }
+        }
+    }
+
+    private void removeAura(string color){
+        GameObject[] objects = GameObject.FindGameObjectsWithTag(color);
+        foreach(GameObject gameObject in objects){
+            gameObject.GetComponent<Outline>().OutlineWidth = 0;
+        }
+    }
+
 
 
     public void Resurrection(){

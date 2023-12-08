@@ -20,8 +20,9 @@ public class Queen : Chess
     // Start is called before the first frame update
     void Start()
     {
-        this.AddComponent<Rook>();
+        /*this.AddComponent<Rook>();
         this.AddComponent<Bishop>();
+        */
         setRook(this.gameObject.GetComponent<Rook>());
         rook.brightSquare = this.brightSquare;
         rook.board = this.board;
@@ -41,7 +42,11 @@ public class Queen : Chess
 
     public override List<Vector3> canMovePosition(int cellNumber)
     {
+        Debug.Log(this.gameObject.name);
         List<Vector3> canMoveList = new List<Vector3>();
+        if(rook.IsUnityNull()){
+            this.setRook(this.GetComponent<Rook>());
+        }
         foreach(Vector3 vector in rook.canMovePosition(cellNumber)){
             canMoveList.Add(vector);
         }

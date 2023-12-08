@@ -14,6 +14,9 @@ GameObject:
   - component: {fileID: -7575401057947344508}
   - component: {fileID: 8017475972077260178}
   - component: {fileID: -8604019589843862943}
+  - component: {fileID: 795716530439685350}
+  - component: {fileID: 8968985357116420090}
+  - component: {fileID: 2170796673530827639}
   m_Layer: 6
   m_Name: White Queen
   m_TagString: white
@@ -133,3 +136,55 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &795716530439685350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1639620864090624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
+--- !u!114 &8968985357116420090
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1639620864090624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6df24db63d3ca884c97998402b161be1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  brightSquare: {fileID: 0}
+  canMove: 1
+  count: 0
+  board: {fileID: 0}
+  boardState: {fileID: 0}
+--- !u!114 &2170796673530827639
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1639620864090624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e9320b534033ce4cac5978301432c74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  brightSquare: {fileID: 0}
+  canMove: 1
+  count: 0
+  board: {fileID: 0}
+  boardState: {fileID: 0}

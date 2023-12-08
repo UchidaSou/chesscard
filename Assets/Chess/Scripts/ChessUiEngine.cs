@@ -40,7 +40,8 @@ public class ChessUiEngine : MonoBehaviour {
 		for (int i = 0; i < 8; i++) {
 			Transform piece = GameObject.Instantiate (blackPiecePrefabs [(int)setup [i]]);
 			Vector3 worldPoint = ToWorldPoint (i+56);
-			piece.position = new Vector3(worldPoint.x, piece.position.y, worldPoint.z);	
+			piece.position = new Vector3(worldPoint.x, piece.position.y, worldPoint.z);
+			piece.Rotate(new Vector3(0,0,180));
 			Chess chess = piece.GetComponent<Chess>();
 			chess.setFirstVector(piece.position);
 			chess.setBeforeVector(piece.position);
