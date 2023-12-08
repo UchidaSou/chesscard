@@ -145,6 +145,7 @@ public class Game : MonoBehaviour
                     }
                 }
                 audioSource.PlayOneShot(audioSource.clip);
+                audioSource.PlayDelayed(0.001f);
                 chess.movePosition(selectedPosition);
                 chessObject = null;
                 //プレイヤーを交代する
@@ -206,6 +207,7 @@ public class Game : MonoBehaviour
         string color = nowPlayer.GetComponent<Player>().getColor();
         card.Resurrection(color);
         audioSource.PlayOneShot(effectAudioClip[0]);
+        audioSource.PlayDelayed(0.001f);
         ChangeTurn();
     }
 
@@ -244,6 +246,7 @@ public class Game : MonoBehaviour
         string color = nowPlayer.GetComponent<Player>().getColor();
         card.twiceMove(color);
         audioSource.PlayOneShot(this.effectAudioClip[0]);
+        audioSource.PlayDelayed(0.001f);
     }
 
     public void canntMove(){
@@ -254,6 +257,7 @@ public class Game : MonoBehaviour
         string color = nowPlayer.GetComponent<Player>().getColor();
         GameObject effectObject = card.canntMove(color);
         audioSource.PlayOneShot(this.effectAudioClip[2]);
+        audioSource.PlayDelayed(0.001f);
         if(color.Equals("white")){
             canntMoveObject[0] = effectObject;
             count = 1;
