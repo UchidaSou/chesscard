@@ -56,8 +56,7 @@ public class EasyNPC : Player
         if(PlayerPrefs.GetInt("Mode",0) == 1){
             return;
         }
-        //int x = UnityEngine.Random.Range(0,20);
-        int x = 2;
+        int x = UnityEngine.Random.Range(0,20);
         switch(x){
             case 0:
              GameObject.Find("Game").GetComponent<Game>().Resurrection();

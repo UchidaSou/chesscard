@@ -26,28 +26,70 @@ public class Card : MonoBehaviour
     [SerializeField]
     GameObject minePositionSquare;
 
-    public void Resurrection(string color){
+    public IEnumerator Resurrection(string color,int state){
+        bool flg = false;
         List<GameObject> retiredList;
+        GameObject retiredObject;
+        GameObject select = new GameObject();
         BoardState boardState = board.GetComponent<BoardState>();
         if(color.Equals("white")){
             retiredList = boardState.whiteRetired;
         }else{
             retiredList = boardState.blackRetired;
         }
-        int size = retiredList.Count;
-        if(size == 0){
-            return;
+        if(state == 0){
+            Debug.Log("クリック待ち");
+            yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
+            Debug.Log("クリック後");
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if(Physics.Raycast(ray,out hit,Mathf.Infinity)){
+                Debug.Log(hit.collider.gameObject.name);
+                GameObject gameObject = hit.collider.gameObject;
+                if(gameObject.tag.Equals("Retired")){
+                    if(gameObject.transform.parent.name.Equals(color + "Retired")){
+                        Debug.Log("Ok");
+                        select = hit.collider.gameObject;
+                        flg = true;
+                    }else{
+                        Debug.Log("No");
+                    }
+                }else{
+                    Debug.Log("No");
+                    GameObject.Find("Game").GetComponent<Game>().useCard = false;
+                    yield break;
+                }
+            }
+        }else{
+            int size = retiredList.Count;
+            if(size == 0){
+                GameObject.Find("Game").GetComponent<Game>().useCard = false;
+                yield break;
+            }
+            int r = Random.Range(0,size);
+            select = retiredList[r];
+            flg = true;
         }
-        int r = Random.Range(0,size);
-        GameObject resurrectionObject = retiredList[r];
-        resurrectionObject.tag = color;
-        Chess chess = resurrectionObject.GetComponent<Chess>();
-        resurrectionObject.transform.position = chess.getFirstVector();
-        Instantiate(ressuEfect,resurrectionObject.transform.position,resurrectionObject.transform.rotation);
-        retiredList.RemoveAt(r);
+        if(!flg){
+            GameObject.Find("Game").GetComponent<Game>().useCard = false;
+            yield break;
+        }
+        Debug.Log(select.name);
+        Chess chess = select.GetComponent<Chess>();
         Vector3 vector = chess.getFirstVector() + new Vector3(-16,0,16);
         int i = (int)-vector.x/4;
         int j  = (int)vector.z/4;
+        if(boardState.chessBoardArray[i,j] != null){
+            if(boardState.chessBoardArray[i,j].name.Contains("King")){
+                Debug.Log("king");
+                GameObject.Find("Game").GetComponent<Game>().useCard = false;
+                yield break;
+            }
+        }
+        select.tag = color;
+        select.transform.position = chess.getFirstVector();
+        Instantiate(ressuEfect,select.transform.position,select.transform.rotation);
+        retiredList.Remove(select);
         if(boardState.chessBoardArray[i,j] != null){
             GameObject gameObject = boardState.chessBoardArray[i,j];
             if(gameObject.tag.Equals("white")){
@@ -56,18 +98,21 @@ public class Card : MonoBehaviour
                 boardState.blackRetired.Add(gameObject);
             }
             string retiredObjectname = gameObject.tag + "Retired";
-            GameObject retiredObject = GameObject.Find(retiredObjectname);
+            retiredObject = GameObject.Find(retiredObjectname);
             gameObject.transform.position = retiredObject.transform.position;
+            gameObject.transform.parent = retiredObject.transform;
             gameObject.tag = "Retired";
             chess = gameObject.GetComponent<Chess>();
             Game game = GameObject.Find("Game").GetComponent<Game>();
             Player player = game.nowPlayer.GetComponent<Player>();
             player.setScore(player.getScore() - chess.getMaterial());
         }
-        boardState.chessBoardArray[i,j] = resurrectionObject;
+        boardState.chessBoardArray[i,j] = select;
         this.resurrection = false;
         this.point -= 15;
         this.text.text = this.point.ToString();
+        GameObject.Find("Game").GetComponent<Game>().ChangeTurn();
+        GameObject.Find("Game").GetComponent<Game>().useCard = false;
     }
 
     public void turnReverse(GameObject beforeMoveObject){
@@ -89,7 +134,7 @@ public class Card : MonoBehaviour
 
     public IEnumerator setMine(string color,int setup){
         int mode = PlayerPrefs.GetInt("Mode",0);
-        int cellNumber=0,maxI = 0,maxJ = 0;
+        int cellNumber=-1,maxI = 0,maxJ = 0;
         if(setup == 0){
             BoardState boardState = board.GetComponent<BoardState>();
             if(mode == 0){
@@ -108,29 +153,28 @@ public class Card : MonoBehaviour
                 }
             }
             int col=0,row=0;
-            cellNumber = -1;
-                Debug.Log("クリック待ち");
-                yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
-                Debug.Log("クリック後");
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
-                if(Physics.Raycast(ray,out hit,Mathf.Infinity)){
-                    Debug.Log(hit.collider.gameObject.name);
-                    Vector3 vector3 = hit.collider.gameObject.transform.position;
-                    col = (int)-(vector3.x - 16) / 4;
-                    row = (int)(vector3.z + 16) / 4;
-                    Debug.Log("i :"+col+" j:"+row);
-                    if(boardState.chessBoardArray[col,row] == null){
-                        cellNumber = col*8+row;
-                    }else{
-                        GameObject[] respawns = GameObject.FindGameObjectsWithTag("Respawn");
-                        for(int k = 0;k<respawns.Length;k++){
-                            Destroy(respawns[k]);
-                        }
-                        GameObject.Find("Game").GetComponent<Game>().useCard = false;
-                        yield break;
+            Debug.Log("クリック待ち");
+            yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
+            Debug.Log("クリック後");
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if(Physics.Raycast(ray,out hit,Mathf.Infinity)){
+                Debug.Log(hit.collider.gameObject.name);
+                Vector3 vector3 = hit.collider.gameObject.transform.position;
+                col = (int)-(vector3.x - 16) / 4;
+                row = (int)(vector3.z + 16) / 4;
+                Debug.Log("i :"+col+" j:"+row);
+                if(boardState.chessBoardArray[col,row] == null){
+                    cellNumber = col*8+row;
+                }else{
+                    GameObject[] respawns = GameObject.FindGameObjectsWithTag("Respawn");
+                    for(int k = 0;k<respawns.Length;k++){
+                        Destroy(respawns[k]);
                     }
+                    GameObject.Find("Game").GetComponent<Game>().useCard = false;
+                    yield break;
                 }
+            }
             GameObject[] positions = GameObject.FindGameObjectsWithTag("Respawn");
             for(int k = 0;k<positions.Length;k++){
                 Destroy(positions[k]);
@@ -148,6 +192,10 @@ public class Card : MonoBehaviour
                     }
                 }
             }
+        }
+        if(cellNumber < 0){
+            GameObject.Find("Game").GetComponent<Game>().useCard = false;
+           yield break; 
         }
         Vector3 vector = ChessUiEngine.ToWorldPoint(cellNumber);
         Debug.Log("setMine " + cellNumber);
@@ -168,41 +216,106 @@ public class Card : MonoBehaviour
         this.text.text = this.point.ToString();
         GameObject.Find("Game").GetComponent<Game>().useCard = false;
     }
-
-    public void twiceMove(string color){
-        List<GameObject> objects = new List<GameObject>();
-        GameObject[] cheesses = GameObject.FindGameObjectsWithTag(color);
-        foreach(GameObject chess in cheesses){
-            if(chess.name.Contains("Pawn") || chess.name.Contains("King")){
-                objects.Add(chess);
+    public IEnumerator twiceMove(string color,int state){
+        bool flg = false;
+        if(state == 0){
+            Debug.Log("クリック待ち");
+            yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
+            Debug.Log("クリック後");
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if(Physics.Raycast(ray,out hit,Mathf.Infinity)){
+                Debug.Log(hit.collider.gameObject.name);
+                GameObject select = hit.collider.gameObject;
+                Chess chess = select.GetComponent<Chess>();
+                Debug.Log(select.name);
+                if(select.tag.Equals(color) && (chess.getSetUp()==0 || chess.getSetUp()==5)){
+                    select.GetComponent<Chess>().setMove(2);
+                    Instantiate(twiceEffect,select.transform.position,Quaternion.Euler(0,0,90),select.transform);
+                    flg = true;
+                    Debug.Log("Twice "+select.name);
+                }else{
+                    GameObject.Find("Game").GetComponent<Game>().useCard = false;
+                    yield break;
+                }
             }
+        }else{
+            List<GameObject> objects = new List<GameObject>();
+            GameObject[] cheesses = GameObject.FindGameObjectsWithTag(color);
+            foreach(GameObject chess in cheesses){
+                if(chess.name.Contains("Pawn") || chess.name.Contains("King")){
+                    objects.Add(chess);
+                }
+            }
+            int r = Random.Range(0,objects.Count);
+            objects[r].GetComponent<Chess>().setMove(2);
+            Instantiate(twiceEffect,objects[r].transform.position,Quaternion.Euler(0,0,90),objects[r].transform);
+            flg = true;
+            Debug.Log("Twice " + objects[r].name);
         }
-        int r = Random.Range(0,objects.Count);
-        objects[r].GetComponent<Chess>().setMove(2);
-        Instantiate(twiceEffect,objects[r].transform.position,Quaternion.Euler(0,0,90),objects[r].transform);
-        Debug.Log("Twice " + objects[r].name);
+        if(!flg){
+            GameObject.Find("Game").GetComponent<Game>().useCard = false;
+            yield break;
+        }
         this.twicemove = false;
         this.point -= 6;
         this.text.text = this.point.ToString();
-        }
+        GameObject.Find("Game").GetComponent<Game>().useCard = false;
+    }
 
 
-    public GameObject canntMove(string color){
-        GameObject[] objects;
-        if(color.Equals("white")){
-           objects = GameObject.FindGameObjectsWithTag("black");
+    public IEnumerator canntMove(string color,int state){
+        bool flg = false;
+        GameObject select = new GameObject();
+        if(state == 0){
+            Debug.Log("クリック待ち");
+            yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
+            Debug.Log("クリック後");
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if(Physics.Raycast(ray,out hit,Mathf.Infinity)){
+                Debug.Log(hit.collider.gameObject.name);
+                if(select.tag.Equals(color)){
+                    GameObject.Find("Game").GetComponent<Game>().useCard = false;
+                    yield break;
+                }else{
+                    select = hit.collider.gameObject;
+                    flg = true;
+                }
+            }
         }else{
-            objects = GameObject.FindGameObjectsWithTag("white");
+            GameObject[] objects;
+            if(color.Equals("white")){
+            objects = GameObject.FindGameObjectsWithTag("black");
+            }else{
+                objects = GameObject.FindGameObjectsWithTag("white");
+            }
+            int r = Random.Range(0,objects.Length);
+            select = objects[r];
+            flg = true;
         }
-         
-        int r = Random.Range(0,objects.Length);
-        objects[r].GetComponent<Chess>().canMove = false;
-        Debug.Log("cantMove " + objects[r].name);
-        insCantMove = Instantiate(cantMoveEffect,objects[r].transform.position,Quaternion.Euler(0,0,0));
+        if(!flg){
+            GameObject.Find("Game").GetComponent<Game>().useCard = false;
+            yield break;
+        }
+        Game game = GameObject.Find("Game").GetComponent<Game>();
+        switch(color){
+            case "white":
+                game.canntMoveObject[0] = select;
+                game.count = 1;
+                break;
+            case "black":
+                game.canntMoveObject[1] = select;
+                game.count = 2;
+                break;
+        }
+        select.GetComponent<Chess>().canMove = false;
+        Debug.Log("cantMove " + select.name);
+        insCantMove = Instantiate(cantMoveEffect,select.transform.position,Quaternion.Euler(0,0,0));
         this.canntmove = false;
         this.point -= 10;
         this.text.text = this.point.ToString();
-        return objects[r];
+        GameObject.Find("Game").GetComponent<Game>().useCard = false;
     }
 
     public void notUseCard(Card card){

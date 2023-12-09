@@ -16,9 +16,9 @@ public class Game : MonoBehaviour
     public GameObject firstCamera,secondCamera;
     Chess chess;
     Vector3 selectedPosition;
-    GameObject[] canntMoveObject = new GameObject[2];
+    public GameObject[] canntMoveObject = new GameObject[2];
     public TMP_Text loser,winner;
-    int count = 0;
+    public int count = 0;
     GameObject beforeMoveObject = null;
     public GameObject resultCanvas;
     public GameObject mainCanvas;
@@ -27,6 +27,7 @@ public class Game : MonoBehaviour
     [SerializeField]
     private AudioClip[] effectAudioClip = new AudioClip[3];
     public bool useCard = false;
+    private Coroutine coroutine;
 
     void Start(){
         resultCanvas.SetActive(false);
@@ -245,18 +246,29 @@ public class Game : MonoBehaviour
 
 
     public void Resurrection(){
+        if(coroutine != null){
+            StopCoroutine(coroutine);
+            coroutine = null;
+            return;
+        }
         Card card = nowPlayer.GetComponent<Card>();
         if(!card.resurrection || card.point < 15){
             return;
         }
         string color = nowPlayer.GetComponent<Player>().getColor();
-        card.Resurrection(color);
+        this.useCard = true;
+        Debug.Log(color);
+        coroutine = StartCoroutine(card.Resurrection(color,player.getState()));
         audioSource.PlayOneShot(effectAudioClip[0]);
         audioSource.PlayDelayed(0.001f);
-        ChangeTurn();
     }
 
     public void TurnReverse(){
+        if(coroutine != null){
+            StopCoroutine(coroutine);
+            coroutine = null;
+            return;
+        }
         Card card = nowPlayer.GetComponent<Card>();
         if(!card.turnreverse || card.point < 10 || beforeMoveObject == null){
             return;
@@ -275,6 +287,12 @@ public class Game : MonoBehaviour
     }
 
     public void setMine(){
+        if(coroutine != null){
+            Debug.Log("Stop coroutine");
+            StopCoroutine(coroutine);
+            coroutine = null;
+            return;
+        }
         this.useCard = true;
         Card card = nowPlayer.GetComponent<Card>();
         if(!card.setmine || card.point < 5){
@@ -282,39 +300,50 @@ public class Game : MonoBehaviour
         }
         string color = nowPlayer.GetComponent<Player>().getColor();
         this.useCard = true;
-        StartCoroutine(card.setMine(color,player.getState()));
+        coroutine = StartCoroutine(card.setMine(color,player.getState()));
     }
 
     public void twiceMove(){
+        if(coroutine != null){
+            Debug.Log("Stop coroutine");
+            StopCoroutine(coroutine);
+            coroutine = null;
+            return;
+        }
         Card card = nowPlayer.GetComponent<Card>();
         if(!card.twicemove || card.point < 6){
             return;
         }
         string color = nowPlayer.GetComponent<Player>().getColor();
-        card.twiceMove(color);
+        this.useCard = true;
+        coroutine = StartCoroutine(card.twiceMove(color,player.getState()));
         audioSource.PlayOneShot(this.effectAudioClip[0]);
         audioSource.PlayDelayed(0.001f);
     }
 
     public void canntMove(){
+        if(coroutine != null){
+            StopCoroutine(coroutine);
+            coroutine = null;
+            return;
+        }
         Card card = nowPlayer.GetComponent<Card>();
         if(!card.canntmove || card.point < 10){
             return;
         }
         string color = nowPlayer.GetComponent<Player>().getColor();
-        GameObject effectObject = card.canntMove(color);
+        this.useCard = true;
+        coroutine = StartCoroutine(card.canntMove(color,player.getState()));
         audioSource.PlayOneShot(this.effectAudioClip[2]);
         audioSource.PlayDelayed(0.001f);
-        if(color.Equals("white")){
-            canntMoveObject[0] = effectObject;
-            count = 1;
-        }else{
-            canntMoveObject[1] = effectObject;
-            count = 2;
-        }        
     }
 
     public void notUseCard(){
+        if(coroutine != null){
+            StopCoroutine(coroutine);
+            coroutine = null;
+            return;
+        }
         Card card = nowPlayer.GetComponent<Card>();
         if(!card.notusecard || card.point < 12){
             return;
