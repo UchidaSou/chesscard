@@ -90,7 +90,7 @@ public class Game : MonoBehaviour
         //現在のプレイヤーを設定
         nowPlayer = firstPlayer;
         player = nowPlayer.GetComponent<Player>();
-        Invoke("setAura(player.getColor())",2.0f);
+        Invoke("firstsetAura",0.5f);  
     }
     // Update is called once per frame
     void FixedUpdate()
@@ -204,6 +204,10 @@ public class Game : MonoBehaviour
         }
     }
 
+    public void firstsetAura(){
+        string color = player.getColor();
+        setAura(color);
+    }
     public void setAura(string color){
         GameObject[] objects = GameObject.FindGameObjectsWithTag(color);
         Chess chess;
@@ -219,6 +223,12 @@ public class Game : MonoBehaviour
                 gameObject.GetComponent<Outline>().OutlineWidth = 0;
             }
         }
+        GameObject king = GameObject.Find("White King(Clone)");
+        king.GetComponent<Outline>().OutlineColor = Color.black;
+        king.GetComponent<Outline>().OutlineWidth = 5;
+        king = GameObject.Find("Black King(Clone)");
+        king.GetComponent<Outline>().OutlineColor = Color.cyan;
+        king.GetComponent<Outline>().OutlineWidth = 5;
     }
 
     private void removeAura(string color){

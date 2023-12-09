@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2352063248182408334}
   - component: {fileID: -3983147442850236449}
   - component: {fileID: -1872095023687179741}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: White King
   m_TagString: white
   m_Icon: {fileID: 0}
