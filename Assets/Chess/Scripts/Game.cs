@@ -26,6 +26,7 @@ public class Game : MonoBehaviour
     private AudioSource audioSource;
     [SerializeField]
     private AudioClip[] effectAudioClip = new AudioClip[3];
+    public bool useCard = false;
 
     void Start(){
         resultCanvas.SetActive(false);
@@ -90,7 +91,7 @@ public class Game : MonoBehaviour
         //現在のプレイヤーを設定
         nowPlayer = firstPlayer;
         player = nowPlayer.GetComponent<Player>();
-        Invoke("firstsetAura",0.5f);  
+        Invoke("firstsetAura",0.5f); 
     }
     // Update is called once per frame
     void FixedUpdate()
@@ -99,6 +100,9 @@ public class Game : MonoBehaviour
             return;
         }
         if(audioSource.isPlaying){
+            return;
+        }
+        if(useCard){
             return;
         }
         bool npcFlg = false;
@@ -271,12 +275,14 @@ public class Game : MonoBehaviour
     }
 
     public void setMine(){
+        this.useCard = true;
         Card card = nowPlayer.GetComponent<Card>();
         if(!card.setmine || card.point < 5){
             return;
         }
         string color = nowPlayer.GetComponent<Player>().getColor();
-        card.setMine(color);
+        this.useCard = true;
+        StartCoroutine(card.setMine(color,player.getState()));
     }
 
     public void twiceMove(){

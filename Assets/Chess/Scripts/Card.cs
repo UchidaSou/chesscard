@@ -1,6 +1,10 @@
+using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
+using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class Card : MonoBehaviour
 {
@@ -19,6 +23,8 @@ public class Card : MonoBehaviour
     public GameObject board;
     [SerializeField]
     GameObject mineSquare;
+    [SerializeField]
+    GameObject minePositionSquare;
 
     public void Resurrection(string color){
         List<GameObject> retiredList;
@@ -81,18 +87,65 @@ public class Card : MonoBehaviour
         this.text.text = this.point.ToString();
     }
 
-    public void setMine(string color){
+    public IEnumerator setMine(string color,int setup){
         int mode = PlayerPrefs.GetInt("Mode",0);
-        int cellNumber;
-        if(mode == 0){
-            cellNumber = Random.Range(2*8,5*8+7);
+        int cellNumber=0,maxI = 0,maxJ = 0;
+        if(setup == 0){
+            BoardState boardState = board.GetComponent<BoardState>();
+            if(mode == 0){
+                maxI = 8;
+                maxJ = 8;
+            }else{
+                maxI = 5;
+                maxJ = 6;
+            }
+            for(int i=0;i<maxI;i++){
+                for(int j=0;j<maxJ;j++){
+                    if(boardState.chessBoardArray[i,j] != null){
+                        continue;
+                    }
+                    GameObject.Instantiate(minePositionSquare,ChessUiEngine.ToWorldPoint(i*8+j),Quaternion.Euler(0,0,0));
+                }
+            }
+            int col=0,row=0;
+            cellNumber = -1;
+                Debug.Log("クリック待ち");
+                yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
+                Debug.Log("クリック後");
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+                if(Physics.Raycast(ray,out hit,Mathf.Infinity)){
+                    Debug.Log(hit.collider.gameObject.name);
+                    Vector3 vector3 = hit.collider.gameObject.transform.position;
+                    col = (int)-(vector3.x - 16) / 4;
+                    row = (int)(vector3.z + 16) / 4;
+                    Debug.Log("i :"+col+" j:"+row);
+                    if(boardState.chessBoardArray[col,row] == null){
+                        cellNumber = col*8+row;
+                    }else{
+                        GameObject[] respawns = GameObject.FindGameObjectsWithTag("Respawn");
+                        for(int k = 0;k<respawns.Length;k++){
+                            Destroy(respawns[k]);
+                        }
+                        GameObject.Find("Game").GetComponent<Game>().useCard = false;
+                        yield break;
+                    }
+                }
+            GameObject[] positions = GameObject.FindGameObjectsWithTag("Respawn");
+            for(int k = 0;k<positions.Length;k++){
+                Destroy(positions[k]);
+            }
         }else{
-            cellNumber = Random.Range(2*8,3*8+4);
-            if(cellNumber < 3*8 && cellNumber > 2*8+4){
-                if(color.Equals("white")){
-                    cellNumber = Random.Range(3*8,3*8+4);
-                }else{
-                    cellNumber = Random.Range(2*8,2*8+4);
+            if(mode == 0){
+                cellNumber = Random.Range(2*8,5*8+7);
+            }else{
+                cellNumber = Random.Range(2*8,3*8+4);
+                if(cellNumber < 3*8 && cellNumber > 2*8+4){
+                    if(color.Equals("white")){
+                        cellNumber = Random.Range(3*8,3*8+4);
+                    }else{
+                        cellNumber = Random.Range(2*8,2*8+4);
+                    }
                 }
             }
         }
@@ -113,6 +166,7 @@ public class Card : MonoBehaviour
         this.setmine = false;
         this.point -= 5;
         this.text.text = this.point.ToString();
+        GameObject.Find("Game").GetComponent<Game>().useCard = false;
     }
 
     public void twiceMove(string color){
