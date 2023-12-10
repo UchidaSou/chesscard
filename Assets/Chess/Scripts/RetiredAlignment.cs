@@ -17,7 +17,7 @@ public class RetiredAlignment : MonoBehaviour
                 gameObject.transform.position = new Vector3(vector.x - 3*(int)(this.count/2),gameObject.transform.position.y,vector.z + 3*(int)(this.count%2));
             }
             Debug.Log(this.gameObject.transform.GetChild(this.count));
-            this.count++;
+            this.count = this.gameObject.transform.childCount;
         }
     }
 }

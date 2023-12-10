@@ -288,7 +288,6 @@ public class Game : MonoBehaviour
             StopCoroutine(coroutine);
             coroutine = null;
         }
-        this.useCard = true;
         Card card = nowPlayer.GetComponent<Card>();
         if(!card.setmine || card.point < 5){
             return;

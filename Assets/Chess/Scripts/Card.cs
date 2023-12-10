@@ -49,13 +49,23 @@ public class Card : MonoBehaviour
             if(Physics.Raycast(ray,out hit,Mathf.Infinity)){
                 Debug.Log(hit.collider.gameObject.name);
                 GameObject gameObject = hit.collider.gameObject;
+                Vector3 firstVec = hit.collider.gameObject.GetComponent<Chess>().getFirstVector();
+                int x = (int)-(firstVec.x - 16) / 4;
+                int z = (int)(firstVec.z + 16) / 4;
                 if(gameObject.tag.Equals("Retired")){
-                    if(gameObject.transform.parent.name.Equals(color + "Retired")){
-                        Debug.Log("Ok");
+                    if(boardState.chessBoardArray[x,z] == null){
+                        if(gameObject.transform.parent.name.Equals(color + "Retired")){
+                            Debug.Log("Ok");
+                            select = hit.collider.gameObject;
+                            flg = true;
+                        }else{
+                            Debug.Log("No");
+                        }
+                    }else if(!boardState.chessBoardArray[x,z].tag.Equals(color)){
                         select = hit.collider.gameObject;
                         flg = true;
                     }else{
-                        Debug.Log("No");
+                        flg = false;
                     }
                 }else{
                     Debug.Log("No");
@@ -75,7 +85,16 @@ public class Card : MonoBehaviour
             }
             int r = Random.Range(0,size);
             select = retiredList[r];
-            flg = true;
+            Vector3 firstVec = select.GetComponent<Chess>().getFirstVector();
+            int x = (int)-(firstVec.x - 16) / 4;
+            int z = (int)(firstVec.z + 16) / 4;
+            if(!(boardState.chessBoardArray[x,z] == null)){
+                flg = true;
+            }else if(!boardState.chessBoardArray[x,z].tag.Equals(color) ){
+                flg = true;
+            }else{
+                flg = false;
+            }
         }
         if(!flg){
             GameObject.Find("Game").GetComponent<Game>().useCard = false;
