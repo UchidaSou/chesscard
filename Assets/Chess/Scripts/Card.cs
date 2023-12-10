@@ -25,6 +25,9 @@ public class Card : MonoBehaviour
     GameObject mineSquare;
     [SerializeField]
     GameObject minePositionSquare;
+    AudioSource audioSource;
+    [SerializeField]
+    AudioClip[] audioClips = new AudioClip[5];
 
     public IEnumerator Resurrection(string color,int state){
         bool flg = false;
@@ -57,6 +60,8 @@ public class Card : MonoBehaviour
                 }else{
                     Debug.Log("No");
                     GameObject.Find("Game").GetComponent<Game>().useCard = false;
+                    audioSource.PlayOneShot(this.audioClips[4]);
+                    audioSource.PlayDelayed(0.001f);
                     yield break;
                 }
             }
@@ -64,6 +69,8 @@ public class Card : MonoBehaviour
             int size = retiredList.Count;
             if(size == 0){
                 GameObject.Find("Game").GetComponent<Game>().useCard = false;
+                audioSource.PlayOneShot(this.audioClips[4]);
+                audioSource.PlayDelayed(0.001f);
                 yield break;
             }
             int r = Random.Range(0,size);
@@ -72,6 +79,8 @@ public class Card : MonoBehaviour
         }
         if(!flg){
             GameObject.Find("Game").GetComponent<Game>().useCard = false;
+            audioSource.PlayOneShot(this.audioClips[4]);
+            audioSource.PlayDelayed(0.001f);
             yield break;
         }
         Debug.Log(select.name);
@@ -83,12 +92,16 @@ public class Card : MonoBehaviour
             if(boardState.chessBoardArray[i,j].name.Contains("King")){
                 Debug.Log("king");
                 GameObject.Find("Game").GetComponent<Game>().useCard = false;
+                audioSource.PlayOneShot(this.audioClips[4]);
+                audioSource.PlayDelayed(0.001f);
                 yield break;
             }
         }
         select.tag = color;
         select.transform.position = chess.getFirstVector();
         Instantiate(ressuEfect,select.transform.position,select.transform.rotation);
+        audioSource.PlayOneShot(this.audioClips[1]);
+        audioSource.PlayDelayed(0.001f);
         retiredList.Remove(select);
         if(boardState.chessBoardArray[i,j] != null){
             GameObject gameObject = boardState.chessBoardArray[i,j];
@@ -172,6 +185,8 @@ public class Card : MonoBehaviour
                         Destroy(respawns[k]);
                     }
                     GameObject.Find("Game").GetComponent<Game>().useCard = false;
+                    audioSource.PlayOneShot(this.audioClips[4]);
+                    audioSource.PlayDelayed(0.001f);
                     yield break;
                 }
             }
@@ -195,13 +210,19 @@ public class Card : MonoBehaviour
         }
         if(cellNumber < 0){
             GameObject.Find("Game").GetComponent<Game>().useCard = false;
-           yield break; 
+            audioSource.PlayOneShot(audioClips[4]);
+            audioSource.PlayDelayed(0.001f);
+            yield break; 
         }
         Vector3 vector = ChessUiEngine.ToWorldPoint(cellNumber);
         Debug.Log("setMine " + cellNumber);
         GameObject setmine = GameObject.Instantiate(mine,vector,Quaternion.Euler(0,0,0));
+        audioSource.PlayOneShot(this.audioClips[0]);
+        audioSource.PlayDelayed(0.001f);
         setmine.GetComponent<Mine>().color = color;
         GameObject ms = GameObject.Instantiate(mineSquare,setmine.transform.position,Quaternion.Euler(0,0,0),setmine.transform);
+        audioSource.PlayOneShot(audioClips[0]);
+        audioSource.PlayDelayed(0.001f);
         ms.tag = "mine";
         switch(color){
             case "white":
@@ -232,10 +253,14 @@ public class Card : MonoBehaviour
                 if(select.tag.Equals(color) && (chess.getSetUp()==0 || chess.getSetUp()==5)){
                     select.GetComponent<Chess>().setMove(2);
                     Instantiate(twiceEffect,select.transform.position,Quaternion.Euler(0,0,90),select.transform);
+                    audioSource.PlayOneShot(this.audioClips[1]);
+                    audioSource.PlayDelayed(0.001f);
                     flg = true;
                     Debug.Log("Twice "+select.name);
                 }else{
                     GameObject.Find("Game").GetComponent<Game>().useCard = false;
+                    audioSource.PlayOneShot(this.audioClips[4]);
+                    audioSource.PlayDelayed(0.001f);
                     yield break;
                 }
             }
@@ -250,11 +275,15 @@ public class Card : MonoBehaviour
             int r = Random.Range(0,objects.Count);
             objects[r].GetComponent<Chess>().setMove(2);
             Instantiate(twiceEffect,objects[r].transform.position,Quaternion.Euler(0,0,90),objects[r].transform);
+            audioSource.PlayOneShot(this.audioClips[1]);
+            audioSource.PlayDelayed(0.001f);
             flg = true;
             Debug.Log("Twice " + objects[r].name);
         }
         if(!flg){
             GameObject.Find("Game").GetComponent<Game>().useCard = false;
+            audioSource.PlayOneShot(this.audioClips[4]);
+            audioSource.PlayDelayed(0.001f);
             yield break;
         }
         this.twicemove = false;
@@ -275,8 +304,10 @@ public class Card : MonoBehaviour
             RaycastHit hit;
             if(Physics.Raycast(ray,out hit,Mathf.Infinity)){
                 Debug.Log(hit.collider.gameObject.name);
-                if(select.tag.Equals(color)){
+                if(hit.collider.gameObject.tag.Equals(color)){
                     GameObject.Find("Game").GetComponent<Game>().useCard = false;
+                    audioSource.PlayOneShot(this.audioClips[4]);
+                    audioSource.PlayDelayed(0.001f);
                     yield break;
                 }else{
                     select = hit.collider.gameObject;
@@ -296,6 +327,8 @@ public class Card : MonoBehaviour
         }
         if(!flg){
             GameObject.Find("Game").GetComponent<Game>().useCard = false;
+            audioSource.PlayOneShot(this.audioClips[4]);
+            audioSource.PlayDelayed(0.001f);
             yield break;
         }
         Game game = GameObject.Find("Game").GetComponent<Game>();
@@ -312,6 +345,8 @@ public class Card : MonoBehaviour
         select.GetComponent<Chess>().canMove = false;
         Debug.Log("cantMove " + select.name);
         insCantMove = Instantiate(cantMoveEffect,select.transform.position,Quaternion.Euler(0,0,0));
+        audioSource.PlayOneShot(this.audioClips[3]);
+        audioSource.PlayDelayed(0.001f);
         this.canntmove = false;
         this.point -= 10;
         this.text.text = this.point.ToString();
@@ -327,5 +362,6 @@ public class Card : MonoBehaviour
 
     void Start(){
         this.board = GameObject.Find("Board");
+        this.audioSource = this.gameObject.GetComponent<AudioSource>();
     }
 }
