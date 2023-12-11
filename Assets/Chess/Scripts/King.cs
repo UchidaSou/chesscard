@@ -58,6 +58,7 @@ public class King : Chess
             Debug.Log("King Retired");
             Game game = GameObject.Find("Game").GetComponent<Game>();
             game.mainCanvas.SetActive(false);
+            game.cheeNameCanvas.SetActive(false);
             game.resultCanvas.SetActive(true);
             game.loser.text = "Loser " + this.color;
             switch(this.color){

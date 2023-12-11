@@ -23,6 +23,7 @@ public class Game : MonoBehaviour
     GameObject beforeMoveObject = null;
     public GameObject resultCanvas;
     public GameObject mainCanvas;
+    public GameObject cheeNameCanvas;
     public bool playStop = false;
     private AudioSource audioSource;
     [SerializeField]
@@ -109,7 +110,8 @@ public class Game : MonoBehaviour
         //現在のプレイヤーを設定
         nowPlayer = firstPlayer;
         player = nowPlayer.GetComponent<Player>();
-        Invoke("firstsetAura",0.5f); 
+        Invoke("firstsetAura",0.5f);
+        StartCoroutine(showChessName());
     }
     // Update is called once per frame
     void FixedUpdate()
@@ -200,6 +202,7 @@ public class Game : MonoBehaviour
         }
         if(checker.isCheckMate(player.getColor())){
             mainCanvas.SetActive(false);
+            cheeNameCanvas.SetActive(false);
             resultCanvas.SetActive(true);
             loser.text = "Loser " + player.getColor();
             winner.text = "Winner ";
@@ -258,6 +261,28 @@ public class Game : MonoBehaviour
         foreach(GameObject gameObject in objects){
             gameObject.GetComponent<Outline>().OutlineWidth = 0;
         }
+    }
+
+    public IEnumerator showChessName(){
+        GameObject nameText = GameObject.Find("chessNameText");
+        TMP_Text textMeshPro = nameText.GetComponent<TMP_Text>();
+        Ray ray;
+        RaycastHit hit;
+        string name;
+        while(!this.playStop){
+            ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if(Physics.Raycast(ray,out hit,Mathf.Infinity)){
+                if(hit.collider.gameObject.layer == LayerMask.NameToLayer("chess")){
+                    name = hit.collider.gameObject.name.Split(" ")[1].Split("(")[0];
+                    textMeshPro.text = name;
+                }else{
+                    textMeshPro.text = "";
+                }
+            }
+            nameText.transform.position = Input.mousePosition + new Vector3(80,0,0);
+            yield return new WaitForSeconds(0.01f);
+        }
+        Debug.Log("stop name show");
     }
 
 

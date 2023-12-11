@@ -31,7 +31,6 @@ public class StertScript : MonoBehaviour
         PlayerPrefs.Save();
         Image image = GameObject.Find("Fede").GetComponent<Image>();
         for(float i=0;i<=1.0f;i=i+0.01f){
-            Debug.Log("color");
             image.color = new Color(0,0,0,i);
             yield return new WaitForSeconds(0.01f);
         }
@@ -39,7 +38,6 @@ public class StertScript : MonoBehaviour
     }
 
     public void onClickFade(){
-        Debug.Log("Start");
         StartCoroutine(onClickBotton());
     }
     public IEnumerator onClickDemoBotton()
@@ -68,14 +66,12 @@ public class StertScript : MonoBehaviour
         PlayerPrefs.Save();
         Image image = GameObject.Find("Fede").GetComponent<Image>();
         for(float i=0;i<=1.0f;i=i+0.01f){
-            Debug.Log("color");
             image.color = new Color(0,0,0,i);
             yield return new WaitForSeconds(0.01f);
         }
         SceneManager.LoadScene("chessMain");
     }
     public void onClickDemoFade(){
-        Debug.Log("Start");
         StartCoroutine(onClickDemoBotton());
     }
     void Start(){
