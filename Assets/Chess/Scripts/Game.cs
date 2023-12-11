@@ -2,6 +2,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Game : MonoBehaviour
 {
@@ -29,7 +30,25 @@ public class Game : MonoBehaviour
     public bool useCard = false;
     private Coroutine coroutine;
 
+    IEnumerator Fadein(){
+        Image image = GameObject.Find("Fede").GetComponent<Image>();
+        for(float i=1;i>=0.0f;i=i-0.01f){
+            Debug.Log("color");
+            image.color = new Color(0,0,0,i);
+            yield return new WaitForSeconds(0.01f);
+        }
+    }
+    IEnumerator Fadeout(){
+        Image image = GameObject.Find("Fede").GetComponent<Image>();
+        for(float i=0.0f;i<=1.0f;i=i+0.01f){
+            Debug.Log("color");
+            image.color = new Color(0,0,0,i);
+            yield return new WaitForSeconds(0.01f);
+        }
+        SceneManager.LoadScene("select");
+    }
     void Start(){
+        StartCoroutine(Fadein());
         resultCanvas.SetActive(false);
         audioSource = this.gameObject.GetComponent<AudioSource>();
         int x = PlayerPrefs.GetInt("Level",1);
@@ -343,6 +362,6 @@ public class Game : MonoBehaviour
     }
 
     public void GoStartBtn(){
-        SceneManager.LoadScene("select");
+        StartCoroutine(Fadeout());
     }
 }

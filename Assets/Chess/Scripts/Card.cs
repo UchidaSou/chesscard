@@ -173,8 +173,8 @@ public class Card : MonoBehaviour
                 maxI = 8;
                 maxJ = 8;
             }else{
-                maxI = 5;
-                maxJ = 6;
+                maxI = 6;
+                maxJ = 5;
             }
             for(int i=0;i<maxI;i++){
                 for(int j=0;j<maxJ;j++){
