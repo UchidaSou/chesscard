@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class StertScript : MonoBehaviour
 {
-    bool flg = false;
     public IEnumerator onClickBotton()
     {
         Debug.Log("onClick");

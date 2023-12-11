@@ -30,6 +30,12 @@ public class Card : MonoBehaviour
     AudioClip[] audioClips = new AudioClip[5];
 
     public IEnumerator Resurrection(string color,int state){
+        GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(false);
+        GameObject position = GameObject.Find(color + "RessCameraPosition");
+        Camera.main.transform.parent = position.transform;
+        Debug.Log(Camera.main.transform.localPosition);
+        StartCoroutine(cameraMove(color));
+        yield return new WaitForSeconds(1.5f);
         bool flg = false;
         List<GameObject> retiredList;
         GameObject retiredObject;
@@ -49,38 +55,51 @@ public class Card : MonoBehaviour
             if(Physics.Raycast(ray,out hit,Mathf.Infinity)){
                 Debug.Log(hit.collider.gameObject.name);
                 GameObject gameObject = hit.collider.gameObject;
-                Vector3 firstVec = hit.collider.gameObject.GetComponent<Chess>().getFirstVector();
-                int x = (int)-(firstVec.x - 16) / 4;
-                int z = (int)(firstVec.z + 16) / 4;
-                if(gameObject.tag.Equals("Retired")){
-                    if(boardState.chessBoardArray[x,z] == null){
-                        if(gameObject.transform.parent.name.Equals(color + "Retired")){
-                            Debug.Log("Ok");
+                if(gameObject.layer == LayerMask.NameToLayer("chess")){
+                    Vector3 firstVec = hit.collider.gameObject.GetComponent<Chess>().getFirstVector();
+                    int x = (int)-(firstVec.x - 16) / 4;
+                    int z = (int)(firstVec.z + 16) / 4;
+                    if(gameObject.tag.Equals("Retired")){
+                        if(boardState.chessBoardArray[x,z] == null){
+                            if(gameObject.transform.parent.name.Equals(color + "Retired")){
+                                Debug.Log("Ok");
+                                select = hit.collider.gameObject;
+                                flg = true;
+                            }else{
+                                Debug.Log("No");
+                            }
+                        }else if(!boardState.chessBoardArray[x,z].tag.Equals(color)){
                             select = hit.collider.gameObject;
                             flg = true;
                         }else{
-                            Debug.Log("No");
+                            flg = false;
                         }
-                    }else if(!boardState.chessBoardArray[x,z].tag.Equals(color)){
-                        select = hit.collider.gameObject;
-                        flg = true;
                     }else{
-                        flg = false;
+                        Debug.Log("No Retired");
+                        GameObject.Find("Game").GetComponent<Game>().useCard = false;
+                        audioSource.PlayOneShot(this.audioClips[4]);
+                        audioSource.PlayDelayed(0.001f);
+                        GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(true);
+                        Camera.main.transform.parent = GameObject.Find(color+"DefualtCameraPosition").transform;
+                        StartCoroutine(cameraMove(color));
+                        yield return new WaitForSeconds(1.5f);
+                        yield break;
                     }
                 }else{
-                    Debug.Log("No");
-                    GameObject.Find("Game").GetComponent<Game>().useCard = false;
-                    audioSource.PlayOneShot(this.audioClips[4]);
-                    audioSource.PlayDelayed(0.001f);
-                    yield break;
+                    flg = false;
                 }
             }
         }else{
             int size = retiredList.Count;
             if(size == 0){
+                Debug.Log("No size");
                 GameObject.Find("Game").GetComponent<Game>().useCard = false;
                 audioSource.PlayOneShot(this.audioClips[4]);
                 audioSource.PlayDelayed(0.001f);
+                GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(true);
+                Camera.main.transform.parent = GameObject.Find(color+"DefualtCameraPosition").transform;
+                StartCoroutine(cameraMove(color));
+                yield return new WaitForSeconds(1.5f);
                 yield break;
             }
             int r = Random.Range(0,size);
@@ -97,9 +116,14 @@ public class Card : MonoBehaviour
             }
         }
         if(!flg){
+            Debug.Log("No flg");
             GameObject.Find("Game").GetComponent<Game>().useCard = false;
             audioSource.PlayOneShot(this.audioClips[4]);
             audioSource.PlayDelayed(0.001f);
+            GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(true);
+            Camera.main.transform.parent = GameObject.Find(color+"DefualtCameraPosition").transform;
+            StartCoroutine(cameraMove(color));
+            yield return new WaitForSeconds(1.5f);
             yield break;
         }
         Debug.Log(select.name);
@@ -113,6 +137,10 @@ public class Card : MonoBehaviour
                 GameObject.Find("Game").GetComponent<Game>().useCard = false;
                 audioSource.PlayOneShot(this.audioClips[4]);
                 audioSource.PlayDelayed(0.001f);
+                GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(true);
+                Camera.main.transform.parent = GameObject.Find(color+"DefualtCameraPosition").transform;
+                StartCoroutine(cameraMove(color));
+                yield return new WaitForSeconds(1.5f);
                 yield break;
             }
         }
@@ -143,8 +171,25 @@ public class Card : MonoBehaviour
         this.resurrection = false;
         this.point -= 15;
         this.text.text = this.point.ToString();
+        GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(true);
+        Camera.main.transform.parent = GameObject.Find(color+"DefualtCameraPosition").transform;
+        StartCoroutine(cameraMove(color));
+        yield return new WaitForSeconds(1.5f);
         GameObject.Find("Game").GetComponent<Game>().ChangeTurn();
         GameObject.Find("Game").GetComponent<Game>().useCard = false;
+    }
+
+    IEnumerator cameraMove(string color){
+        Quaternion quaternion = Camera.main.transform.localRotation;
+        for(int s = 90;s>45;s--){
+            Camera.main.transform.localPosition = Camera.main.transform.localPosition * Mathf.Sin(s*(Mathf.PI/180));
+            Debug.Log(Camera.main.transform.localPosition);
+            quaternion.x = quaternion.x * Mathf.Sin(s*(Mathf.PI/180));
+            quaternion.y = quaternion.y * Mathf.Sin(s*(Mathf.PI/180));
+            quaternion.z = quaternion.z * Mathf.Sin(s*(Mathf.PI/180));
+            Camera.main.transform.localRotation = quaternion;
+            yield return new WaitForSeconds(0.01f);     
+        }
     }
 
     public void turnReverse(GameObject beforeMoveObject){
