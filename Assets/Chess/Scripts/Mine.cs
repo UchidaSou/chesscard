@@ -1,4 +1,5 @@
 using System.Threading;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Mine : MonoBehaviour
@@ -22,6 +23,7 @@ public class Mine : MonoBehaviour
             GameObject retiredObject = GameObject.Find(tag + "Retired");
             Instantiate(effect,this.transform.position,this.transform.rotation);
             collider.transform.position = retiredObject.transform.position;
+            collider.transform.parent = retiredObject.transform;
             collider.tag = "Retired";
             Destroy(this.gameObject);
         }
@@ -31,7 +33,6 @@ public class Mine : MonoBehaviour
         GameObject gameObject = GameObject.Find("Game");
         Game game = gameObject.GetComponent<Game>();
         this.gameObject.tag = game.nowPlayer.GetComponent<Player>().getColor();
-        board = GameObject.Find("Board");
         this.tag = "mine";
     }
 }

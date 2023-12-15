@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7144779596078092647}
   - component: {fileID: 4386522006641156314}
   - component: {fileID: -4052954961942200912}
+  - component: {fileID: -6243774330919491647}
   m_Layer: 6
   m_Name: Black King
   m_TagString: black
@@ -117,6 +118,7 @@ MonoBehaviour:
   count: 0
   board: {fileID: 1595888500303032, guid: bec5b097ce3a840e4b09cd099b17c337, type: 3}
   boardState: {fileID: 0}
+  mylist: []
 --- !u!54 &-4052954961942200912
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -133,3 +135,21 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &-6243774330919491647
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1381633088875808}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []

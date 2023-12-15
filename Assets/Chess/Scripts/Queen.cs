@@ -20,8 +20,6 @@ public class Queen : Chess
     // Start is called before the first frame update
     void Start()
     {
-        this.AddComponent<Rook>();
-        this.AddComponent<Bishop>();
         setRook(this.gameObject.GetComponent<Rook>());
         rook.brightSquare = this.brightSquare;
         rook.board = this.board;

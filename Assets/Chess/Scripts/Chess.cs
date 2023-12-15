@@ -5,8 +5,6 @@ public abstract class Chess:MonoBehaviour
     public GameObject brightSquare;
     private Vector3 beforeVector;
     private Vector3 firstVector;
-
-    private string color;
     private int move;
     public bool canMove = true;
     public int count = 0;
@@ -23,15 +21,6 @@ public abstract class Chess:MonoBehaviour
     public int getSetUp(){
         return this.setup;
     }
-/*
-    public void setColor(string color){
-        this.color = color;
-    }
-
-    public string getColor(){
-        return this.color;
-    }
-*/
     public void ShowCanMovePosition(){
         if(!this.canMove){
             return;
@@ -72,6 +61,7 @@ public abstract class Chess:MonoBehaviour
             string retiredObjectname = gameObject.tag + "Retired";
             GameObject retiredObject = GameObject.Find(retiredObjectname);
             gameObject.transform.position = retiredObject.transform.position;
+            gameObject.transform.parent = retiredObject.transform;
             gameObject.tag = "Retired";
             Chess chess = gameObject.GetComponent<Chess>();
             player.setScore(player.getScore() - chess.getMaterial());

@@ -1,6 +1,8 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Game : MonoBehaviour
 {
@@ -15,18 +17,45 @@ public class Game : MonoBehaviour
     public GameObject firstCamera,secondCamera;
     Chess chess;
     Vector3 selectedPosition;
-    GameObject[] canntMoveObject = new GameObject[2];
+    public GameObject[] canntMoveObject = new GameObject[2];
     public TMP_Text loser,winner;
-    int count = 0;
+    public int count = 0;
     GameObject beforeMoveObject = null;
     public GameObject resultCanvas;
     public GameObject mainCanvas;
+    public GameObject cheeNameCanvas;
     public bool playStop = false;
     private AudioSource audioSource;
     [SerializeField]
     private AudioClip[] effectAudioClip = new AudioClip[3];
+    public bool useCard = false;
+    private Coroutine coroutine;
+    [SerializeField]
+    GameObject normalBoard;
+    [SerializeField]
+    GameObject miniBoard;
+    [SerializeField]
+    GameObject whiteRetiredObject;
+    [SerializeField]
+    GameObject blackRetiredObject;
 
+    IEnumerator Fadein(){
+        Image image = GameObject.Find("Fede").GetComponent<Image>();
+        for(float i=1;i>=0.0f;i=i-0.01f){
+            image.color = new Color(0,0,0,i);
+            yield return new WaitForSeconds(0.01f);
+        }
+    }
+    IEnumerator Fadeout(){
+        Image image = GameObject.Find("Fede").GetComponent<Image>();
+        for(float i=0.0f;i<=1.0f;i=i+0.01f){
+            image.color = new Color(0,0,0,i);
+            yield return new WaitForSeconds(0.01f);
+        }
+        SceneManager.LoadScene("select");
+    }
     void Start(){
+        StartCoroutine(Fadein());
         resultCanvas.SetActive(false);
         audioSource = this.gameObject.GetComponent<AudioSource>();
         int x = PlayerPrefs.GetInt("Level",1);
@@ -34,20 +63,27 @@ public class Game : MonoBehaviour
         int mode = PlayerPrefs.GetInt("Mode",0);
         if(mode == 0){
             uiEngine.SetupPieces();
+            Destroy(miniBoard);
+            checker.board  = normalBoard;
         }else{
             uiEngine.SetUpDemo();
-            Vector3 pos = firstCamera.transform.position;
+            Destroy(normalBoard);
+            checker.board = miniBoard;
+            Vector3 pos = firstCamera.transform.parent.transform.position;
             pos.z = -5.0f;
-            firstCamera.transform.position = pos;
-            pos = secondCamera.transform.position;
-            pos.z = -5.0f;
-            secondCamera.transform.position = pos;
+            firstCamera.transform.parent.transform.position = pos;
+            secondCamera.transform.parent.transform.position = new Vector3(-15,30,-5);
+            whiteRetiredObject.transform.position = new Vector3(12,3.5f,10);
+            GameObject.Find("whiteRessCameraPosition").transform.position = new Vector3(5,21,15);
+            blackRetiredObject.transform.position = new Vector3(-7,3.5f,-23);
+            GameObject.Find("blackRessCameraPosition").transform.position = new Vector3(2.5f,20,-25);
         }
         if(y == 1){
             firstPlayer.AddComponent<RealPlayer>();
             secondCamera.SetActive(false);
             player = firstPlayer.GetComponent<Player>();
             player.setColor("white");
+            this.removeAura(player.getColor());
             if(x == 1){
                 secondPlayer.AddComponent<EasyNPC>();
             }else{
@@ -55,6 +91,7 @@ public class Game : MonoBehaviour
             }
             player = secondPlayer.GetComponent<Player>();
             player.setColor("black");
+            this.removeAura(player.getColor());
         }else{
             secondPlayer.AddComponent<RealPlayer>();
             firstCamera.SetActive(false);
@@ -77,6 +114,7 @@ public class Game : MonoBehaviour
             chess = gameObject.GetComponent<Chess>();
             player.setScore(player.getScore() + chess.getMaterial());
         }
+        firstPlayer.GetComponent<Card>().board = checker.board;
         //後行プレイヤーの設定
         player = secondPlayer.GetComponent<Player>();
         gameObjects = GameObject.FindGameObjectsWithTag(player.getColor());
@@ -84,9 +122,12 @@ public class Game : MonoBehaviour
             chess = gameObject.GetComponent<Chess>();
             player.setScore(player.getScore() + chess.getMaterial());
         }
+        secondPlayer.GetComponent<Card>().board = checker.board;
         //現在のプレイヤーを設定
         nowPlayer = firstPlayer;
         player = nowPlayer.GetComponent<Player>();
+        Invoke("firstsetAura",0.5f);
+        StartCoroutine(showChessName());
     }
     // Update is called once per frame
     void FixedUpdate()
@@ -95,6 +136,9 @@ public class Game : MonoBehaviour
             return;
         }
         if(audioSource.isPlaying){
+            return;
+        }
+        if(useCard){
             return;
         }
         bool npcFlg = false;
@@ -158,6 +202,7 @@ public class Game : MonoBehaviour
         if(!player.card.usecard){
             player.card.usecard = true;
         }
+        this.removeAura(player.getColor());
         switch(player.getColor()){
             case "white":
                 nowPlayer = secondPlayer;
@@ -173,6 +218,7 @@ public class Game : MonoBehaviour
         }
         if(checker.isCheckMate(player.getColor())){
             mainCanvas.SetActive(false);
+            cheeNameCanvas.SetActive(false);
             resultCanvas.SetActive(true);
             loser.text = "Loser " + player.getColor();
             winner.text = "Winner ";
@@ -184,6 +230,7 @@ public class Game : MonoBehaviour
             playStop = true;
             return;
         }
+        setAura(player.getColor());
         player.card.point += 1;
         for(int i=0;i<count;i++){
             if(canntMoveObject[i] != null){
@@ -198,20 +245,85 @@ public class Game : MonoBehaviour
         }
     }
 
+    public void firstsetAura(){
+        string color = player.getColor();
+        setAura(color);
+    }
+    public void setAura(string color){
+        GameObject[] objects = GameObject.FindGameObjectsWithTag(color);
+        Chess chess;
+        int i=0,j=0;
+        foreach(GameObject gameObject in objects){
+            chess = gameObject.GetComponent<Chess>();
+            i = (int)-(gameObject.transform.position.x - 16) / 4;
+            j = (int)(gameObject.transform.position.z + 16) / 4;
+            if(chess.canMovePosition(i*8+j).Count != 0){
+                gameObject.GetComponent<Outline>().OutlineWidth = 2;
+                gameObject.GetComponent<Outline>().OutlineColor = Color.green;
+            }else{
+                gameObject.GetComponent<Outline>().OutlineWidth = 0;
+            }
+        }
+        GameObject king = GameObject.Find("White King(Clone)");
+        king.GetComponent<Outline>().OutlineColor = Color.black;
+        king.GetComponent<Outline>().OutlineWidth = 5;
+        king = GameObject.Find("Black King(Clone)");
+        king.GetComponent<Outline>().OutlineColor = Color.cyan;
+        king.GetComponent<Outline>().OutlineWidth = 5;
+    }
+
+    private void removeAura(string color){
+        GameObject[] objects = GameObject.FindGameObjectsWithTag(color);
+        foreach(GameObject gameObject in objects){
+            gameObject.GetComponent<Outline>().OutlineWidth = 0;
+        }
+    }
+
+    public IEnumerator showChessName(){
+        GameObject namePanel = GameObject.Find("NamePanel");
+        GameObject nameText = GameObject.Find("chessNameText");
+        TMP_Text textMeshPro = nameText.GetComponent<TMP_Text>();
+        Ray ray;
+        RaycastHit hit;
+        string name;
+        while(!this.playStop){
+            ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if(Physics.Raycast(ray,out hit,Mathf.Infinity)){
+                if(hit.collider.gameObject.layer == LayerMask.NameToLayer("chess")){
+                    name = hit.collider.gameObject.name.Split(" ")[1].Split("(")[0];
+                    textMeshPro.text = name;
+                }else{
+                    textMeshPro.text = "";
+                }
+            }
+            namePanel.transform.position = Input.mousePosition + new Vector3(60,0,0);
+            yield return new WaitForSeconds(0.01f);
+        }
+        Debug.Log("stop name show");
+    }
+
+
 
     public void Resurrection(){
+        if(coroutine != null){
+            StopCoroutine(coroutine);
+            coroutine = null;
+        }
         Card card = nowPlayer.GetComponent<Card>();
         if(!card.resurrection || card.point < 15){
             return;
         }
         string color = nowPlayer.GetComponent<Player>().getColor();
-        card.Resurrection(color);
-        audioSource.PlayOneShot(effectAudioClip[0]);
-        audioSource.PlayDelayed(0.001f);
-        ChangeTurn();
+        this.useCard = true;
+        Debug.Log(color);
+        coroutine = StartCoroutine(card.Resurrection(color,player.getState()));
     }
 
     public void TurnReverse(){
+        if(coroutine != null){
+            StopCoroutine(coroutine);
+            coroutine = null;
+        }
         Card card = nowPlayer.GetComponent<Card>();
         if(!card.turnreverse || card.point < 10 || beforeMoveObject == null){
             return;
@@ -230,44 +342,54 @@ public class Game : MonoBehaviour
     }
 
     public void setMine(){
+        if(coroutine != null){
+            Debug.Log("Stop coroutine");
+            StopCoroutine(coroutine);
+            coroutine = null;
+        }
         Card card = nowPlayer.GetComponent<Card>();
         if(!card.setmine || card.point < 5){
             return;
         }
         string color = nowPlayer.GetComponent<Player>().getColor();
-        card.setMine(color);
+        this.useCard = true;
+        coroutine = StartCoroutine(card.setMine(color,player.getState()));
     }
 
     public void twiceMove(){
+        if(coroutine != null){
+            Debug.Log("Stop coroutine");
+            StopCoroutine(coroutine);
+            coroutine = null;
+        }
         Card card = nowPlayer.GetComponent<Card>();
         if(!card.twicemove || card.point < 6){
             return;
         }
         string color = nowPlayer.GetComponent<Player>().getColor();
-        card.twiceMove(color);
-        audioSource.PlayOneShot(this.effectAudioClip[0]);
-        audioSource.PlayDelayed(0.001f);
+        this.useCard = true;
+        coroutine = StartCoroutine(card.twiceMove(color,player.getState()));
     }
 
     public void canntMove(){
+        if(coroutine != null){
+            StopCoroutine(coroutine);
+            coroutine = null;
+        }
         Card card = nowPlayer.GetComponent<Card>();
         if(!card.canntmove || card.point < 10){
             return;
         }
         string color = nowPlayer.GetComponent<Player>().getColor();
-        GameObject effectObject = card.canntMove(color);
-        audioSource.PlayOneShot(this.effectAudioClip[2]);
-        audioSource.PlayDelayed(0.001f);
-        if(color.Equals("white")){
-            canntMoveObject[0] = effectObject;
-            count = 1;
-        }else{
-            canntMoveObject[1] = effectObject;
-            count = 2;
-        }        
+        this.useCard = true;
+        coroutine = StartCoroutine(card.canntMove(color,player.getState()));
     }
 
     public void notUseCard(){
+        if(coroutine != null){
+            StopCoroutine(coroutine);
+            coroutine = null;
+        }
         Card card = nowPlayer.GetComponent<Card>();
         if(!card.notusecard || card.point < 12){
             return;
@@ -280,6 +402,6 @@ public class Game : MonoBehaviour
     }
 
     public void GoStartBtn(){
-        SceneManager.LoadScene("select");
+        StartCoroutine(Fadeout());
     }
 }

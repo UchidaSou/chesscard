@@ -1,11 +1,13 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class StertScript : MonoBehaviour
 {
-    public void onClickBotton()
+    public IEnumerator onClickBotton()
     {
+        Debug.Log("onClick");
         Toggle easy = GameObject.Find("easy").GetComponent<Toggle>();
         bool easyflag = easy.isOn;
         if (easyflag)
@@ -27,10 +29,18 @@ public class StertScript : MonoBehaviour
         }
         PlayerPrefs.SetInt("Mode",0);
         PlayerPrefs.Save();
-
+        Image image = GameObject.Find("Fede").GetComponent<Image>();
+        for(float i=0;i<=1.0f;i=i+0.01f){
+            image.color = new Color(0,0,0,i);
+            yield return new WaitForSeconds(0.01f);
+        }
         SceneManager.LoadScene("chessMain");
     }
-    public void onClickDemoBotton()
+
+    public void onClickFade(){
+        StartCoroutine(onClickBotton());
+    }
+    public IEnumerator onClickDemoBotton()
     {
         Toggle easy = GameObject.Find("easy").GetComponent<Toggle>();
         bool easyflag = easy.isOn;
@@ -54,7 +64,24 @@ public class StertScript : MonoBehaviour
 
         PlayerPrefs.SetInt("Mode",1);
         PlayerPrefs.Save();
-
+        Image image = GameObject.Find("Fede").GetComponent<Image>();
+        for(float i=0;i<=1.0f;i=i+0.01f){
+            image.color = new Color(0,0,0,i);
+            yield return new WaitForSeconds(0.01f);
+        }
         SceneManager.LoadScene("chessMain");
+    }
+    public void onClickDemoFade(){
+        StartCoroutine(onClickDemoBotton());
+    }
+    void Start(){
+        StartCoroutine(Fadein());
+    }
+    IEnumerator Fadein(){
+        Image image = GameObject.Find("Fede").GetComponent<Image>();
+        for(float i=1;i>=0.0f;i=i-0.01f){
+            image.color = new Color(0,0,0,i);
+            yield return new WaitForSeconds(0.01f);
+        }
     }
 }

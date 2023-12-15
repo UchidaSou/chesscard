@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading;
 using Unity.VisualScripting;
 using UnityEditor;
@@ -10,6 +11,7 @@ public class Checker : MonoBehaviour
     public int checkCount = 0;
     public GameObject checkObject = null;
     public bool inFlg = false;
+    public GameObject board;
     public bool isCheckMate(string color){
         GameObject king;
         GameObject[] objects;
@@ -32,7 +34,7 @@ public class Checker : MonoBehaviour
         int move = king1.getMove();
         int maxI = king1.getMaxI();
         int maxJ = king1.getMaxJ();
-        BoardState boardState = GameObject.Find("Board").GetComponent<BoardState>();
+        BoardState boardState = board.GetComponent<BoardState>();
         int count = 0;
         int checkCount=0;
         for(int k=kingJ-move;k<=kingJ+move;k++){
@@ -63,7 +65,6 @@ public class Checker : MonoBehaviour
         checkCount = 0;
         GameObject king;
         GameObject[] objects;
-        GameObject board = GameObject.Find("Board");
         BoardState boardState = board.GetComponent<BoardState>();
         if(color.Equals("white")){
             king = GameObject.Find("White King(Clone)");
@@ -91,7 +92,7 @@ public class Checker : MonoBehaviour
         this.checkObject = null;
         GameObject king;
         GameObject[] objects;
-        BoardState boardState = GameObject.Find("Board").GetComponent<BoardState>();
+        BoardState boardState = board.GetComponent<BoardState>();
         if(color.Equals("white")){
             king = GameObject.Find("White King(Clone)");
             objects = GameObject.FindGameObjectsWithTag("black");

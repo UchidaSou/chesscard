@@ -1,9 +1,12 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class King : Chess
 {
     public List<GameObject> mylist;
+    bool playStop;
+    string color;
     public override List<Vector3> canMovePosition(int cellNumber)
     {
         mylist.Clear();
@@ -43,5 +46,31 @@ public class King : Chess
         this.setMove(1);
         this.setMaterial(0);
         mylist = new List<GameObject>();
+        playStop = false;
+        this.color = this.gameObject.tag;
+    }
+
+    void Update(){
+        if(playStop){
+            return;
+        }
+        if(this.gameObject.tag.Equals("Retired")){
+            Debug.Log("King Retired");
+            Game game = GameObject.Find("Game").GetComponent<Game>();
+            game.mainCanvas.SetActive(false);
+            game.cheeNameCanvas.SetActive(false);
+            game.resultCanvas.SetActive(true);
+            game.loser.text = "Loser " + this.color;
+            switch(this.color){
+                case "white":
+                    game.winner.text = "Winner black";
+                    break;
+                case "black":
+                    game.winner.text = "Winner white";
+                    break;
+            }
+            game.playStop = true;
+            this.playStop = true;
+        }
     }
 }

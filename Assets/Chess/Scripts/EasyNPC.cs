@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 
 public class EasyNPC : Player
@@ -55,8 +56,8 @@ public class EasyNPC : Player
         if(PlayerPrefs.GetInt("Mode",0) == 1){
             return;
         }
-        //int x = UnityEngine.Random.Range(0,20);
-        int x = 2;
+        int x = UnityEngine.Random.Range(0,20);
+        //int x = 0;
         switch(x){
             case 0:
              GameObject.Find("Game").GetComponent<Game>().Resurrection();
