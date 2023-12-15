@@ -125,6 +125,7 @@ public class Checker : MonoBehaviour
                 boardState.checkBoardArray[vi,vj] = true;
                 if(boardState.chessBoardArray[vi,vj] == king){
                     this.checkObject = gameObject;
+                    Debug.Log(gameObject.name);
                     if(Math.Abs(kingI - i) <= 1  && Math.Abs(kingJ - j) <= 1){
                         Debug.Log(checkObject);
                         this.inFlg = true;
@@ -133,5 +134,13 @@ public class Checker : MonoBehaviour
                 }
             }
         }
+        /*
+        for(i=0;i<king.GetComponent<Chess>().getMaxI();i++){
+            for(j=0;j<king.GetComponent<Chess>().getMaxJ();j++){
+                Debug.Log(boardState.chessBoardArray[i,j] + " i:"+i+" j:"+j);
+                Debug.Log(boardState.checkBoardArray[i,j] + " i:"+i+" j:"+j);
+            }
+        }*/
+        Debug.Log("inflg "+this.inFlg);
     }
 }

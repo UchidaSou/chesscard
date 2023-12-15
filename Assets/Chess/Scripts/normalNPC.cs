@@ -151,7 +151,11 @@ public class normalNPC : Player
         List<Vector3> vectors;
         GameObject enemey;
         bool flg = false;
-        GameObject[] objects = new GameObject[5];
+        int size = 5;
+        if(mylist.Count <= 4){
+            size = mylist.Count;
+        }
+        GameObject[] objects = new GameObject[size];
         for(int i=0;i<objects.Length;i++){
             objects[i] = mylist[UnityEngine.Random.Range(0,mylist.Count)];
         }

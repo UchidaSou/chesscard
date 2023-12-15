@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.Android.Types;
 using UnityEngine;
 
 public class BoardState : MonoBehaviour
@@ -35,5 +36,15 @@ public class BoardState : MonoBehaviour
         }
         blackRetired = new List<GameObject>();
         whiteRetired = new List<GameObject>();
+    }
+
+    void Update(){
+        /*
+        for(int i=0;i<8;i++){
+            for(int j=0;j<8;j++){
+                Debug.Log(chessBoardArray[i,j] + " i:"+i+" j:"+j);
+            }
+        }
+        */
     }
 }

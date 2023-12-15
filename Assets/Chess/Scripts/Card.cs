@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using Unity.VisualScripting.FullSerializer;
@@ -43,14 +44,18 @@ public class Card : MonoBehaviour
         }else{
             retiredList = boardState.blackRetired;
         }
+        if(GameObject.Find(color+"Retired").transform.childCount == 0){
+            GameObject.Find("Game").GetComponent<Game>().useCard = false;
+            yield break;
+        }
         if(state == 0){
             GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(false);
+            plainText.text = "復活させる駒を選んでください";
             GameObject position = GameObject.Find(color + "RessCameraPosition");
             Camera.main.transform.parent = position.transform;
             Debug.Log(Camera.main.transform.localPosition);
             StartCoroutine(cameraMove(color));
             yield return new WaitForSeconds(1.5f);
-            plainText.text = "復活させる駒を選んでください";
             Debug.Log("クリック待ち");
             yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
             Debug.Log("クリック後");
@@ -396,7 +401,7 @@ public class Card : MonoBehaviour
             RaycastHit hit;
             if(Physics.Raycast(ray,out hit,Mathf.Infinity)){
                 Debug.Log(hit.collider.gameObject.name);
-                if(hit.collider.gameObject.tag.Equals(color)){
+                if(hit.collider.gameObject.tag.Equals(color) || hit.collider.gameObject.layer != LayerMask.NameToLayer("chess")){
                     GameObject.Find("Game").GetComponent<Game>().useCard = false;
                     audioSource.PlayOneShot(this.audioClips[4]);
                     audioSource.PlayDelayed(0.001f);

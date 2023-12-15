@@ -86,5 +86,4 @@ public class Pawn : Chess
             Destroy(this.gameObject);
         }
     }
-
 }
