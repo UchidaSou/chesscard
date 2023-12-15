@@ -30,6 +30,14 @@ public class Game : MonoBehaviour
     private AudioClip[] effectAudioClip = new AudioClip[3];
     public bool useCard = false;
     private Coroutine coroutine;
+    [SerializeField]
+    GameObject normalBoard;
+    [SerializeField]
+    GameObject miniBoard;
+    [SerializeField]
+    GameObject whiteRetiredObject;
+    [SerializeField]
+    GameObject blackRetiredObject;
 
     IEnumerator Fadein(){
         Image image = GameObject.Find("Fede").GetComponent<Image>();
@@ -55,14 +63,20 @@ public class Game : MonoBehaviour
         int mode = PlayerPrefs.GetInt("Mode",0);
         if(mode == 0){
             uiEngine.SetupPieces();
+            Destroy(miniBoard);
+            checker.board  = normalBoard;
         }else{
             uiEngine.SetUpDemo();
-            Vector3 pos = firstCamera.transform.position;
+            Destroy(normalBoard);
+            checker.board = miniBoard;
+            Vector3 pos = firstCamera.transform.parent.transform.position;
             pos.z = -5.0f;
-            firstCamera.transform.position = pos;
-            pos = secondCamera.transform.position;
-            pos.z = -5.0f;
-            secondCamera.transform.position = pos;
+            firstCamera.transform.parent.transform.position = pos;
+            secondCamera.transform.parent.transform.position = new Vector3(-15,30,-5);
+            whiteRetiredObject.transform.position = new Vector3(12,3.5f,10);
+            GameObject.Find("whiteRessCameraPosition").transform.position = new Vector3(5,21,15);
+            blackRetiredObject.transform.position = new Vector3(-7,3.5f,-23);
+            GameObject.Find("blackRessCameraPosition").transform.position = new Vector3(2.5f,20,-25);
         }
         if(y == 1){
             firstPlayer.AddComponent<RealPlayer>();
@@ -100,6 +114,7 @@ public class Game : MonoBehaviour
             chess = gameObject.GetComponent<Chess>();
             player.setScore(player.getScore() + chess.getMaterial());
         }
+        firstPlayer.GetComponent<Card>().board = checker.board;
         //後行プレイヤーの設定
         player = secondPlayer.GetComponent<Player>();
         gameObjects = GameObject.FindGameObjectsWithTag(player.getColor());
@@ -107,6 +122,7 @@ public class Game : MonoBehaviour
             chess = gameObject.GetComponent<Chess>();
             player.setScore(player.getScore() + chess.getMaterial());
         }
+        secondPlayer.GetComponent<Card>().board = checker.board;
         //現在のプレイヤーを設定
         nowPlayer = firstPlayer;
         player = nowPlayer.GetComponent<Player>();
@@ -264,6 +280,7 @@ public class Game : MonoBehaviour
     }
 
     public IEnumerator showChessName(){
+        GameObject namePanel = GameObject.Find("NamePanel");
         GameObject nameText = GameObject.Find("chessNameText");
         TMP_Text textMeshPro = nameText.GetComponent<TMP_Text>();
         Ray ray;
@@ -279,7 +296,7 @@ public class Game : MonoBehaviour
                     textMeshPro.text = "";
                 }
             }
-            nameText.transform.position = Input.mousePosition + new Vector3(80,0,0);
+            namePanel.transform.position = Input.mousePosition + new Vector3(60,0,0);
             yield return new WaitForSeconds(0.01f);
         }
         Debug.Log("stop name show");

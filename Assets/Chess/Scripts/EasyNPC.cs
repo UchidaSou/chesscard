@@ -57,7 +57,7 @@ public class EasyNPC : Player
             return;
         }
         //int x = UnityEngine.Random.Range(0,20);
-        int x = 2;
+        int x = 0;
         switch(x){
             case 0:
              GameObject.Find("Game").GetComponent<Game>().Resurrection();

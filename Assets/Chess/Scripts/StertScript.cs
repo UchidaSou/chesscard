@@ -80,7 +80,6 @@ public class StertScript : MonoBehaviour
     IEnumerator Fadein(){
         Image image = GameObject.Find("Fede").GetComponent<Image>();
         for(float i=1;i>=0.0f;i=i-0.01f){
-            Debug.Log("color");
             image.color = new Color(0,0,0,i);
             yield return new WaitForSeconds(0.01f);
         }
