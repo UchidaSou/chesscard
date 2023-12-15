@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
@@ -28,6 +29,8 @@ public class Card : MonoBehaviour
     AudioSource audioSource;
     [SerializeField]
     AudioClip[] audioClips = new AudioClip[5];
+    [SerializeField]
+    TMP_Text plainText;
 
     public IEnumerator Resurrection(string color,int state){
         bool flg = false;
@@ -47,6 +50,7 @@ public class Card : MonoBehaviour
             Debug.Log(Camera.main.transform.localPosition);
             StartCoroutine(cameraMove(color));
             yield return new WaitForSeconds(1.5f);
+            plainText.text = "復活させる駒を選んでください";
             Debug.Log("クリック待ち");
             yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
             Debug.Log("クリック後");
@@ -83,6 +87,7 @@ public class Card : MonoBehaviour
                         StartCoroutine(cameraMove(color));
                         yield return new WaitForSeconds(1.5f);
                         GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(true);
+                        plainText.text = "";
                         yield break;
                     }
                 }else{
@@ -93,6 +98,7 @@ public class Card : MonoBehaviour
             StartCoroutine(cameraMove(color));
             yield return new WaitForSeconds(1.5f);
             GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(true);
+            plainText.text = "";
         }else{
             int size = retiredList.Count;
             if(size == 0){
@@ -108,7 +114,13 @@ public class Card : MonoBehaviour
             Debug.Log(select.name + " " + x + " " + z);
             if(boardState.chessBoardArray[x,z] != null){
                 if(!boardState.chessBoardArray[x,z].tag.Equals(color)){
+                    Debug.Log("not color");
                     flg = true;
+                }
+                if(boardState.chessBoardArray[x,z].name.Contains("King")){
+                    Debug.Log("King");
+                    GameObject.Find("Game").GetComponent<Game>().useCard = false;
+                    yield break;
                 }
             }else{
                 flg = true;
@@ -121,8 +133,9 @@ public class Card : MonoBehaviour
             audioSource.PlayDelayed(0.001f);
             Camera.main.transform.parent = GameObject.Find(color+"DefualtCameraPosition").transform;
             StartCoroutine(cameraMove(color));
-            yield return new WaitForSeconds(1.5f);
+            yield return new WaitForSeconds(2.0f);
             GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(true);
+            plainText.text = "";
             yield break;
         }
         Debug.Log(select.name);
@@ -140,6 +153,7 @@ public class Card : MonoBehaviour
                 StartCoroutine(cameraMove(color));
                 yield return new WaitForSeconds(1.5f);
                 GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(true);
+                plainText.text = "";
                 yield break;
             }
         }
@@ -225,6 +239,8 @@ public class Card : MonoBehaviour
                 }
             }
             int col=0,row=0;
+            GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(false);
+            plainText.text = "設置する場所を選んでください";
             Debug.Log("クリック待ち");
             yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
             Debug.Log("クリック後");
@@ -246,6 +262,8 @@ public class Card : MonoBehaviour
                     GameObject.Find("Game").GetComponent<Game>().useCard = false;
                     audioSource.PlayOneShot(this.audioClips[4]);
                     audioSource.PlayDelayed(0.001f);
+                    GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(true);
+                    plainText.text = "";
                     yield break;
                 }
             }
@@ -271,6 +289,8 @@ public class Card : MonoBehaviour
             GameObject.Find("Game").GetComponent<Game>().useCard = false;
             audioSource.PlayOneShot(audioClips[4]);
             audioSource.PlayDelayed(0.001f);
+            GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(true);
+            plainText.text = "";
             yield break; 
         }
         Vector3 vector = ChessUiEngine.ToWorldPoint(cellNumber);
@@ -295,10 +315,14 @@ public class Card : MonoBehaviour
         this.point -= 5;
         this.text.text = this.point.ToString();
         GameObject.Find("Game").GetComponent<Game>().useCard = false;
+        GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(true);
+        plainText.text = "";
     }
     public IEnumerator twiceMove(string color,int state){
         bool flg = false;
         if(state == 0){
+            GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(false);
+            plainText.text = "駒を選んでください";
             Debug.Log("クリック待ち");
             yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
             Debug.Log("クリック後");
@@ -320,6 +344,8 @@ public class Card : MonoBehaviour
                     GameObject.Find("Game").GetComponent<Game>().useCard = false;
                     audioSource.PlayOneShot(this.audioClips[4]);
                     audioSource.PlayDelayed(0.001f);
+                    GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(true);
+                    plainText.text = "";
                     yield break;
                 }
             }
@@ -339,16 +365,20 @@ public class Card : MonoBehaviour
             flg = true;
             Debug.Log("Twice " + objects[r].name);
         }
-        if(!flg){
+        if(state==0 && !flg){
             GameObject.Find("Game").GetComponent<Game>().useCard = false;
             audioSource.PlayOneShot(this.audioClips[4]);
             audioSource.PlayDelayed(0.001f);
+            GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(true);
+            plainText.text = "";
             yield break;
         }
         this.twicemove = false;
         this.point -= 6;
         this.text.text = this.point.ToString();
         GameObject.Find("Game").GetComponent<Game>().useCard = false;
+        GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(true);
+        plainText.text = "";
     }
 
 
@@ -356,6 +386,8 @@ public class Card : MonoBehaviour
         bool flg = false;
         GameObject select = new GameObject();
         if(state == 0){
+            GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(false);
+            plainText.text = "駒を選んでください";
             Debug.Log("クリック待ち");
             yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
             Debug.Log("クリック後");
@@ -367,6 +399,8 @@ public class Card : MonoBehaviour
                     GameObject.Find("Game").GetComponent<Game>().useCard = false;
                     audioSource.PlayOneShot(this.audioClips[4]);
                     audioSource.PlayDelayed(0.001f);
+                    GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(true);
+                    plainText.text = "";
                     yield break;
                 }else{
                     select = hit.collider.gameObject;
@@ -384,10 +418,12 @@ public class Card : MonoBehaviour
             select = objects[r];
             flg = true;
         }
-        if(!flg){
+        if(state == 0 && !flg){
             GameObject.Find("Game").GetComponent<Game>().useCard = false;
             audioSource.PlayOneShot(this.audioClips[4]);
             audioSource.PlayDelayed(0.001f);
+            GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(true);
+            plainText.text = "";
             yield break;
         }
         Game game = GameObject.Find("Game").GetComponent<Game>();
@@ -410,6 +446,8 @@ public class Card : MonoBehaviour
         this.point -= 10;
         this.text.text = this.point.ToString();
         GameObject.Find("Game").GetComponent<Game>().useCard = false;
+        GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(true);
+        plainText.text = "";
     }
 
     public void notUseCard(Card card){
