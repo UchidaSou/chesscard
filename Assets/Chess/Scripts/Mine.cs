@@ -33,7 +33,6 @@ public class Mine : MonoBehaviour
         GameObject gameObject = GameObject.Find("Game");
         Game game = gameObject.GetComponent<Game>();
         this.gameObject.tag = game.nowPlayer.GetComponent<Player>().getColor();
-        board = GameObject.Find("Board");
         this.tag = "mine";
     }
 }

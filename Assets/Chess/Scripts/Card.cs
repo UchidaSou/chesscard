@@ -300,6 +300,7 @@ public class Card : MonoBehaviour
         audioSource.PlayDelayed(0.001f);
         setmine.GetComponent<Mine>().color = color;
         GameObject ms = GameObject.Instantiate(mineSquare,setmine.transform.position,Quaternion.Euler(0,0,0),setmine.transform);
+        setmine.GetComponent<Mine>().board = GameObject.Find("Game").GetComponent<Game>().checker.board;
         audioSource.PlayOneShot(audioClips[0]);
         audioSource.PlayDelayed(0.001f);
         ms.tag = "mine";
