@@ -14,13 +14,10 @@ public class Checker : MonoBehaviour
     public GameObject board;
     public bool isCheckMate(string color){
         GameObject king;
-        GameObject[] objects;
         if(color.Equals("white")){
             king = GameObject.Find("White King(Clone)");
-            objects = GameObject.FindGameObjectsWithTag("black");
         }else{
             king = GameObject.Find("Black King(Clone)");
-            objects = GameObject.FindGameObjectsWithTag("white");
         }
         if(king.gameObject.tag.Equals("Retired")){
             return true;
@@ -28,9 +25,7 @@ public class Checker : MonoBehaviour
         Vector3 kingPosition = king.transform.position + new Vector3(-16,0,16);
         int kingI = (int)-kingPosition.x/4;
         int kingJ = (int)kingPosition.z/4;
-        int kingCellNumber = kingI*8 + kingJ;
         King king1 = king.GetComponent<King>();
-        List<Vector3> kingCanMove = king1.canMovePosition(kingCellNumber);
         int move = king1.getMove();
         int maxI = king1.getMaxI();
         int maxJ = king1.getMaxJ();
@@ -64,14 +59,11 @@ public class Checker : MonoBehaviour
     public bool isCheck(string color){
         checkCount = 0;
         GameObject king;
-        GameObject[] objects;
         BoardState boardState = board.GetComponent<BoardState>();
         if(color.Equals("white")){
             king = GameObject.Find("White King(Clone)");
-            objects = GameObject.FindGameObjectsWithTag("black");
         }else{
             king = GameObject.Find("Black King(Clone)");
-            objects = GameObject.FindGameObjectsWithTag("white");
         }
         if(king.tag.Equals("Retired")){
             return true;
@@ -87,18 +79,21 @@ public class Checker : MonoBehaviour
     }
     
     public void setCheck(string color){
+        Debug.Log("setCheck");
         this.checkCount = 0;
         this.inFlg = false;
         this.checkObject = null;
         GameObject king;
-        GameObject[] objects;
+        List<GameObject> objects = new List<GameObject>();
         BoardState boardState = board.GetComponent<BoardState>();
         if(color.Equals("white")){
             king = GameObject.Find("White King(Clone)");
-            objects = GameObject.FindGameObjectsWithTag("black");
+            //objects = GameObject.FindGameObjectsWithTag("black");
+            color = "black";
         }else{
             king = GameObject.Find("Black King(Clone)");
-            objects = GameObject.FindGameObjectsWithTag("white");
+            //objects = GameObject.FindGameObjectsWithTag("white");
+            color = "white";
         }
         if(king == null){
             return;
@@ -106,6 +101,11 @@ public class Checker : MonoBehaviour
         for(int x=0;x<king.GetComponent<Chess>().getMaxI();x++){
             for(int y=0;y<king.GetComponent<Chess>().getMaxJ();y++){
                 boardState.checkBoardArray[x,y] = false;
+                if(boardState.chessBoardArray[x,y] == null){
+                    continue;
+                }else if(boardState.chessBoardArray[x,y].tag.Equals(color)){
+                    objects.Add(boardState.chessBoardArray[x,y]);
+                }
             }
         }
         Vector3 kingPosition = king.transform.position + new Vector3(-16,0,16);
@@ -119,15 +119,16 @@ public class Checker : MonoBehaviour
             i = (int)- (gameObject.transform.position.x -16) / 4;
             j = (int)(gameObject.transform.position.z + 16) / 4;
             cellNumber = i*8+j;
+            Debug.Log(gameObject.name + " i:" + i + " j:" + j);
             foreach(Vector3 vector in chess.canMovePosition(cellNumber)){
                 vi = (int)-(vector.x - 16) / 4;
                 vj = (int)(vector.z + 16) / 4;
+               // Debug.Log("vi:"+vi+" vj:"+vj);
                 boardState.checkBoardArray[vi,vj] = true;
                 if(boardState.chessBoardArray[vi,vj] == king){
                     this.checkObject = gameObject;
-                    Debug.Log(gameObject.name);
                     if(Math.Abs(kingI - i) <= 1  && Math.Abs(kingJ - j) <= 1){
-                        Debug.Log(checkObject);
+                        //Debug.Log(checkObject);
                         this.inFlg = true;
                         this.checkCount++;
                     }

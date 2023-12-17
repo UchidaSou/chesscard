@@ -53,7 +53,7 @@ public class Pawn : Chess
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if(this.tag == "Retired" || PlayerPrefs.GetInt("Mode",0) == 1){
             return;
@@ -65,8 +65,9 @@ public class Pawn : Chess
             Vector3 instantiatePosition = this.transform.position;
             instantiatePosition.y = 3.1f;
             GameObject queen = Instantiate(Queen,instantiatePosition,Quaternion.Euler(90,0,0));
-            Chess chess = queen.GetComponent<Chess>();
             this.boardState.chessBoardArray[i,j] = queen;
+            queen.tag = this.gameObject.tag;
+            Chess chess = queen.GetComponent<Chess>();
             chess.board = this.board;
             chess.boardState = this.board.gameObject.GetComponent<BoardState>();
             chess.boardState.chessBoardArray = this.boardState.chessBoardArray;
@@ -83,6 +84,7 @@ public class Pawn : Chess
             chess.setMaterial(9);
             chess.setBrightSquare(this.getBrightSquare());
             chess.setSetUp(1);
+            Debug.Log("Promotion");
             Destroy(this.gameObject);
         }
     }

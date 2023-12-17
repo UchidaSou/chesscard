@@ -29,6 +29,7 @@ public class Game : MonoBehaviour
     [SerializeField]
     private AudioClip[] effectAudioClip = new AudioClip[3];
     public bool useCard = false;
+    bool check = false;
     private Coroutine coroutine;
     [SerializeField]
     GameObject normalBoard;
@@ -130,7 +131,7 @@ public class Game : MonoBehaviour
         StartCoroutine(showChessName());
     }
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
         if(playStop){
             return;
@@ -139,6 +140,9 @@ public class Game : MonoBehaviour
             return;
         }
         if(useCard){
+            return;
+        }
+        if(check){
             return;
         }
         bool npcFlg = false;
@@ -192,13 +196,14 @@ public class Game : MonoBehaviour
                 audioSource.PlayDelayed(0.001f);
                 chess.movePosition(selectedPosition);
                 chessObject = null;
+                check = true;
                 //プレイヤーを交代する
-                ChangeTurn();
+                StartCoroutine(ChangeTurn());
             }
         }   
     }
 
-    public void ChangeTurn(){
+    public IEnumerator ChangeTurn(){
         if(!player.card.usecard){
             player.card.usecard = true;
         }
@@ -212,6 +217,7 @@ public class Game : MonoBehaviour
                 break;
         }
         player = nowPlayer.GetComponent<Player>();
+        yield return new WaitForSeconds(0.5f);
         checker.setCheck(player.getColor());
         if(checker.isCheck(player.getColor())){
             Debug.Log("check " + player.getColor());
@@ -228,7 +234,7 @@ public class Game : MonoBehaviour
                 winner.text = winner.text + "white";
             }
             playStop = true;
-            return;
+            yield break;
         }
         setAura(player.getColor());
         player.card.point += 1;
@@ -243,6 +249,7 @@ public class Game : MonoBehaviour
                 }
             }
         }
+        check = false;
     }
 
     public void firstsetAura(){
