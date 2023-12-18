@@ -6,7 +6,6 @@ using Unity.VisualScripting;
 using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.UIElements;
 
 public class Card : MonoBehaviour
 {
@@ -32,6 +31,8 @@ public class Card : MonoBehaviour
     AudioClip[] audioClips = new AudioClip[5];
     [SerializeField]
     TMP_Text plainText;
+    [SerializeField]
+    Image image;
 
     public IEnumerator Resurrection(string color,int state){
         bool flg = false;
@@ -55,7 +56,7 @@ public class Card : MonoBehaviour
             Camera.main.transform.parent = position.transform;
             Debug.Log(Camera.main.transform.localPosition);
             StartCoroutine(cameraMove(color));
-            yield return new WaitForSeconds(1.5f);
+            yield return new WaitForSeconds(2.0f);
             Debug.Log("クリック待ち");
             yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
             Debug.Log("クリック後");
@@ -85,23 +86,18 @@ public class Card : MonoBehaviour
                         }
                     }else{
                         Debug.Log("No Retired");
-                        GameObject.Find("Game").GetComponent<Game>().useCard = false;
                         audioSource.PlayOneShot(this.audioClips[4]);
                         audioSource.PlayDelayed(0.001f);
-                        Camera.main.transform.parent = GameObject.Find(color+"DefualtCameraPosition").transform;
-                        StartCoroutine(cameraMove(color));
-                        yield return new WaitForSeconds(1.5f);
-                        GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(true);
-                        plainText.text = "";
-                        yield break;
                     }
                 }else{
+                    audioSource.PlayOneShot(this.audioClips[4]);
+                    audioSource.PlayDelayed(0.001f);
                     flg = false;
                 }
             }
             Camera.main.transform.parent = GameObject.Find(color+"DefualtCameraPosition").transform;
             StartCoroutine(cameraMove(color));
-            yield return new WaitForSeconds(1.5f);
+            yield return new WaitForSeconds(2.5f);
             GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(true);
             plainText.text = "";
         }else{
@@ -134,13 +130,6 @@ public class Card : MonoBehaviour
         if(state == 0 && !flg){
             Debug.Log("No flg");
             GameObject.Find("Game").GetComponent<Game>().useCard = false;
-            audioSource.PlayOneShot(this.audioClips[4]);
-            audioSource.PlayDelayed(0.001f);
-            Camera.main.transform.parent = GameObject.Find(color+"DefualtCameraPosition").transform;
-            StartCoroutine(cameraMove(color));
-            yield return new WaitForSeconds(2.0f);
-            GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(true);
-            plainText.text = "";
             yield break;
         }
         Debug.Log(select.name);
@@ -148,20 +137,6 @@ public class Card : MonoBehaviour
         Vector3 vector = chess.getFirstVector() + new Vector3(-16,0,16);
         int i = (int)-vector.x/4;
         int j  = (int)vector.z/4;
-        if(state == 0 && boardState.chessBoardArray[i,j] != null){
-            if(boardState.chessBoardArray[i,j].name.Contains("King")){
-                Debug.Log("king");
-                GameObject.Find("Game").GetComponent<Game>().useCard = false;
-                audioSource.PlayOneShot(this.audioClips[4]);
-                audioSource.PlayDelayed(0.001f);
-                Camera.main.transform.parent = GameObject.Find(color+"DefualtCameraPosition").transform;
-                StartCoroutine(cameraMove(color));
-                yield return new WaitForSeconds(1.5f);
-                GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(true);
-                plainText.text = "";
-                yield break;
-            }
-        }
         select.tag = color;
         select.transform.position = chess.getFirstVector();
         Instantiate(ressuEfect,select.transform.position,select.transform.rotation);
@@ -194,6 +169,7 @@ public class Card : MonoBehaviour
     }
 
     IEnumerator cameraMove(string color){
+        image.raycastTarget = true;
         Quaternion quaternion = Camera.main.transform.localRotation;
         for(int s = 90;s>0;s--){
             Camera.main.transform.localPosition = Camera.main.transform.localPosition * Mathf.Sin(s*(Mathf.PI/180));
@@ -204,6 +180,7 @@ public class Card : MonoBehaviour
             yield return new WaitForSeconds(0.01f);     
         }
         Camera.main.transform.localPosition = new Vector3(0,0,0);
+        image.raycastTarget = false;
     }
 
     public void turnReverse(GameObject beforeMoveObject){

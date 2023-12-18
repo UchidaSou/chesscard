@@ -79,7 +79,6 @@ public class Checker : MonoBehaviour
     }
     
     public void setCheck(string color){
-        Debug.Log("setCheck");
         this.checkCount = 0;
         this.inFlg = false;
         this.checkObject = null;
@@ -88,11 +87,9 @@ public class Checker : MonoBehaviour
         BoardState boardState = board.GetComponent<BoardState>();
         if(color.Equals("white")){
             king = GameObject.Find("White King(Clone)");
-            //objects = GameObject.FindGameObjectsWithTag("black");
             color = "black";
         }else{
             king = GameObject.Find("Black King(Clone)");
-            //objects = GameObject.FindGameObjectsWithTag("white");
             color = "white";
         }
         if(king == null){
@@ -119,29 +116,18 @@ public class Checker : MonoBehaviour
             i = (int)- (gameObject.transform.position.x -16) / 4;
             j = (int)(gameObject.transform.position.z + 16) / 4;
             cellNumber = i*8+j;
-            Debug.Log(gameObject.name + " i:" + i + " j:" + j);
             foreach(Vector3 vector in chess.canMovePosition(cellNumber)){
                 vi = (int)-(vector.x - 16) / 4;
                 vj = (int)(vector.z + 16) / 4;
-               // Debug.Log("vi:"+vi+" vj:"+vj);
                 boardState.checkBoardArray[vi,vj] = true;
                 if(boardState.chessBoardArray[vi,vj] == king){
                     this.checkObject = gameObject;
                     if(Math.Abs(kingI - i) <= 1  && Math.Abs(kingJ - j) <= 1){
-                        //Debug.Log(checkObject);
                         this.inFlg = true;
                         this.checkCount++;
                     }
                 }
             }
         }
-        /*
-        for(i=0;i<king.GetComponent<Chess>().getMaxI();i++){
-            for(j=0;j<king.GetComponent<Chess>().getMaxJ();j++){
-                Debug.Log(boardState.chessBoardArray[i,j] + " i:"+i+" j:"+j);
-                Debug.Log(boardState.checkBoardArray[i,j] + " i:"+i+" j:"+j);
-            }
-        }*/
-        Debug.Log("inflg "+this.inFlg);
     }
 }

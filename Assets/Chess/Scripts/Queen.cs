@@ -40,6 +40,9 @@ public class Queen : Chess
     public override List<Vector3> canMovePosition(int cellNumber)
     {
         List<Vector3> canMoveList = new List<Vector3>();
+        if(!this.canMove){
+            return canMoveList;
+        }
         foreach(Vector3 vector in rook.canMovePosition(cellNumber)){
             canMoveList.Add(vector);
         }

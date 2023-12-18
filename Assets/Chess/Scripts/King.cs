@@ -13,6 +13,9 @@ public class King : Chess
         int maxI = this.getMaxI();
         int maxJ = this.getMaxJ();
         List<Vector3> canMoveList = new List<Vector3>();
+        if(!this.canMove){
+            return canMoveList;
+        }
         int j = (int) cellNumber % 8;
         int i = (int) cellNumber / 8;
         int move = this.getMove();

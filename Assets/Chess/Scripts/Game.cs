@@ -27,7 +27,7 @@ public class Game : MonoBehaviour
     public bool playStop = false;
     private AudioSource audioSource;
     [SerializeField]
-    private AudioClip[] effectAudioClip = new AudioClip[3];
+    private AudioClip effectAudioClip;
     public bool useCard = false;
     bool check = false;
     private Coroutine coroutine;
@@ -39,6 +39,10 @@ public class Game : MonoBehaviour
     GameObject whiteRetiredObject;
     [SerializeField]
     GameObject blackRetiredObject;
+    [SerializeField]
+    Image effectPanel;
+    [SerializeField]
+    TMP_Text effectName;
 
     IEnumerator Fadein(){
         Image image = GameObject.Find("Fede").GetComponent<Image>();
@@ -55,7 +59,30 @@ public class Game : MonoBehaviour
         }
         SceneManager.LoadScene("select");
     }
+    IEnumerator cutin(string effectName){
+        this.audioSource.PlayOneShot(effectAudioClip);
+        this.audioSource.PlayDelayed(0.001f);
+        RectTransform rectTransform = effectPanel.GetComponent<RectTransform>();
+        rectTransform.offsetMin = new Vector2(1200,0);
+        rectTransform.offsetMax = new Vector2(0,200);
+        this.effectName.text = effectName;
+        for(int i=0;i<=10;i++){
+            rectTransform.offsetMin = new Vector2(1200 - i*120,0);
+            yield return new WaitForSeconds(0.01f);
+        }
+        yield return new WaitForSeconds(1.0f);
+        for(int i=0;i<=10;i++){
+            rectTransform.offsetMax = new Vector2(-i*120,200);
+            yield return new WaitForSeconds(0.01f);
+        }
+        yield break;
+    }
     void Start(){
+        Screen.autorotateToPortrait = false;
+        Screen.autorotateToPortraitUpsideDown = false;
+        Screen.autorotateToLandscapeLeft = true;
+        Screen.autorotateToLandscapeRight = true;
+        Screen.orientation = ScreenOrientation.LandscapeRight;
         StartCoroutine(Fadein());
         resultCanvas.SetActive(false);
         audioSource = this.gameObject.GetComponent<AudioSource>();
@@ -70,10 +97,8 @@ public class Game : MonoBehaviour
             uiEngine.SetUpDemo();
             Destroy(normalBoard);
             checker.board = miniBoard;
-            Vector3 pos = firstCamera.transform.parent.transform.position;
-            pos.z = -5.0f;
-            firstCamera.transform.parent.transform.position = pos;
-            secondCamera.transform.parent.transform.position = new Vector3(-15,30,-5);
+            firstCamera.transform.parent.transform.position = new Vector3(22,29,-9);
+            secondCamera.transform.parent.transform.position = new Vector3(-15,30,-4);
             whiteRetiredObject.transform.position = new Vector3(12,3.5f,10);
             GameObject.Find("whiteRessCameraPosition").transform.position = new Vector3(5,21,15);
             blackRetiredObject.transform.position = new Vector3(-7,3.5f,-23);
@@ -323,6 +348,7 @@ public class Game : MonoBehaviour
         string color = nowPlayer.GetComponent<Player>().getColor();
         this.useCard = true;
         Debug.Log(color);
+        StartCoroutine(cutin("復活"));
         coroutine = StartCoroutine(card.Resurrection(color,player.getState()));
     }
 
@@ -336,6 +362,7 @@ public class Game : MonoBehaviour
             return;
         }
         string color = beforeMoveObject.tag;
+        StartCoroutine(cutin("待った"));
         card.turnReverse(beforeMoveObject);
         beforeMoveObject.GetComponent<Chess>().canMove = false;
         if(color.Equals("white")){
@@ -360,6 +387,7 @@ public class Game : MonoBehaviour
         }
         string color = nowPlayer.GetComponent<Player>().getColor();
         this.useCard = true;
+        StartCoroutine(cutin("地雷"));
         coroutine = StartCoroutine(card.setMine(color,player.getState()));
     }
 
@@ -375,6 +403,7 @@ public class Game : MonoBehaviour
         }
         string color = nowPlayer.GetComponent<Player>().getColor();
         this.useCard = true;
+        StartCoroutine(cutin("倍行動"));
         coroutine = StartCoroutine(card.twiceMove(color,player.getState()));
     }
 
@@ -389,6 +418,7 @@ public class Game : MonoBehaviour
         }
         string color = nowPlayer.GetComponent<Player>().getColor();
         this.useCard = true;
+        StartCoroutine(cutin("封印"));
         coroutine = StartCoroutine(card.canntMove(color,player.getState()));
     }
 
@@ -401,6 +431,7 @@ public class Game : MonoBehaviour
         if(!card.notusecard || card.point < 12){
             return;
         }
+        StartCoroutine(cutin("禁止"));
         if(nowPlayer.Equals(firstPlayer)){
             card.notUseCard(secondPlayer.GetComponent<Player>().card);
         }else{
