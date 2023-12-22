@@ -501,4 +501,9 @@ public class Game : MonoBehaviour
     public void GoStartBtn(){
         StartCoroutine(Fadeout());
     }
+
+    public void showHelp(){
+        Debug.Log("Help");
+        Application.OpenURL("https://classroom.google.com/u/1/w/NjIyNzIzMDgxNjU2/t/all");
+    }
 }
