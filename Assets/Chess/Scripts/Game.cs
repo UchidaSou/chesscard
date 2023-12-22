@@ -1,7 +1,5 @@
-using System;
 using System.Collections;
 using TMPro;
-using Unity.VisualScripting.Dependencies.NCalc;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -30,6 +28,10 @@ public class Game : MonoBehaviour
     private AudioSource audioSource;
     [SerializeField]
     private AudioClip effectAudioClip;
+    [SerializeField]
+    private AudioClip buzzer;
+    [SerializeField]
+    private AudioClip pieceMove;
     public bool useCard = false;
     bool check = false;
     private Coroutine coroutine;
@@ -45,8 +47,6 @@ public class Game : MonoBehaviour
     Image effectPanel;
     [SerializeField]
     TMP_Text effectName;
-    [SerializeField]
-    Image image;
 
     IEnumerator Fadein(){
         Image image = GameObject.Find("Fede").GetComponent<Image>();
@@ -196,6 +196,9 @@ public class Game : MonoBehaviour
         if(Input.GetMouseButtonDown(0) ||player.getState() != 0){
             if(player.getState() != 0){
                 player.UseCard();
+                if(useCard){
+                    return;
+                }
             }
             GameObject[] reapwn = GameObject.FindGameObjectsWithTag("Respawn");
             if(reapwn.Length > 0){
@@ -239,7 +242,7 @@ public class Game : MonoBehaviour
                         Destroy(gameObject);
                     }
                 }
-                audioSource.PlayOneShot(audioSource.clip);
+                audioSource.PlayOneShot(pieceMove);
                 audioSource.PlayDelayed(0.001f);
                 chess.movePosition(selectedPosition);
                 chessObject = null;
@@ -312,8 +315,8 @@ public class Game : MonoBehaviour
             i = (int)-(gameObject.transform.position.x - 16) / 4;
             j = (int)(gameObject.transform.position.z + 16) / 4;
             if(chess.canMovePosition(i*8+j).Count != 0){
-                gameObject.GetComponent<Outline>().OutlineWidth = 2;
                 gameObject.GetComponent<Outline>().OutlineColor = Color.green;
+                gameObject.GetComponent<Outline>().OutlineWidth = 2;
             }else{
                 gameObject.GetComponent<Outline>().OutlineWidth = 0;
             }
@@ -326,7 +329,7 @@ public class Game : MonoBehaviour
         king.GetComponent<Outline>().OutlineWidth = 5;
     }
 
-    private void removeAura(string color){
+    public void removeAura(string color){
         GameObject[] objects = GameObject.FindGameObjectsWithTag(color);
         foreach(GameObject gameObject in objects){
             gameObject.GetComponent<Outline>().OutlineWidth = 0;
@@ -365,9 +368,21 @@ public class Game : MonoBehaviour
         }
         Card card = nowPlayer.GetComponent<Card>();
         if(!card.resurrection || card.point < 15 || !card.usecard){
+            if(player.getState() == 0){
+                audioSource.PlayOneShot(buzzer);
+                audioSource.PlayDelayed(0.001f);
+            }
             return;
         }
         string color = nowPlayer.GetComponent<Player>().getColor();
+        if(GameObject.Find(color+"Retired").transform.childCount == 0){
+            if(player.getState() == 0){
+                audioSource.PlayOneShot(buzzer);
+                audioSource.PlayDelayed(0.001f);
+            }
+            return;
+        }
+
         this.useCard = true;
         Debug.Log(color);
         StartCoroutine(cutin("復活"));
@@ -381,12 +396,17 @@ public class Game : MonoBehaviour
         }
         Card card = nowPlayer.GetComponent<Card>();
         if(!card.turnreverse || card.point < 10 || beforeMoveObject == null || !card.usecard){
+            if(player.getState() == 0){
+                audioSource.PlayOneShot(buzzer);
+                audioSource.PlayDelayed(0.001f);
+            }
             return;
         }
         this.useCard = true;
         string color = beforeMoveObject.tag;
         StartCoroutine(cutin("待った"));
-        coroutine = StartCoroutine(card.turnReverse(beforeMoveObject));
+        coroutine = StartCoroutine(card.turnReverse(beforeMoveObject,player.getState()));
+        StartCoroutine(ChangeTurn());
         beforeMoveObject.GetComponent<Chess>().canMove = false;
         if(color.Equals("white")){
             canntMoveObject[0] = beforeMoveObject;
@@ -405,6 +425,10 @@ public class Game : MonoBehaviour
         }
         Card card = nowPlayer.GetComponent<Card>();
         if(!card.setmine || card.point < 5 || !card.usecard){
+            if(player.getState() == 0){
+                audioSource.PlayOneShot(buzzer);
+                audioSource.PlayDelayed(0.001f);
+            }
             return;
         }
         string color = nowPlayer.GetComponent<Player>().getColor();
@@ -421,6 +445,10 @@ public class Game : MonoBehaviour
         }
         Card card = nowPlayer.GetComponent<Card>();
         if(!card.twicemove || card.point < 6 || !card.usecard){
+            if(player.getState() == 0){
+                audioSource.PlayOneShot(buzzer);
+                audioSource.PlayDelayed(0.001f);
+            }
             return;
         }
         string color = nowPlayer.GetComponent<Player>().getColor();
@@ -436,6 +464,10 @@ public class Game : MonoBehaviour
         }
         Card card = nowPlayer.GetComponent<Card>();
         if(!card.canntmove || card.point < 10 || !card.usecard){
+            if(player.getState() == 0){
+                audioSource.PlayOneShot(buzzer);
+                audioSource.PlayDelayed(0.001f);
+            }
             return;
         }
         string color = nowPlayer.GetComponent<Player>().getColor();
@@ -451,13 +483,18 @@ public class Game : MonoBehaviour
         }
         Card card = nowPlayer.GetComponent<Card>();
         if(!card.notusecard || card.point < 12 || !card.usecard){
+            if(player.getState() == 0){
+                audioSource.PlayOneShot(buzzer);
+                audioSource.PlayDelayed(0.001f);
+            }
             return;
         }
+        this.useCard = true;
         StartCoroutine(cutin("禁止"));
         if(nowPlayer.Equals(firstPlayer)){
-            coroutine = StartCoroutine(card.notUseCard(secondPlayer.GetComponent<Player>().card));
+            coroutine = StartCoroutine(card.notUseCard(secondPlayer.GetComponent<Player>().card,player.getState()));
         }else{
-            coroutine = StartCoroutine(card.notUseCard(firstPlayer.GetComponent<Player>().card));
+            coroutine = StartCoroutine(card.notUseCard(firstPlayer.GetComponent<Player>().card,player.getState()));
         }
     }
 

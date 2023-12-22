@@ -30,6 +30,7 @@ public class Card : MonoBehaviour
     TMP_Text plainText;
     [SerializeField]
     Image image;
+    bool cameraFlg = false;
 
     public IEnumerator Resurrection(string color,int state){
         bool flg = false;
@@ -49,12 +50,13 @@ public class Card : MonoBehaviour
         GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(false);
         yield return new WaitForSeconds(3.0f);
         if(state == 0){
-            plainText.text = "復活させる駒を選んでください";
             GameObject position = GameObject.Find(color + "RessCameraPosition");
             Camera.main.transform.parent = position.transform;
             Debug.Log(Camera.main.transform.localPosition);
+            cameraFlg = true;
             StartCoroutine(cameraMove(color));
-            yield return new WaitForSeconds(2.0f);
+            yield return new WaitUntil(() => !cameraFlg);
+            plainText.text = "復活させる駒を選んでください";
             Debug.Log("クリック待ち");
             yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
             Debug.Log("クリック後");
@@ -95,7 +97,8 @@ public class Card : MonoBehaviour
             }
             Camera.main.transform.parent = GameObject.Find(color+"DefualtCameraPosition").transform;
             StartCoroutine(cameraMove(color));
-            yield return new WaitForSeconds(2.5f);
+            cameraFlg = true;
+            yield return new WaitUntil(() => !cameraFlg);
             GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(true);
             plainText.text = "";
         }else{
@@ -160,10 +163,14 @@ public class Card : MonoBehaviour
             player.setScore(player.getScore() - chess.getMaterial());
         }
         boardState.chessBoardArray[i,j] = select;
+        select.transform.parent = null;
         this.resurrection = false;
         this.point -= 15;
         this.text.text = this.point.ToString();
-        GameObject.Find("Game").GetComponent<Game>().ChangeTurn();
+        if(state == 0){
+            Destroy(GameObject.Find("ResurrectionBtn").gameObject);
+        }
+        StartCoroutine(GameObject.Find("Game").GetComponent<Game>().ChangeTurn());
         GameObject.Find("Game").GetComponent<Game>().useCard = false;
     }
 
@@ -179,10 +186,12 @@ public class Card : MonoBehaviour
             yield return new WaitForSeconds(0.01f);     
         }
         Camera.main.transform.localPosition = new Vector3(0,0,0);
+        Camera.main.transform.localRotation = Quaternion.Euler(0,0,0);
         image.raycastTarget = false;
+        cameraFlg = false;
     }
 
-    public IEnumerator turnReverse(GameObject beforeMoveObject){
+    public IEnumerator turnReverse(GameObject beforeMoveObject, int state){
         Debug.Log("Reverse");
         GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(false);
         yield return new WaitForSeconds(3.0f);
@@ -197,10 +206,12 @@ public class Card : MonoBehaviour
         j = (int) (vector.z + 16) / 4;
         boardState.chessBoardArray[i,j] = beforeMoveObject;
         GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(true);
+        if(state == 0){
+            Destroy(GameObject.Find("TurnReverseBtn").gameObject);
+        }
         this.turnreverse = false;
         this.point -= 10;
         this.text.text = this.point.ToString();
-        StartCoroutine(GameObject.Find("Game").GetComponent<Game>().ChangeTurn());
         GameObject.Find("Game").GetComponent<Game>().useCard = false;
         yield break;
     }
@@ -316,6 +327,9 @@ public class Card : MonoBehaviour
         this.text.text = this.point.ToString();
         GameObject.Find("Game").GetComponent<Game>().useCard = false;
         GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(true);
+        if(setup == 0){
+            Destroy(GameObject.Find("SetMineBtn").gameObject);
+        }
         plainText.text = "";
     }
     public IEnumerator twiceMove(string color,int state){
@@ -380,6 +394,9 @@ public class Card : MonoBehaviour
         this.text.text = this.point.ToString();
         GameObject.Find("Game").GetComponent<Game>().useCard = false;
         GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(true);
+        if(state == 0){
+            Destroy(GameObject.Find("TwiceMoveBtn").gameObject);
+        }
         plainText.text = "";
     }
 
@@ -450,17 +467,24 @@ public class Card : MonoBehaviour
         this.text.text = this.point.ToString();
         GameObject.Find("Game").GetComponent<Game>().useCard = false;
         GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(true);
+        if(state == 0){
+            Destroy(GameObject.Find("CantMoveBtn").gameObject);
+        }
         plainText.text = "";
     }
 
-    public IEnumerator notUseCard(Card card){
+    public IEnumerator notUseCard(Card card,int state){
         GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(false);
         yield return new WaitForSeconds(3.0f);
         card.usecard = false;
         this.point -= 12;
         GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(true);
+        if(state == 0){
+            Destroy(GameObject.Find("NotCardBtn").gameObject);
+        }
         this.text.text = this.point.ToString();
         this.notusecard = false;
+        GameObject.Find("Game").GetComponent<Game>().useCard = false;
         yield break;
     }
 

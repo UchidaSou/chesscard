@@ -1,9 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Threading;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 
 public class Checker : MonoBehaviour

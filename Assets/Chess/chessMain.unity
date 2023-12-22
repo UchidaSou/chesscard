@@ -302,6 +302,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09c595d86e1449c42a6507713e965cb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  board: {fileID: 1484360090}
 --- !u!1 &27592064
 GameObject:
   m_ObjectHideFlags: 0
@@ -1191,6 +1192,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09c595d86e1449c42a6507713e965cb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  board: {fileID: 1484360090}
 --- !u!1 &370728910
 GameObject:
   m_ObjectHideFlags: 0
@@ -1584,6 +1586,8 @@ MonoBehaviour:
   cheeNameCanvas: {fileID: 1537270366}
   playStop: 0
   effectAudioClip: {fileID: 8300000, guid: 429b4414bdb8ae849932b307d38e6279, type: 3}
+  buzzer: {fileID: 8300000, guid: 45d2a91ed8f53a344906393fdfb8cc8a, type: 3}
+  pieceMove: {fileID: 8300000, guid: 75d29330329e03a4e9cdc677d128f6f5, type: 3}
   useCard: 0
   normalBoard: {fileID: 1484360090}
   miniBoard: {fileID: 1595889364082990}
@@ -1591,7 +1595,6 @@ MonoBehaviour:
   blackRetiredObject: {fileID: 331020256}
   effectPanel: {fileID: 1646469301}
   effectName: {fileID: 922821497}
-  image: {fileID: 1430259963}
 --- !u!4 &569050816
 Transform:
   m_ObjectHideFlags: 0
@@ -1617,7 +1620,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 75d29330329e03a4e9cdc677d128f6f5, type: 3}
+  m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -2568,7 +2571,7 @@ GameObject:
   - component: {fileID: 929060153}
   - component: {fileID: 929060152}
   m_Layer: 5
-  m_Name: NotCard
+  m_Name: NotCardBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2642,7 +2645,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 569050815}
         m_TargetAssemblyTypeName: Game, Assembly-CSharp
-        m_MethodName: nullBtn
+        m_MethodName: notUseCard
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3221,7 +3224,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1218637073}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.30666667
+  m_Size: 0.3066667
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -4978,7 +4981,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: 1000, y: 100}
-  m_SizeDelta: {x: -2000, y: 200}
+  m_SizeDelta: {x: -2000, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1646469301
 MonoBehaviour:
@@ -5272,7 +5275,7 @@ GameObject:
   - component: {fileID: 1773709603}
   - component: {fileID: 1773709602}
   m_Layer: 5
-  m_Name: TrunReverseBtn
+  m_Name: TurnReverseBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6653,7 +6656,7 @@ GameObject:
   - component: {fileID: 2097841906}
   - component: {fileID: 2097841905}
   m_Layer: 5
-  m_Name: TwiceMove
+  m_Name: TwiceMoveBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
