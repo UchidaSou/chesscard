@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using TMPro;
+using Unity.VisualScripting.Dependencies.NCalc;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -43,6 +45,8 @@ public class Game : MonoBehaviour
     Image effectPanel;
     [SerializeField]
     TMP_Text effectName;
+    [SerializeField]
+    Image image;
 
     IEnumerator Fadein(){
         Image image = GameObject.Find("Fede").GetComponent<Image>();
@@ -63,21 +67,39 @@ public class Game : MonoBehaviour
         this.audioSource.PlayOneShot(effectAudioClip);
         this.audioSource.PlayDelayed(0.001f);
         RectTransform rectTransform = effectPanel.GetComponent<RectTransform>();
-        rectTransform.offsetMin = new Vector2(1200,0);
-        rectTransform.offsetMax = new Vector2(0,200);
+        RectTransform mainCanvasRect = this.mainCanvas.GetComponent<RectTransform>();
+        Vector2 vec = mainCanvasRect.sizeDelta;
+        Vector3 scale = mainCanvasRect.localScale;
+        vec.x = vec.x*scale.x;
+        vec.y = 0;
+        rectTransform.offsetMin = vec;
+        yield return new WaitForSeconds(0.1f);
+        vec.x = 0;
+        vec.y = 200;
+        rectTransform.offsetMax = vec;
         this.effectName.text = effectName;
-        for(int i=0;i<=10;i++){
-            rectTransform.offsetMin = new Vector2(1200 - i*120,0);
+        for(int i=90;i>=0;i=i-10){
+            rectTransform.offsetMin = new Vector2(mainCanvasRect.sizeDelta.x / scale.x * Mathf.Sin(i*Mathf.PI/180),0);
             yield return new WaitForSeconds(0.01f);
         }
-        yield return new WaitForSeconds(1.0f);
-        for(int i=0;i<=10;i++){
-            rectTransform.offsetMax = new Vector2(-i*120,200);
+        yield return new WaitForSeconds(1.5f);
+        for(int i=0;i<=90;i=i+10){
+            rectTransform.offsetMax = new Vector2(-mainCanvasRect.sizeDelta.x / scale.x * Mathf.Sin(i*Mathf.PI/180),200);
             yield return new WaitForSeconds(0.01f);
         }
         yield break;
     }
     void Start(){
+        RectTransform rectTransform = effectPanel.GetComponent<RectTransform>();
+        RectTransform mainCanvasRect = this.mainCanvas.GetComponent<RectTransform>();
+        Vector2 vec = mainCanvasRect.sizeDelta;
+        Vector3 scale = mainCanvasRect.localScale;
+        vec.x = vec.x*scale.x;
+        vec.y = 0;
+        rectTransform.offsetMin = vec;
+        vec.x = 0;
+        vec.y = 0;
+        rectTransform.offsetMax = vec;
         Screen.autorotateToPortrait = false;
         Screen.autorotateToPortraitUpsideDown = false;
         Screen.autorotateToLandscapeLeft = true;
@@ -342,7 +364,7 @@ public class Game : MonoBehaviour
             coroutine = null;
         }
         Card card = nowPlayer.GetComponent<Card>();
-        if(!card.resurrection || card.point < 15){
+        if(!card.resurrection || card.point < 15 || !card.usecard){
             return;
         }
         string color = nowPlayer.GetComponent<Player>().getColor();
@@ -358,12 +380,13 @@ public class Game : MonoBehaviour
             coroutine = null;
         }
         Card card = nowPlayer.GetComponent<Card>();
-        if(!card.turnreverse || card.point < 10 || beforeMoveObject == null){
+        if(!card.turnreverse || card.point < 10 || beforeMoveObject == null || !card.usecard){
             return;
         }
+        this.useCard = true;
         string color = beforeMoveObject.tag;
         StartCoroutine(cutin("待った"));
-        card.turnReverse(beforeMoveObject);
+        coroutine = StartCoroutine(card.turnReverse(beforeMoveObject));
         beforeMoveObject.GetComponent<Chess>().canMove = false;
         if(color.Equals("white")){
             canntMoveObject[0] = beforeMoveObject;
@@ -372,7 +395,6 @@ public class Game : MonoBehaviour
             canntMoveObject[1] = beforeMoveObject;
             count = 2;
         }
-        ChangeTurn();
     }
 
     public void setMine(){
@@ -382,7 +404,7 @@ public class Game : MonoBehaviour
             coroutine = null;
         }
         Card card = nowPlayer.GetComponent<Card>();
-        if(!card.setmine || card.point < 5){
+        if(!card.setmine || card.point < 5 || !card.usecard){
             return;
         }
         string color = nowPlayer.GetComponent<Player>().getColor();
@@ -398,7 +420,7 @@ public class Game : MonoBehaviour
             coroutine = null;
         }
         Card card = nowPlayer.GetComponent<Card>();
-        if(!card.twicemove || card.point < 6){
+        if(!card.twicemove || card.point < 6 || !card.usecard){
             return;
         }
         string color = nowPlayer.GetComponent<Player>().getColor();
@@ -413,7 +435,7 @@ public class Game : MonoBehaviour
             coroutine = null;
         }
         Card card = nowPlayer.GetComponent<Card>();
-        if(!card.canntmove || card.point < 10){
+        if(!card.canntmove || card.point < 10 || !card.usecard){
             return;
         }
         string color = nowPlayer.GetComponent<Player>().getColor();
@@ -428,14 +450,14 @@ public class Game : MonoBehaviour
             coroutine = null;
         }
         Card card = nowPlayer.GetComponent<Card>();
-        if(!card.notusecard || card.point < 12){
+        if(!card.notusecard || card.point < 12 || !card.usecard){
             return;
         }
         StartCoroutine(cutin("禁止"));
         if(nowPlayer.Equals(firstPlayer)){
-            card.notUseCard(secondPlayer.GetComponent<Player>().card);
+            coroutine = StartCoroutine(card.notUseCard(secondPlayer.GetComponent<Player>().card));
         }else{
-            card.notUseCard(firstPlayer.GetComponent<Player>().card);
+            coroutine = StartCoroutine(card.notUseCard(firstPlayer.GetComponent<Player>().card));
         }
     }
 

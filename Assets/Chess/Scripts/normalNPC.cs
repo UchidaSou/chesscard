@@ -220,6 +220,7 @@ public class normalNPC : Player
     public override void UseCard()
     {
         int x = UnityEngine.Random.Range(0,20);
+        //int x = 2;
         switch(x){
             case 0:
              GameObject.Find("Game").GetComponent<Game>().Resurrection();

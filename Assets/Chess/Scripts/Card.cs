@@ -1,9 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
-using Unity.VisualScripting;
-using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -49,8 +46,9 @@ public class Card : MonoBehaviour
             GameObject.Find("Game").GetComponent<Game>().useCard = false;
             yield break;
         }
+        GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(false);
+        yield return new WaitForSeconds(3.0f);
         if(state == 0){
-            GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(false);
             plainText.text = "復活させる駒を選んでください";
             GameObject position = GameObject.Find(color + "RessCameraPosition");
             Camera.main.transform.parent = position.transform;
@@ -101,6 +99,7 @@ public class Card : MonoBehaviour
             GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(true);
             plainText.text = "";
         }else{
+            GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(true);
             int size = retiredList.Count;
             if(size == 0){
                 Debug.Log("No size");
@@ -183,8 +182,10 @@ public class Card : MonoBehaviour
         image.raycastTarget = false;
     }
 
-    public void turnReverse(GameObject beforeMoveObject){
+    public IEnumerator turnReverse(GameObject beforeMoveObject){
         Debug.Log("Reverse");
+        GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(false);
+        yield return new WaitForSeconds(3.0f);
         int i = (int) -(beforeMoveObject.transform.position.x - 16) / 4;
         int j = (int) (beforeMoveObject.transform.position.z + 16) /4;
         BoardState boardState = board.GetComponent<BoardState>();
@@ -195,14 +196,20 @@ public class Card : MonoBehaviour
         i = (int) -(vector.x - 16) / 4;
         j = (int) (vector.z + 16) / 4;
         boardState.chessBoardArray[i,j] = beforeMoveObject;
+        GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(true);
         this.turnreverse = false;
         this.point -= 10;
         this.text.text = this.point.ToString();
+        StartCoroutine(GameObject.Find("Game").GetComponent<Game>().ChangeTurn());
+        GameObject.Find("Game").GetComponent<Game>().useCard = false;
+        yield break;
     }
 
     public IEnumerator setMine(string color,int setup){
         int mode = PlayerPrefs.GetInt("Mode",0);
         int cellNumber=-1,maxI = 0,maxJ = 0;
+        GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(false);
+        yield return new WaitForSeconds(3.0f);
         if(setup == 0){
             BoardState boardState = board.GetComponent<BoardState>();
             if(mode == 0){
@@ -221,7 +228,6 @@ public class Card : MonoBehaviour
                 }
             }
             int col=0,row=0;
-            GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(false);
             plainText.text = "設置する場所を選んでください";
             Debug.Log("クリック待ち");
             yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
@@ -254,16 +260,27 @@ public class Card : MonoBehaviour
                 Destroy(positions[k]);
             }
         }else{
-            if(mode == 0){
-                cellNumber = Random.Range(2*8,5*8+7);
-            }else{
-                cellNumber = Random.Range(2*8,3*8+4);
-                if(cellNumber < 3*8 && cellNumber > 2*8+4){
-                    if(color.Equals("white")){
-                        cellNumber = Random.Range(3*8,3*8+4);
-                    }else{
-                        cellNumber = Random.Range(2*8,2*8+4);
+            GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(true);
+            bool ok = true;
+            int i=0,j= 0;
+            BoardState boardState = this.board.GetComponent<BoardState>();
+            while(ok){
+                if(mode == 0){
+                    cellNumber = Random.Range(2*8,5*8+7);
+                }else{
+                    cellNumber = Random.Range(2*8,3*8+4);
+                    if(cellNumber < 3*8 && cellNumber > 2*8+4){
+                        if(color.Equals("white")){
+                            cellNumber = Random.Range(3*8,3*8+4);
+                        }else{
+                            cellNumber = Random.Range(2*8,2*8+4);
+                        }
                     }
+                }
+                i = cellNumber / 8;
+                j = cellNumber % 8;
+                if(boardState.chessBoardArray[i,j] == null){
+                    ok = false;
                 }
             }
         }
@@ -303,8 +320,9 @@ public class Card : MonoBehaviour
     }
     public IEnumerator twiceMove(string color,int state){
         bool flg = false;
+        GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(false);
+        yield return new WaitForSeconds(3.0f);
         if(state == 0){
-            GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(false);
             plainText.text = "駒を選んでください";
             Debug.Log("クリック待ち");
             yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
@@ -333,6 +351,7 @@ public class Card : MonoBehaviour
                 }
             }
         }else{
+            GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(true);
             List<GameObject> objects = new List<GameObject>();
             GameObject[] cheesses = GameObject.FindGameObjectsWithTag(color);
             foreach(GameObject chess in cheesses){
@@ -368,8 +387,9 @@ public class Card : MonoBehaviour
     public IEnumerator canntMove(string color,int state){
         bool flg = false;
         GameObject select = new GameObject();
+        GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(false);
+        yield return new WaitForSeconds(3.0f);
         if(state == 0){
-            GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(false);
             plainText.text = "駒を選んでください";
             Debug.Log("クリック待ち");
             yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
@@ -433,11 +453,15 @@ public class Card : MonoBehaviour
         plainText.text = "";
     }
 
-    public void notUseCard(Card card){
+    public IEnumerator notUseCard(Card card){
+        GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(false);
+        yield return new WaitForSeconds(3.0f);
         card.usecard = false;
         this.point -= 12;
+        GameObject.Find("Game").GetComponent<Game>().mainCanvas.SetActive(true);
         this.text.text = this.point.ToString();
         this.notusecard = false;
+        yield break;
     }
 
     void Start(){
