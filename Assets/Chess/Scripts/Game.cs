@@ -112,10 +112,12 @@ public class Game : MonoBehaviour
         int y = PlayerPrefs.GetInt("First", 1);
         int mode = PlayerPrefs.GetInt("Mode",0);
         if(mode == 0){
+            uiEngine.board = normalBoard;
             uiEngine.SetupPieces();
             Destroy(miniBoard);
             checker.board  = normalBoard;
         }else{
+            uiEngine.board = miniBoard;
             uiEngine.SetUpDemo();
             Destroy(normalBoard);
             checker.board = miniBoard;
@@ -276,12 +278,14 @@ public class Game : MonoBehaviour
             mainCanvas.SetActive(false);
             cheeNameCanvas.SetActive(false);
             resultCanvas.SetActive(true);
-            loser.text = "Loser " + player.getColor();
+            loser.text = "Loser ";
             winner.text = "Winner ";
             if(player.getColor().Equals("white")){
-                winner.text = winner.text + "black";
+                winner.text += "<color=" + "black"+">black</color>";
+                loser.text += "<color=" + "white"+">white</color>";
             }else{
-                winner.text = winner.text + "white";
+                loser.text += "<color=" + "black"+">black</color>";
+                winner.text += "<color=" + "white"+">white</color>";
             }
             playStop = true;
             yield break;
@@ -502,8 +506,4 @@ public class Game : MonoBehaviour
         StartCoroutine(Fadeout());
     }
 
-    public void showHelp(){
-        Debug.Log("Help");
-        Application.OpenURL("https://classroom.google.com/u/1/w/NjIyNzIzMDgxNjU2/t/all");
-    }
 }

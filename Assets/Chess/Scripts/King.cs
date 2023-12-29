@@ -62,13 +62,16 @@ public class King : Chess
             game.mainCanvas.SetActive(false);
             game.cheeNameCanvas.SetActive(false);
             game.resultCanvas.SetActive(true);
-            game.loser.text = "Loser " + this.color;
+            game.loser.text = "Loser ";
+            game.winner.text = "Winner ";
             switch(this.color){
                 case "white":
-                    game.winner.text = "Winner black";
+                    game.winner.text += "<color=" + "black"+">black</color>";
+                    game.loser.text += "<color=" + "white"+">white</color>";
                     break;
                 case "black":
-                    game.winner.text = "Winner white";
+                    game.loser.text += "<color=" + "black"+">black</color>";
+                    game.winner.text += "<color=" + "white"+">white</color>";
                     break;
             }
             game.playStop = true;

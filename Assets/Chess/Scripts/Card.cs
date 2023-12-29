@@ -230,11 +230,13 @@ public class Card : MonoBehaviour
                 maxI = 6;
                 maxJ = 5;
             }
+            Debug.Log(maxI + " " + maxJ);
             for(int i=0;i<maxI;i++){
                 for(int j=0;j<maxJ;j++){
                     if(boardState.chessBoardArray[i,j] != null){
                         continue;
                     }
+                    Debug.Log(boardState.chessBoardArray[i,j]);
                     GameObject.Instantiate(minePositionSquare,ChessUiEngine.ToWorldPoint(i*8+j),Quaternion.Euler(0,0,0));
                 }
             }
