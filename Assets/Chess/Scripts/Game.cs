@@ -64,6 +64,7 @@ public class Game : MonoBehaviour
         SceneManager.LoadScene("select");
     }
     IEnumerator cutin(string effectName){
+        effectPanel.gameObject.SetActive(true);
         this.audioSource.PlayOneShot(effectAudioClip);
         this.audioSource.PlayDelayed(0.001f);
         RectTransform rectTransform = effectPanel.GetComponent<RectTransform>();
@@ -87,6 +88,7 @@ public class Game : MonoBehaviour
             rectTransform.offsetMax = new Vector2(-mainCanvasRect.sizeDelta.x / scale.x * Mathf.Sin(i*Mathf.PI/180),200);
             yield return new WaitForSeconds(0.01f);
         }
+        effectPanel.gameObject.SetActive(false);
         yield break;
     }
     void Start(){
@@ -105,6 +107,7 @@ public class Game : MonoBehaviour
         Screen.autorotateToLandscapeLeft = true;
         Screen.autorotateToLandscapeRight = true;
         Screen.orientation = ScreenOrientation.LandscapeRight;
+        effectPanel.gameObject.SetActive(false);
         StartCoroutine(Fadein());
         resultCanvas.SetActive(false);
         audioSource = this.gameObject.GetComponent<AudioSource>();
@@ -116,11 +119,15 @@ public class Game : MonoBehaviour
             uiEngine.SetupPieces();
             Destroy(miniBoard);
             checker.board  = normalBoard;
+            whiteRetiredObject.GetComponent<RetiredAlignment>().board = normalBoard;
+            blackRetiredObject.GetComponent<RetiredAlignment>().board = normalBoard;
         }else{
             uiEngine.board = miniBoard;
             uiEngine.SetUpDemo();
             Destroy(normalBoard);
             checker.board = miniBoard;
+            whiteRetiredObject.GetComponent<RetiredAlignment>().board = miniBoard;
+            blackRetiredObject.GetComponent<RetiredAlignment>().board = miniBoard;
             firstCamera.transform.parent.transform.position = new Vector3(22,29,-9);
             secondCamera.transform.parent.transform.position = new Vector3(-15,30,-4);
             whiteRetiredObject.transform.position = new Vector3(12,3.5f,10);
@@ -128,6 +135,7 @@ public class Game : MonoBehaviour
             blackRetiredObject.transform.position = new Vector3(-7,3.5f,-23);
             GameObject.Find("blackRessCameraPosition").transform.position = new Vector3(2.5f,20,-25);
         }
+        Debug.Log(uiEngine.board.name);
         if(y == 1){
             firstPlayer.AddComponent<RealPlayer>();
             secondCamera.SetActive(false);
@@ -138,6 +146,7 @@ public class Game : MonoBehaviour
                 secondPlayer.AddComponent<EasyNPC>();
             }else{
                 secondPlayer.AddComponent<normalNPC>();
+                secondPlayer.GetComponent<normalNPC>().board = uiEngine.board;
             }
             player = secondPlayer.GetComponent<Player>();
             player.setColor("black");
@@ -151,6 +160,7 @@ public class Game : MonoBehaviour
                 firstPlayer.AddComponent<EasyNPC>();
             }else{
                 firstPlayer.AddComponent<normalNPC>();
+                firstPlayer.GetComponent<normalNPC>().board = uiEngine.board;
             }
             player = firstPlayer.GetComponent<Player>();
             player.setColor("white");

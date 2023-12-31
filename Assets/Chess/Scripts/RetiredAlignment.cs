@@ -3,8 +3,7 @@ using UnityEngine;
 public class RetiredAlignment : MonoBehaviour
 {
     int count = 0;
-    [SerializeField]
-    GameObject board;
+    public GameObject board;
     private BoardState boardState;
     // Update is called once per frame
     void Update()

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,7 +15,9 @@ public class HelpWebView : MonoBehaviour
     Image image;
     [SerializeField]
     GameObject[] button;
-    
+    [SerializeField]
+    GameObject[] canvas;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -22,9 +25,10 @@ public class HelpWebView : MonoBehaviour
         this.rectTransform.sizeDelta = new Vector2(0,0);
         for(int i=0;i<button.Length;i++){
             button[i].SetActive(false);
+            canvas[i].SetActive(false);
         }
         helpCanvasObject.SetActive(false);
-    }
+        }
 
     public void onClickHelpView(){
         Debug.Log("Help");
@@ -43,6 +47,7 @@ public class HelpWebView : MonoBehaviour
             button[i].SetActive(true);
         }
         this.open = false;
+        onClickGame();
     }
 
     public void onClickCloseHelp(){
@@ -54,6 +59,7 @@ public class HelpWebView : MonoBehaviour
         this.open = true;
         for(int i=0;i<button.Length;i++){
             button[i].SetActive(false);
+            canvas[i].SetActive(false);
         }
         for(int i=0;i<=90;i=i+10){
             rectTransform.sizeDelta = mainCanvas.GetComponent<RectTransform>().sizeDelta * Mathf.Cos(i*Mathf.PI/180);
@@ -64,14 +70,23 @@ public class HelpWebView : MonoBehaviour
     }
 
     public void onClickGame(){
-        image.color = Color.red;
+        //image.color = Color.red;
+        canvas[0].SetActive(true);
+        canvas[1].SetActive(false);
+        canvas[2].SetActive(false);
     }
 
     public void onClickChess(){
-        image.color = Color.blue;
+        //image.color = Color.blue;
+        canvas[0].SetActive(false);
+        canvas[1].SetActive(true);
+        canvas[2].SetActive(false);
     }
 
     public void onClickCard(){
-        image.color = Color.green;
+        //image.color = Color.green;
+        canvas[0].SetActive(false);
+        canvas[1].SetActive(false);
+        canvas[2].SetActive(true);
     }
 }
