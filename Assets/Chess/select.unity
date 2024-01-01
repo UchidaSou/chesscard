@@ -2261,8 +2261,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u30C1\u30A7\u30B9\xD7\u30AB\u30FC\u30C9"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 7d032c54935d9ca4e9430ac6fc95e35e, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: da7cc135fbdf4d84d975caac2aef7fb5, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 9e4a4aa5ffd59f246bbf6af39d37d02f, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: bb6a4f8261637db4ca4523d0dbbe52be, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
