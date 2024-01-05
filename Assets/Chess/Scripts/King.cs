@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 
 public class King : Chess
@@ -13,6 +12,9 @@ public class King : Chess
         int maxI = this.getMaxI();
         int maxJ = this.getMaxJ();
         List<Vector3> canMoveList = new List<Vector3>();
+        if(!this.canMove){
+            return canMoveList;
+        }
         int j = (int) cellNumber % 8;
         int i = (int) cellNumber / 8;
         int move = this.getMove();
@@ -60,13 +62,16 @@ public class King : Chess
             game.mainCanvas.SetActive(false);
             game.cheeNameCanvas.SetActive(false);
             game.resultCanvas.SetActive(true);
-            game.loser.text = "Loser " + this.color;
+            game.loser.text = "Loser ";
+            game.winner.text = "Winner ";
             switch(this.color){
                 case "white":
-                    game.winner.text = "Winner black";
+                    game.winner.text += "<color=" + "black"+">black</color>";
+                    game.loser.text += "<color=" + "white"+">white</color>";
                     break;
                 case "black":
-                    game.winner.text = "Winner white";
+                    game.loser.text += "<color=" + "black"+">black</color>";
+                    game.winner.text += "<color=" + "white"+">white</color>";
                     break;
             }
             game.playStop = true;

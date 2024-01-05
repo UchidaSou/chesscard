@@ -6,6 +6,9 @@ public class Knight : Chess
     public override List<Vector3> canMovePosition(int cellNumber)
     {
         List<Vector3> canMoveList = new List<Vector3>();
+        if(!this.canMove){
+            return canMoveList;
+        }
         int j = (int) cellNumber % 8;
         int i = (int) cellNumber / 8;
         GameObject gameObject;

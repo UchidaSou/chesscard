@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
-using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 
 public class normalNPC : Player
@@ -151,7 +149,11 @@ public class normalNPC : Player
         List<Vector3> vectors;
         GameObject enemey;
         bool flg = false;
-        GameObject[] objects = new GameObject[5];
+        int size = 5;
+        if(mylist.Count <= 4){
+            size = mylist.Count;
+        }
+        GameObject[] objects = new GameObject[size];
         for(int i=0;i<objects.Length;i++){
             objects[i] = mylist[UnityEngine.Random.Range(0,mylist.Count)];
         }
@@ -208,7 +210,7 @@ public class normalNPC : Player
     void Start()
     {
         this.setState(2);
-        board = GameObject.Find("Board");
+        //board = GameObject.Find("Board");
         this.boardState = board.GetComponent<BoardState>();
         this.card = this.gameObject.GetComponent<Card>();
     }  
@@ -216,6 +218,7 @@ public class normalNPC : Player
     public override void UseCard()
     {
         int x = UnityEngine.Random.Range(0,20);
+        //int x = 2;
         switch(x){
             case 0:
              GameObject.Find("Game").GetComponent<Game>().Resurrection();

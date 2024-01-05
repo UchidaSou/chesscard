@@ -75,6 +75,11 @@ public class StertScript : MonoBehaviour
         StartCoroutine(onClickDemoBotton());
     }
     void Start(){
+        Screen.autorotateToPortrait = false;
+        Screen.autorotateToPortraitUpsideDown = false;
+        Screen.autorotateToLandscapeLeft = true;
+        Screen.autorotateToLandscapeRight = true;
+        Screen.orientation = ScreenOrientation.LandscapeRight;
         StartCoroutine(Fadein());
     }
     IEnumerator Fadein(){
