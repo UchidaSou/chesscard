@@ -285,6 +285,7 @@ public class Game : MonoBehaviour
             Debug.Log("check " + player.getColor());
         }
         if(checker.isCheckMate(player.getColor())){
+            StopAllCoroutines();
             mainCanvas.SetActive(false);
             cheeNameCanvas.SetActive(false);
             resultCanvas.SetActive(true);

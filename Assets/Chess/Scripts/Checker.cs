@@ -18,6 +18,9 @@ public class Checker : MonoBehaviour
         if(king.gameObject.tag.Equals("Retired")){
             return true;
         }
+        if(GameObject.FindGameObjectsWithTag(king.tag).Length == 1 && !king.GetComponent<Chess>().canMove){
+            return true;
+        }
         Vector3 kingPosition = king.transform.position + new Vector3(-16,0,16);
         int kingI = (int)-kingPosition.x/4;
         int kingJ = (int)kingPosition.z/4;
@@ -62,6 +65,9 @@ public class Checker : MonoBehaviour
             king = GameObject.Find("Black King(Clone)");
         }
         if(king.tag.Equals("Retired")){
+            return true;
+        }
+        if(GameObject.FindGameObjectsWithTag(king.tag).Length == 1 && !king.GetComponent<Chess>().canMove){
             return true;
         }
         Vector3 kingPosition = king.transform.position + new Vector3(-16,0,16);
