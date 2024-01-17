@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Checker : MonoBehaviour
@@ -46,6 +47,21 @@ public class Checker : MonoBehaviour
                 if(boardState.checkBoardArray[l,k]){
                     checkCount++;
                 }
+            }
+        }
+        if(!king.GetComponent<Chess>().canMove){
+            GameObject[] objects = GameObject.FindGameObjectsWithTag(king.tag);
+            int c=0;
+            foreach(GameObject gameObject in objects){
+                int i = (int)-(gameObject.transform.position.x - 16 ) / 4;
+                int j = (int)(gameObject.transform.position.z + 16) / 4;
+                if(gameObject.GetComponent<Chess>().canMovePosition(i*8+j).Count == 0){
+                    c++;
+                }
+            }
+            if(c == objects.Length){
+                Debug.Log("all cant move");
+                return true;
             }
         }
         if(count == checkCount){
